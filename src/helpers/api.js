@@ -8,6 +8,7 @@ export const api = axios.create({
 
 export const handleError = error => {
   const response = error.response;
+  //comment
 
   // catch 4xx and 5xx status codes
   if (response && !!`${response.status}`.match(/^[4|5]\d{2}$/)) {
