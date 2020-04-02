@@ -64,7 +64,7 @@ const ButtonContainer = styled.div`
  * https://reactjs.org/docs/react-component.html
  * @Class
  */
-class Login extends React.Component {
+class Register extends React.Component {
   /**
    * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
    * The constructor for a React component is called before it is mounted (rendered).
@@ -74,8 +74,8 @@ class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      username: null,
-      password: null
+      name: null,
+      username: null
     };
   }
   /**
@@ -83,30 +83,30 @@ class Login extends React.Component {
    * If the request is successful, a new user is returned to the front-end
    * and its token is stored in the localStorage.
    */
-  async login() {
+  async register() {
     try {
+      // eslint-disable-next-line
+
       const requestBody = JSON.stringify({
         username: this.state.username,
         password: this.state.password,
       });
-      const response = await api.put( '/login', requestBody);
+      // eslint-disable-next-line
+      const response = await api.post('/users', requestBody);
 
-      // Store the token into the local storage.
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('id', response.data.id);
-
-      // Login successfully worked --> navigate to the route /game in the GameRouter
-      this.props.history.push(`/overview`);
+      // registration successfully worked --> navigate to the route /login
+      this.props.history.push(`/login`);
     } catch (error) {
-      alert(`Something went wrong during the login: \n${handleError(error)}`);
+      alert(`Something went wrong during the registration: \n${handleError(error)}`)
+      this.props.history.push('/register');
     }
   }
 
-  async register(){
+  async login(){
     try{
-      this.props.history.push("/register")
-    } catch (error){
-      alert ("Something went wrong while trying to return to the registration screen")
+      this.props.history.push(`/login`);
+    }catch (error) {
+      alert(`Something went wrong during the login: \n${handleError(error)}`);
     }
   }
 
@@ -149,25 +149,33 @@ class Login extends React.Component {
                   this.handleInputChange('password', e.target.value);
                 }}
             />
+            <Label>Please confirm your password</Label>
+            <InputField
+                placeholder="Enter here.."
+                onChange={e => {
+                  this.handleInputChange('repeatedPassword', e.target.value);
+                }}
+            />
             <ButtonContainer>
               <Button
-                  disabled={!this.state.username || !this.state.password}
+                disabled={!this.state.username || !this.state.repeatedPassword || !this.state.password}
+                width="50%"
+                onClick={() => {
+                  if (this.state.repeatedPassword===this.state.password) this.register();
+                  else throw alert("Passwords do not match!")
+                }}
+              >
+                Register as new user
+              </Button>
+            </ButtonContainer>
+            <ButtonContainer>
+              <Button
                   width="50%"
                   onClick={() => {
                     this.login();
                   }}
               >
-                Login
-              </Button>
-            </ButtonContainer>
-            <ButtonContainer>
-              <Button
-                width="50%"
-                onClick={() => {
-                  this.register();
-                }}
-              >
-                Back to Registration
+                Login with Account
               </Button>
             </ButtonContainer>
           </Form>
@@ -181,4 +189,4 @@ class Login extends React.Component {
  * You can get access to the history object's properties via the withRouter.
  * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
  */
-export default withRouter(Login);
+export default withRouter(Register);
