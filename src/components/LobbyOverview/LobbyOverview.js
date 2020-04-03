@@ -16,7 +16,7 @@ const Container = styled(BaseContainer)`
   text-align: center;
 `;
 
-const Users = styled.ul`
+const Games = styled.ul`
   list-style: none;
   padding-left: 0;
 `;
@@ -30,7 +30,7 @@ const PlayerContainer = styled.li`
 
 
 
-class OverView extends Component {
+class LobbyOverview extends Component {
   constructor() {
     super();
     this.state = {
@@ -100,7 +100,7 @@ class OverView extends Component {
               <Spinner />
           ) : (
               <div>
-                <Users>
+                <Games>
                   {this.state.users.map(user => {
                     return (
                         <PlayerContainer onClick={() => {
@@ -113,7 +113,7 @@ class OverView extends Component {
                     );
                   })}
                   
-                </Users>
+                </Games>
                 <Button
                     width={"30%"}
                     onClick={() => {
@@ -129,4 +129,4 @@ class OverView extends Component {
   }
 }
 
-export default withRouter(OverView);
+export default withRouter(LobbyOverview);
