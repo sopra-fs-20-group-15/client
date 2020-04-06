@@ -2,18 +2,9 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 
-const FormContainer = styled.div`
-  margin-top: 1em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 50px;
-  justify-content: center;
-`;
 
 // "text-decoration-skip-ink: none" is used to make sure that the brackets are underlined too
 // needs "text-align: center" because some titles span over two lines
@@ -30,17 +21,7 @@ const GridItemTitle = styled.div`
   text-decoration-skip-ink: none;
 `;
 
-const Container = styled(BaseContainer)`
-  border-radius: 25px;
-  border-style: solid;
-  position: absolute;
-  height: 338px
-  left: 27.71%;
-  right: 27.71%;
-  top: 29%;
-`;
-
-const GridContainer = styled(BaseContainer)`
+const GridContainer = styled.div`
   display: grid;
   grid-template-columns: 300px auto;
   grid-gap: 3px 3px;
@@ -51,7 +32,7 @@ const GridContainer = styled(BaseContainer)`
   height: 350px
   left: 27.71%;
   right: 27.71%;
-  top: 29%;
+  top: 35%;
 `;
 
 const GridItemInput = styled.div`
@@ -59,183 +40,6 @@ const GridItemInput = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
-`;
-
-const GameName = styled(BaseContainer)`
-  position: absolute;
-  border-style: solid;
-  border-top-left-radius: 25px
-  width: 293px;
-  height: 70px;
-  margin-left: -3px;
-  margin-top: -3px;
-  background: #FCC812;
-  font-family: Happy Monkey;
-  font-size: 24px;
-  text-decoration: underline;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-// needs "text-align: center" because text spans over two lines
-const NumberOfPlayers = styled(BaseContainer)`
-  position: absolute;
-  border-style: solid;
-  width: 293px;
-  height: 70px;
-  margin-left: -3px;
-  margin-top: 64px;
-  background: #FCC812;
-  font-family: Happy Monkey;
-  font-size: 24px;
-  text-decoration: underline;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-`;
-
-const Angels = styled(BaseContainer)`
-  position: absolute;
-  border-style: solid;
-  width: 293px;
-  height: 70px;
-  margin-left: -3px;
-  margin-top: 131px;
-  background: #FCC812;
-  font-family: Happy Monkey;
-  font-size: 24px;
-  text-decoration: underline;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Devils = styled(BaseContainer)`
-  position: absolute;
-  border-style: solid;
-  width: 293px;
-  height: 70px;
-  margin-left: -3px;
-  margin-top: 198px;
-  background: #FCC812;
-  font-family: Happy Monkey;
-  font-size: 24px;
-  text-decoration: underline;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-// "text-decoration-skip-ink: none" is used to make sure that the brackets are underlined too
-const Password = styled(BaseContainer)`
-  position: absolute;
-  border-style: solid;
-  border-bottom-left-radius: 25px
-  width: 293px;
-  height: 70px;
-  margin-left: -3px;
-  margin-top: 265px;
-  background: #FCC812;
-  font-family: Happy Monkey;
-  font-size: 24px;
-  text-decoration: underline;
-  text-decoration-skip-ink: none;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const GameName2 = styled(BaseContainer)`
-    border-style: solid;
-    border-top-right-radius: 25px;
-    margin-left: auto;
-    padding-left: 0px;
-    margin-right: auto;
-    padding-right: 0px;
-    max-width: 1160px;
-    position: absolute;
-    height: 70px;
-    left: 287px;
-    right: -3px;
-    top: -3px;
-    bottom: 0px;
-    background: #ECDD8F;
-`;
-
-const NumberOfPlayers2 = styled(BaseContainer)`
-    border-style: solid;
-    margin-left: auto;
-    padding-left: 0px;
-    margin-right: auto;
-    padding-right: 0px;
-    max-width: 1160px;
-    position: absolute;
-    height: 70px;
-    left: 287px;
-    right: -3px;
-    top: 64px;
-    bottom: 0px;
-    background: #ECDD8F;
-`;
-
-const Angels2 = styled(BaseContainer)`
-    border-style: solid;
-    margin-left: auto;
-    padding-left: 0px;
-    margin-right: auto;
-    padding-right: 0px;
-    max-width: 1160px;
-    position: absolute;
-    height: 70px;
-    left: 287px;
-    right: -3px;
-    top: 131px;
-    bottom: 0px;
-    background: #ECDD8F;
-    display: flex;
-    align-items: center;
-`;
-
-const Devils2 = styled(BaseContainer)`
-    border-style: solid;
-    margin-left: auto;
-    padding-left: 0px;
-    margin-right: auto;
-    padding-right: 0px;
-    max-width: 1160px;
-    position: absolute;
-    height: 70px;
-    left: 287px;
-    right: -3px;
-    top: 198px;
-    bottom: 0px;
-    background: #ECDD8F;
-    display: flex;
-    align-items: center;
-`;
-
-const Password2 = styled(BaseContainer)`
-    border-style: solid;
-    border-bottom-right-radius: 25px;
-    margin-left: auto;
-    padding-left: 0px;
-    margin-right: auto;
-    padding-right: 0px;
-    max-width: 1160px;
-    position: absolute;
-    height: 70px;
-    left: 287px;
-    right: -3px;
-    top: 265px;
-    bottom: 0px;
-    background: #ECDD8F;
 `;
 
 const Minus = styled.div`
@@ -312,47 +116,66 @@ const Number = styled.div`
 
 const ButtonGroup = styled.div`
   position: absolute;
-  bottom: 10%;
+  bottom: 5%;
   left: 30%;
   right: 30%;
 `;
 
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
- `;
-
 
 class CreateGame extends Component{
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            username: null,
-            id: null,
-            status: null,
-            visible: false,
-            usernameToBeSet: null,
+            gameName: null,
+            maxNumberOfPlayers: 3,
+            numberOfAngels: 0,
+            numberOfDevils: 0,
+            password: null
         };
+
+        // any way to refactor this into one (or two) methods?
+        /* The bind() method creates a new function that, when called, has its this keyword
+        set to the provided value, with a given sequence of arguments preceding any provided when
+        the new function is called. */
+        this.handleDecreaseAngels = this.handleDecreaseAngels.bind(this);
+        this.handleIncreaseAngels = this.handleIncreaseAngels.bind(this);
+        this.handleDecreaseDevils = this.handleDecreaseDevils.bind(this);
+        this.handleIncreaseDevils = this.handleIncreaseDevils.bind(this);
+
     }
 
 
-    async edit() {
+    async createGame() {
         try {
             const requestBody = JSON.stringify({
-                username: this.state.usernameToBeSet,
-                token: localStorage.getItem("token"),
+                gameName: this.state.gameName,
+                maxNumberOfPlayers: this.state.maxNumberOfPlayers,
+                numberOfAngels: this.state.numberOfAngels,
+                numberOfDevils: this.state.numberOfDevils,
+                password: null
             });
-            await api.put('/users/'+this.props.match.params.id, requestBody);
 
-            // update successfully worked --> navigate to the route /login
-            this.props.history.push(`/profile/`+this.props.match.params.id);
+            const response = await api.post('/games', requestBody);
+
+            localStorage.setItem('gameId', response.data.id);
+
+            // registration successfully worked --> navigate to the route /login
+            this.props.history.push(`/games/` + this.props.match.params.id);
         } catch (error) {
-            alert(`Something went wrong during the editing process: \n${handleError(error)}`)
-            this.props.history.push('/overview/');
+            alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
+            this.props.history.push('/lobbyOverview');
         }
     }
 
-    async componentDidMount() {
+    async cancel() {
+        try {
+            this.props.history.push('/lobbyOverview')
+        } catch (error) {
+            alert(`Something went wrong during the cancellation of the game: \n${handleError(error)}`)
+        }
+    }
+
+/*    async componentDidMount() {
         try {
             const urlId=this.props.match.params.id;
             const response = await api.get('/users/'+urlId);
@@ -386,13 +209,54 @@ class CreateGame extends Component{
         } catch (error) {
             alert(`Something went wrong while fetching the user: \n${handleError(error)}`);
         }
-    }
+    }*/
 
     handleInputChange(key, value) {
         // Example: if the key is username, this statement is the equivalent to the following one:
         // this.setState({'username': value});
-        this.setState({ [key]: value });
+        // making sure that the new number of players does not violate the constraints imposed by the game rules
+        if (this.state.numberOfDevils + this.state.numberOfAngels + value <= 7) {
+            this.setState({[key]: value});
+        }
     }
+
+    /* state: the data is updated
+    *  callback:  updated value is displayed to the user by calling console.log on the value*/
+    handleDecreaseAngels = () => {
+        // making sure the number of bots can't be below zero (because that would make no fucking sense...)
+        if (this.state.numberOfAngels !== 0) {
+            this.setState({numberOfAngels: this.state.numberOfAngels - 1}, () => {
+                console.log(this.state.numberOfAngels)
+            });
+        }
+    };
+
+    handleIncreaseAngels = () => {
+        /* making sure that the total number of participants in the game (including bots) does not exceed seven
+           (only necessary to check when incrementing, obviously)
+           (can this condition be refactored, so it only has to be stated once?) */
+        if (this.state.maxNumberOfPlayers + this.state.numberOfDevils + this.state.numberOfAngels < 7) {
+            this.setState({numberOfAngels: this.state.numberOfAngels + 1}, () => {
+                console.log(this.state.numberOfAngels)
+            });
+        }
+    };
+
+    handleDecreaseDevils = () => {
+        if (this.state.numberOfDevils !== 0) {
+            this.setState({numberOfDevils: this.state.numberOfDevils - 1}, () => {
+                console.log(this.state.numberOfDevils)
+            });
+        }
+    };
+
+    handleIncreaseDevils = () => {
+        if (this.state.maxNumberOfPlayers + this.state.numberOfDevils + this.state.numberOfAngels < 7) {
+            this.setState({numberOfDevils: this.state.numberOfDevils + 1}, () => {
+                console.log(this.state.numberOfDevils)
+            });
+        }
+    };
 
     render() {
         return (
@@ -403,12 +267,13 @@ class CreateGame extends Component{
                     <GridItemInput>
                         <InputField
                         placeholder="Enter here.."
+                        onChange={e => {this.handleInputChange('gameName', e.target.value)}}
                         />
                     </GridItemInput>
 
                     <GridItemTitle> Max. Number of Players </GridItemTitle>
                     <GridItemInput>
-                        <select id="country" name="country">
+                        <select value={this.state.maxNumberOfPlayers} onChange={e => {this.handleInputChange('maxNumberOfPlayers', parseInt(e.target.value))}}>
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
@@ -419,31 +284,33 @@ class CreateGame extends Component{
 
                     <GridItemTitle> Add Angels </GridItemTitle>
                     <GridItemInput>
-                        <Minus> - </Minus>
-                        <Number> 0 </Number>
-                        <Plus> + </Plus>
+                        <Minus onClick={this.handleDecreaseAngels.bind(this)}> - </Minus>
+                        <Number> {this.state.numberOfAngels} </Number>
+                        <Plus onClick={this.handleIncreaseAngels.bind(this)}> + </Plus>
                     </GridItemInput>
 
                     <GridItemTitle> Add Devils </GridItemTitle>
                     <GridItemInput>
-                        <Minus> - </Minus>
-                        <Number> 0 </Number>
-                        <Plus> + </Plus>
+                        <Minus onClick={this.handleDecreaseDevils.bind(this)}> - </Minus>
+                        <Number> {this.state.numberOfDevils} </Number>
+                        <Plus onClick={this.handleIncreaseDevils.bind(this)}> + </Plus>
                     </GridItemInput>
 
                     <GridItemTitle> Password (Optional) </GridItemTitle>
                     <GridItemInput>
                         <InputField
                             placeholder="Enter here.."
+                            onChange={e => {this.handleInputChange('password', e.target.value)}}
                         />
                     </GridItemInput>
                 </GridContainer>
+
                 <ButtonGroup>
                     <ButtonContainer>
                         <Button
                             width="50%"
                             onClick={() => {
-
+                                this.createGame();
                             }}
                         >
                             Create Game
@@ -454,7 +321,7 @@ class CreateGame extends Component{
                         <Button
                             width="50%"
                             onClick={() => {
-
+                                this.cancel();
                             }}
                         >
                             Cancel

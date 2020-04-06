@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { ReactLogo } from "./ReactLogo";
 
 /**
  * Using styled-components you can visual HTML primitives and use props with it!
@@ -9,7 +8,7 @@ import { ReactLogo } from "./ReactLogo";
  * https://www.styled-components.com/
  */
 const Container = styled.div`
-  height: ${props => props.height}px;
+  height: 270px;
   background: ${props => props.background};
   display: flex;
   justify-content: center;
@@ -22,7 +21,7 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-const JustOneLogo = require("./JustOneLogo.jpg");
+const JustOneLogo = require("./JustOne-Logo.png");
 
 
 /**
