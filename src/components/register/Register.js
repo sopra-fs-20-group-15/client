@@ -165,7 +165,7 @@ class Register extends React.Component {
                   else throw alert("Passwords do not match!")
                 }}
               >
-                Register as new user
+                Register as new User
               </Button>
             </ButtonContainer>
             <ButtonContainer>
