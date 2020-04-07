@@ -5,6 +5,15 @@ import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../../views/design/Button';
 
+
+const Game = styled.div`
+  position: relative;
+  width: 100%px;
+  height: 100%px;
+  
+  background: linear-gradient(180deg, #005C0F 0%, rgba(0, 147, 23, 0) 100%), #05F400;
+`;
+
 const Player = styled.div`
   width: 10%;
   height: 100px;
@@ -30,19 +39,12 @@ const Table = styled.div`
 
 
 const TableContainer = styled.div`
-  margin-top: 7em;
+  // margin-top: 7em;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 300px;
   justify-content: center;
-`;
-
-const TableContainer2 = styled.div`
-  position: absolute;
-  width: 1006px;
-  height: 576px;
-  top: 100px;
 `;
 
 const Form = styled.div`
@@ -163,20 +165,19 @@ class InGame extends React.Component {
 
     render() {
         return (
-            <BaseContainer>
-                <div>
-                    <Player></Player>
-                </div>
-                <div>
-                    <Player></Player>
-                </div>
-                <div>
-                    <Table></Table>
-                </div>
-                <div>
-                    <Player></Player>
-                </div>
-            </BaseContainer>
+                <Game>
+                    <BaseContainer>
+                        <div>
+                            <Player></Player>
+                        </div>
+                            <TableContainer>
+                                <Table></Table>
+                            </TableContainer>
+                        <div>
+                            <Player></Player>
+                        </div>
+                    </BaseContainer>
+                </Game>
         );
     }
 }
