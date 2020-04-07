@@ -18,7 +18,8 @@ class GameRouter extends React.Component {
         <Route
           exact
           path={`${this.props.base}/dashboard`}
-          render={() => <Game />}
+          render={() => <Game />
+          }
         />
 
         <Route

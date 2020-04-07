@@ -1,23 +1,64 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans");
+@import url("https://fonts.googleapis.com/css?family=Happy+Monkey");
 
 /**
 This file contains the general and shared style of your application.
  */
 body {
+  height: 100vh;
   margin: 0;
   padding: 0;
   font-family: "Open Sans", sans-serif;
-  background: #0e3d61;
+  background: linear-gradient(180deg, #AA9E5E 0%, rgba(255, 255, 255, 0) 100%), #E8DFB4;
 }
 
 input,
-textarea,
-select,
-button {
+textarea {
   font-family: inherit;
   line-height: inherit;
   font-size: inherit;
   outline: none;
+}
+
+select {
+  width: 30%;
+  height: 80%;
+  font-size: 40px;
+  background-color: rgba(203,189,140,0.54);
+  margin: 8px 0;
+  display: inline-block;
+  border-radius: 4px;
+  box-sizing: border-box;
+  border-width: 0;
+  text-align-last: center;
+}
+
+button {
+  font-family: "Happy Monkey", sans-serif;
+  line-height: inherit;
+  font-size: inherit;
+  outline: none;
+  background: #BDAF7E;
+  mix-blend-mode: normal;
+  border-radius: 10px;
+}
+
+GridItemTitle {
+  background: #FCC812;
+  font-family: "Happy Monkey", sans-serif;
+  font-size: 24px;
+  text-decoration: underline;
+  text-transform: uppercase;
+  justify-content: center;
+  align-items: center;
+}
+
+title {
+  margin: 0;
+  padding: 0;
+  font-family: "Happy Monkey", sans-serif;
+  text-align: center;
+  background: #0e3d61;
 }
 
 *:focus {
