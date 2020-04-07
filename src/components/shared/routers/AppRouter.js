@@ -13,6 +13,8 @@ import Profile from "../../Profile/Profile";
 import {ProfileEditGuard} from "../routeProtectors/ProfileEditGuard";
 import ProfileEdit from "../../ProfileEdit/ProfileEdit"
 import CreateGame from "../../CreateGame/CreateGame";
+import {InGameGuard} from "../routeProtectors/InGameGuard";
+import InGame from "../../InGame/InGame";
 
 /**
  * Main router of your application.
@@ -71,6 +73,14 @@ class AppRouter extends React.Component {
                  </ProfileGuard>
               )}
              />
+              <Route
+                  path="/ingame"
+                  render={() => (
+                      <InGameGuard>
+                          <InGame />
+                      </InGameGuard>
+                  )}
+              />
              <Route
                   path="/profile/:id/edit"
                   exact
