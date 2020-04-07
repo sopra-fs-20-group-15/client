@@ -6,6 +6,7 @@ import Player from '../../views/Player';
 import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
+import Header from "../../views/Header";
 
 
 
@@ -94,6 +95,7 @@ class LobbyOverview extends Component {
   render() {
     return (
         <Container>
+          <div><Header height={"100"} /></div>
           <h2>User Overview </h2>
           <p>To inspect user click the user field:</p>
           {!this.state.users ? (

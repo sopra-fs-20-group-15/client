@@ -5,6 +5,7 @@ import { api, handleError } from '../../helpers/api';
 import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
+import Header from "../../views/Header";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -78,6 +79,7 @@ class Profile extends Component{
     render() {
         return (
             <Container>
+                <div><Header height={"100"} /></div>
                {!this.state.status ? (
                     <Spinner />
                 ) : (

@@ -5,6 +5,7 @@ import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
+import Header from "../../views/Header";
 
 
 // "text-decoration-skip-ink: none" is used to make sure that the brackets are underlined too
@@ -262,6 +263,9 @@ class CreateGame extends Component{
     render() {
         return (
             <BaseContainer>
+                <div>
+                    <Header height={"100"} />
+                </div>
                 <img src={TriangleBackground}/>
                 <GridContainer>
                     <GridItemTitle> Game Name </GridItemTitle>
