@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import TriangleBackground from "./TriangleBackground.png";
+import {BaseContainer} from "../helpers/layout";
 
 /**
  * Using styled-components you can visual HTML primitives and use props with it!
@@ -21,7 +23,7 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-const JustOneLogo = require("./JustOne-Logo.png");
+const JustOneLogo = require("./JustOneLogo.png");
 
 
 /**
@@ -36,7 +38,7 @@ const JustOneLogo = require("./JustOne-Logo.png");
 const Header = props => {
   return (
     <Container height={props.height}>
-        <img src={JustOneLogo} top="100px"/>
+        <img src={JustOneLogo}/>
     </Container>
   );
 };

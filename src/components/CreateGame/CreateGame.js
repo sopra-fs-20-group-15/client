@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import TriangleBackground from '../../views/TriangleBackground.png'
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { Button } from '../../views/design/Button';
@@ -261,7 +262,7 @@ class CreateGame extends Component{
     render() {
         return (
             <BaseContainer>
-
+                <img src={TriangleBackground}/>
                 <GridContainer>
                     <GridItemTitle> Game Name </GridItemTitle>
                     <GridItemInput>
