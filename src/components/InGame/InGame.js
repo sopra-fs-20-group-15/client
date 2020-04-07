@@ -5,13 +5,44 @@ import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../../views/design/Button';
 
-const FormContainer = styled.div`
-  margin-top: 2em;
+const Player = styled.div`
+  width: 10%;
+  height: 100px;
+  
+  background: linear-gradient(180deg, #CF7C00 0%, rgba(147, 88, 0, 0.0302086) 96.98%, rgba(114, 68, 0, 0) 100%), #773900;
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
+const PlayerContainer = styled.div`
+`;
+
+const Table = styled.div`
+  width: 80%;
+  height: 500px;
+  
+  background: linear-gradient(180deg, #CF7C00 0%, rgba(147, 88, 0, 0.0302086) 96.98%, rgba(114, 68, 0, 0) 100%), #773900;
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
+
+const TableContainer = styled.div`
+  margin-top: 7em;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 300px;
   justify-content: center;
+`;
+
+const TableContainer2 = styled.div`
+  position: absolute;
+  width: 1006px;
+  height: 576px;
+  top: 100px;
 `;
 
 const Form = styled.div`
@@ -133,6 +164,18 @@ class InGame extends React.Component {
     render() {
         return (
             <BaseContainer>
+                <div>
+                    <Player></Player>
+                </div>
+                <div>
+                    <Player></Player>
+                </div>
+                <div>
+                    <Table></Table>
+                </div>
+                <div>
+                    <Player></Player>
+                </div>
             </BaseContainer>
         );
     }
