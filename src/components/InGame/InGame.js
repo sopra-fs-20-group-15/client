@@ -19,6 +19,12 @@ const GuessedCards = styled.div`
   background: #FFFFFF;
   border: 2px solid #000000;
   box-sizing: border-box;
+  
+  font-size: 50px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 110px;
+  color: #52ff02;
 `;
 
 const Deck = styled.div`
@@ -32,6 +38,11 @@ const Deck = styled.div`
   background: #FFFFFF;
   border: 2px solid #000000;
   box-sizing: border-box;
+  
+  font-size: 100px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 230px;
 `;
 
 const ActiveCard = styled.div`
@@ -45,6 +56,176 @@ const ActiveCard = styled.div`
   background: #FFFFFF;
   border: 2px solid #000000;
   box-sizing: border-box;
+`;
+
+const First = styled.div`
+    position: absolute;
+    padding: 4px 0;
+    height: 30px;
+    width: 10%;
+    margin-left: 8px;
+    margin-right: auto;
+    
+    font-family: Happy Monkey;
+    font-size: 20px;
+    color: #00CDCD;
+    
+    top: 17.5px;
+`;
+
+const Second = styled.div`
+    position: absolute;
+    padding: 4px 0;
+    height: 30px;
+    width: 10%;
+    margin-left: 8px;
+    margin-right: auto;
+    
+    font-family: Happy Monkey;
+    font-size: 20px;
+    color: #42c202;
+    
+    top: 65px;
+`;
+
+const Third = styled.div`
+    position: absolute;
+    padding: 4px 0;
+    height: 30px;
+    width: 10%;
+    margin-left: 8px;
+    margin-right: auto;
+    
+    font-family: Happy Monkey;
+    font-size: 20px;
+    color: #db3d3d;
+    
+    top: 112.5px;
+`;
+
+const Forth = styled.div`
+    position: absolute;
+    padding: 4px 0;
+    height: 30px;
+    width: 10%;
+    margin-left: 8px;
+    margin-right: auto;
+    
+    font-family: Happy Monkey;
+    font-size: 20px;
+    color: #fc9229;
+    
+    top: 160px;
+`;
+
+const Fifth = styled.div`
+    position: absolute;
+    padding: 4px 0;
+    height: 30px;
+    width: 10%;
+    margin-left: 8px;
+    margin-right: auto;
+    
+    font-family: Happy Monkey;
+    font-size: 20px;
+    color: #ffe203;
+    
+    top: 207.5px;
+`;
+
+const FirstWord = styled.div`
+    position: relative;
+    padding: 5px 0;
+    height: 30px;
+    width: 80%;
+    margin-left: 30px;
+    margin-right: auto;
+    
+    border-style: solid;
+    border-color: #00CDCD;
+    
+    font-family: Happy Monkey;
+    font-size: 15px;
+    justify-content: center;
+    display: flex;
+    
+    top: 17.5px;
+`;
+
+const SecondWord = styled.div`
+    position: relative;
+    padding: 5px 0;
+    height: 30px;
+    width: 80%;
+    margin-left: 30px;
+    margin-right: auto;
+    
+    border-style: solid;
+    border-color: #42c202;
+    
+    font-family: Happy Monkey;
+    font-size: 15px;
+    justify-content: center;
+    display: flex;
+    
+    top: 35px;
+`;
+
+const ThirdWord = styled.div`
+    position: relative;
+    padding: 5px 0;
+    height: 30px;
+    width: 80%;
+    margin-left: 30px;
+    margin-right: auto;
+    
+    border-style: solid;
+    border-color: #db3d3d;
+    
+    font-family: Happy Monkey;
+    font-size: 15px;
+    justify-content: center;
+    display: flex;
+    
+    top: 52.5px;
+`;
+
+const ForthWord = styled.div`
+    position: relative;
+    padding: 5px 0;
+    height: 30px;
+    width: 80%;
+    margin-left: 30px;
+    margin-right: auto;
+    
+    border-style: solid;
+    border-color: #fc9229;
+    
+    font-family: Happy Monkey;
+    font-size: 15px;
+    justify-content: center;
+    display: flex;
+    
+    top: 70px;
+`;
+
+const FifthWord = styled.div`
+    position: relative;
+    padding: 5px 0;
+    height: 30px;
+    width: 80%;
+    margin-left: 30px;
+    margin-right: auto;
+    
+    border-style: solid;
+    border-color: #ffe203;
+    
+    font-family: Happy Monkey;
+    font-size: 15px;
+    justify-content: center;
+    display: flex;
+    
+    top: 87.5px;
 `;
 
 //The position of ActiveCard, Deck and GuessedCards are relative to BoardContainer
@@ -82,13 +263,11 @@ const Game = styled.div`
 `;
 
 const Timer = styled.div`
+  position: relative;
   width: 175px;
   height: 175px;
   display: inline-block;
-  //makes a circle
-  -webkit-border-radius: 175px/175px;
-  -moz-border-radius: 175px/175px;
-  border-radius: 175px/175px;
+  border-radius: 50%;
   
   margin-left: 10px;
 
@@ -98,6 +277,7 @@ const Timer = styled.div`
 `;
 
 const Phase = styled.div`
+  position: relative;
   width: 250px;
   height:125px;
   display: inline-block;
@@ -287,6 +467,83 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+const Seconds = styled.div`
+    position: absolute;
+    top: 60px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Happy Monkey;
+    font-size: 70px;
+    justify-content: center;
+    display: flex;
+`;
+
+const Round = styled.div`
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Happy Monkey;
+    text-decoration: underline;
+    font-size: 28px;
+    justify-content: center;
+    display: flex;
+`;
+
+const PhaseMessage = styled.div`
+    position: absolute;
+    top: 70px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Happy Monkey;
+    font-size: 24px;
+    justify-content: center;
+    display: flex;
+`;
+
+const Phase1Circle = styled.div`
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background: #05FF00;
+    left: 26px;
+    top: 20px;
+`;
+
+const Phase2Circle = styled.div`
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background: #817857;
+    left: 82px;
+    top: 20px;
+`;
+
+const Phase3Circle = styled.div`
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background: #817857;
+    left: 138px;
+    top: 20px;
+`;
+
+const Phase4Circle = styled.div`
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background: #817857;
+    left: 194px;
+    top: 20px;
+`;
+
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
  * You should have a class (instead of a functional component) when:
@@ -367,8 +624,19 @@ class InGame extends React.Component {
                 <Game>
                     {/*Timer and Phase*/}
                     <HUDContainer>
-                        <Timer></Timer>
-                        <Phase></Phase>
+                        <Timer>
+                            {/*Placeholders -> will need props!*/}
+                            <Round> Round 13 </Round>
+                            <Seconds> 30 </Seconds>
+                        </Timer>
+                        <Phase>
+                            <Phase1Circle/>
+                            <Phase2Circle/>
+                            <Phase3Circle/>
+                            <Phase4Circle/>
+                            {/* need props here, just placeholder for now*/}
+                            <PhaseMessage> Choose Number </PhaseMessage>
+                        </Phase>
                     </HUDContainer>
                     {/*First Player Row*/}
                     <PlayerContainer>
@@ -384,9 +652,21 @@ class InGame extends React.Component {
                     <TableContainer>
                         <Table>
                             <BoardContainer>
-                            <GuessedCards></GuessedCards>
-                            <Deck></Deck>
-                            <ActiveCard></ActiveCard>
+                            <GuessedCards> 3 </GuessedCards>
+                            <Deck> 7 </Deck>
+                            <ActiveCard>
+                                {/* The words are only placeholders, as are the numbers */}
+                                <First> 1. </First>
+                                <FirstWord> Chocolate </FirstWord>
+                                <Second> 2. </Second>
+                                <SecondWord> Barbie </SecondWord>
+                                <Third> 3. </Third>
+                                <ThirdWord> Marmite </ThirdWord>
+                                <Forth> 4. </Forth>
+                                <ForthWord> Motherfucker </ForthWord>
+                                <Fifth> 5. </Fifth>
+                                <FifthWord> Weather forecast </FifthWord>
+                            </ActiveCard>
                             </BoardContainer>
                         </Table>
                     </TableContainer>

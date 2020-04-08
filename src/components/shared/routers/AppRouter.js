@@ -76,9 +76,9 @@ class AppRouter extends React.Component {
               <Route
                   path="/gamelobby"
                   render={() => (
-                      <InGameGuard>
+                      // <InGameGuard>
                           <InGame />
-                      </InGameGuard>
+                      // </InGameGuard>
                   )}
               />
              <Route
