@@ -8,8 +8,14 @@ import { Button } from '../../views/design/Button';
 
 const Game = styled.div`
   position: relative;
-  width: 100%px;
-  height: 100%px;
+  width: 110%px;
+  height: 110%px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-left: auto;
+  margin-right: auto;
   
   background: linear-gradient(180deg, #005C0F 0%, rgba(0, 147, 23, 0) 100%), #05F400;
 `;
@@ -17,6 +23,7 @@ const Game = styled.div`
 const Player = styled.div`
   width: 10%;
   height: 100px;
+  display: inline-block;
   
   background: linear-gradient(180deg, #CF7C00 0%, rgba(147, 88, 0, 0.0302086) 96.98%, rgba(114, 68, 0, 0) 100%), #773900;
   border: 3px solid #000000;
@@ -25,11 +32,15 @@ const Player = styled.div`
 `;
 
 const PlayerContainer = styled.div`
+  // margin-top: 2em;
 `;
 
 const Table = styled.div`
-  width: 80%;
-  height: 500px;
+  width: 750px;
+  height:375px;
+  -webkit-border-radius: 375px/188px;
+  -moz-border-radius: 375px/188px;
+  border-radius: 375px/188px;
   
   background: linear-gradient(180deg, #CF7C00 0%, rgba(147, 88, 0, 0.0302086) 96.98%, rgba(114, 68, 0, 0) 100%), #773900;
   border: 3px solid #000000;
@@ -39,11 +50,10 @@ const Table = styled.div`
 
 
 const TableContainer = styled.div`
-  // margin-top: 7em;
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   align-items: center;
-  min-height: 300px;
+  // min-height: 300px;
   justify-content: center;
 `;
 
@@ -166,17 +176,18 @@ class InGame extends React.Component {
     render() {
         return (
                 <Game>
-                    <BaseContainer>
-                        <div>
-                            <Player></Player>
-                        </div>
+                        <PlayerContainer>
+                            <Player></Player><Player></Player>
+                        </PlayerContainer>
+                        <PlayerContainer>
+                            <Player></Player><Player></Player>
+                        </PlayerContainer>
                             <TableContainer>
                                 <Table></Table>
                             </TableContainer>
-                        <div>
-                            <Player></Player>
-                        </div>
-                    </BaseContainer>
+                        <PlayerContainer>
+                            <Player></Player><Player></Player>
+                        </PlayerContainer>
                 </Game>
         );
     }
