@@ -5,27 +5,75 @@ import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../../views/design/Button';
 
+//margin padding stuff:
+//percentage for values relative to the browser
+//absolute for absolute values
 
 const Game = styled.div`
   position: relative;
-  width: 110%px;
-  height: 110%px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 30px;
-  padding-right: 30px;
+  width: 100%px;
+  height: 100%px;
+  //padding based on the resolution of the screen
+  padding-top: 3%;
+  padding-bottom: 1%;
+  padding-left: 3%;
+  padding-right: 3%;
   margin-left: auto;
   margin-right: auto;
+  //min width and height of the game: prevents distortion
+  min-width: 1366px;
+  min-height: 768px;
+  
+  //determines the layer of the div component (-1 = background)
+  z-index: -1;
   
   background: linear-gradient(180deg, #005C0F 0%, rgba(0, 147, 23, 0) 100%), #05F400;
 `;
 
+const Timer = styled.div`
+  width: 100px;
+  height:100px;
+  display: inline-block;
+
+  background: #BDAF7E;
+  border: 3px solid #000000;
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
+`;
+
+const Phase = styled.div`
+  width: 100px;
+  height:100px;
+  display: inline-block;
+  float: right;
+  
+  background: #BDAF7E;
+  border: 3px solid #000000;
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
+`;
+
+//puts Phase and Timer in a box
+const HUDContainer = styled.div`
+`;
+
 const Player = styled.div`
-  width: 10%;
+  width: 200px;
   height: 100px;
   display: inline-block;
   
-  background: linear-gradient(180deg, #CF7C00 0%, rgba(147, 88, 0, 0.0302086) 96.98%, rgba(114, 68, 0, 0) 100%), #773900;
+  
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
+//use for the two players at the top
+const PlayerTop = styled.div`
+  //makes it slightly below Phase and Timer
+  vertical-align: bottom;
+  width: 200px;
+  height: 100px;
+  display: inline-block;
+  
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
@@ -46,6 +94,8 @@ const Table = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  z-index: -1;
 `;
 
 
@@ -53,8 +103,10 @@ const TableContainer = styled.div`
   display: flex;
   // flex-direction: column;
   align-items: center;
-  // min-height: 300px;
   justify-content: center;
+  //allows player HUD to overlap the Table (ich bin so ein genius guy)
+  margin: -10%;
+  
 `;
 
 const Form = styled.div`
@@ -176,18 +228,25 @@ class InGame extends React.Component {
     render() {
         return (
                 <Game>
-                        <PlayerContainer>
-                            <Player></Player><Player></Player>
-                        </PlayerContainer>
-                        <PlayerContainer>
-                            <Player></Player><Player></Player>
-                        </PlayerContainer>
-                            <TableContainer>
-                                <Table></Table>
-                            </TableContainer>
-                        <PlayerContainer>
-                            <Player></Player><Player></Player>
-                        </PlayerContainer>
+                    <HUDContainer>
+                        <Timer></Timer>
+                        <Phase></Phase>
+                    </HUDContainer>
+                    <PlayerContainer>
+                        <Player></Player><Player></Player>
+                    </PlayerContainer>
+                    <PlayerContainer>
+                        <Player></Player><Player></Player>
+                    </PlayerContainer>
+                    <TableContainer>
+                        <Table></Table>
+                    </TableContainer>
+                    <PlayerContainer>
+                        <Player></Player><Player></Player>
+                    </PlayerContainer>
+                    <PlayerContainer>
+                        <Player></Player>
+                    </PlayerContainer>
                 </Game>
         );
     }
