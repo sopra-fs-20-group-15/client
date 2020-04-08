@@ -11,13 +11,13 @@ import { Button } from '../../views/design/Button';
 
 const Game = styled.div`
   position: relative;
-  width: 100%px;
-  height: 100%px;
+  width: 100%;
+  height: 100%;
   //padding based on the resolution of the screen
-  padding-top: 3%;
+  padding-top: 2%;
   padding-bottom: 1%;
-  padding-left: 3%;
-  padding-right: 3%;
+  padding-left: 2%;
+  padding-right: 2%;
   margin-left: auto;
   margin-right: auto;
   //min width and height of the game: prevents distortion
@@ -31,9 +31,13 @@ const Game = styled.div`
 `;
 
 const Timer = styled.div`
-  width: 100px;
-  height:100px;
+  width: 150px;
+  height:150px;
   display: inline-block;
+  //makes a circle
+  -webkit-border-radius: 150px/150px;
+  -moz-border-radius: 150px/150px;
+  border-radius: 150px/150px;
 
   background: #BDAF7E;
   border: 3px solid #000000;
@@ -41,10 +45,12 @@ const Timer = styled.div`
 `;
 
 const Phase = styled.div`
-  width: 100px;
-  height:100px;
+  width: 250px;
+  height:125px;
   display: inline-block;
   float: right;
+  //flattens the curve of Phase
+  border-radius: 25px/25px;
   
   background: #BDAF7E;
   border: 3px solid #000000;
@@ -66,29 +72,17 @@ const Player = styled.div`
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
 `;
 
-//use for the two players at the top
-const PlayerTop = styled.div`
-  //makes it slightly below Phase and Timer
-  vertical-align: bottom;
-  width: 200px;
-  height: 100px;
-  display: inline-block;
-  
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
-`;
 
 const PlayerContainer = styled.div`
   // margin-top: 2em;
 `;
 
 const Table = styled.div`
-  width: 750px;
-  height:375px;
-  -webkit-border-radius: 375px/188px;
-  -moz-border-radius: 375px/188px;
-  border-radius: 375px/188px;
+  width: 850px;
+  height:425px;
+  -webkit-border-radius: 425px/213px;
+  -moz-border-radius: 425px/213px;
+  border-radius: 425px/213px;
   
   background: linear-gradient(180deg, #CF7C00 0%, rgba(147, 88, 0, 0.0302086) 96.98%, rgba(114, 68, 0, 0) 100%), #773900;
   border: 3px solid #000000;
@@ -105,7 +99,7 @@ const TableContainer = styled.div`
   align-items: center;
   justify-content: center;
   //allows player HUD to overlap the Table (ich bin so ein genius guy)
-  margin: -10%;
+  margin: -150px;
   
 `;
 
