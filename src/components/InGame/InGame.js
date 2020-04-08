@@ -31,13 +31,15 @@ const Game = styled.div`
 `;
 
 const Timer = styled.div`
-  width: 150px;
-  height:150px;
+  width: 175px;
+  height: 175px;
   display: inline-block;
   //makes a circle
-  -webkit-border-radius: 150px/150px;
-  -moz-border-radius: 150px/150px;
-  border-radius: 150px/150px;
+  -webkit-border-radius: 175px/175px;
+  -moz-border-radius: 175px/175px;
+  border-radius: 175px/175px;
+  
+  margin-left: 10px;
 
   background: #BDAF7E;
   border: 3px solid #000000;
@@ -61,11 +63,93 @@ const Phase = styled.div`
 const HUDContainer = styled.div`
 `;
 
-const Player = styled.div`
-  width: 200px;
-  height: 100px;
+const TopLeftPlayer = styled.div`
+  width: 350px;
+  height: 130px;
   display: inline-block;
   
+  margin-top: -8%;
+  margin-left: 20%;
+  
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
+const TopRightPlayer = styled.div`
+  width: 350px;
+  height: 130px;
+  display: inline-block;
+  float: right;
+  
+  margin-top: -8%;
+  margin-right: 20%;
+  
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
+const MidLeftPlayer = styled.div`
+  width: 350px;
+  height: 130px;
+  display: inline-block;
+  
+  margin-top: 2%;
+  margin-left: 0%;
+  
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
+const MidRightPlayer = styled.div`
+  width: 350px;
+  height: 130px;
+  display: inline-block;
+  float: right;
+  
+  margin-top: 2%;
+  margin-right: 0%;
+  
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
+const MidLeftPlayer2 = styled.div`
+  width: 350px;
+  height: 130px;
+  display: inline-block;
+  
+  margin-top: 2%;
+  margin-left: 3%;
+  
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
+const MidRightPlayer2 = styled.div`
+  width: 350px;
+  height: 130px;
+  display: inline-block;
+  float: right;
+  
+  margin-top: 2%;
+  margin-right: 3%;
+  
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
+const BottomPlayer = styled.div`
+  width: 350px;
+  height: 130px;
+  
+  margin-top: 2%;
+  margin: 0 auto;
   
   border: 3px solid #000000;
   box-sizing: border-box;
@@ -74,15 +158,15 @@ const Player = styled.div`
 
 
 const PlayerContainer = styled.div`
-  // margin-top: 2em;
 `;
 
 const Table = styled.div`
-  width: 850px;
-  height:425px;
-  -webkit-border-radius: 425px/213px;
-  -moz-border-radius: 425px/213px;
-  border-radius: 425px/213px;
+  width: 1000px;
+  height: 500px;
+  border-radius: 1000px/500px;
+  
+  margin-top: -250px;
+  margin-bottom: -200px;
   
   background: linear-gradient(180deg, #CF7C00 0%, rgba(147, 88, 0, 0.0302086) 96.98%, rgba(114, 68, 0, 0) 100%), #773900;
   border: 3px solid #000000;
@@ -94,13 +178,10 @@ const Table = styled.div`
 
 
 const TableContainer = styled.div`
-  display: flex;
-  // flex-direction: column;
+  display: fix;
   align-items: center;
   justify-content: center;
   //allows player HUD to overlap the Table (ich bin so ein genius guy)
-  margin: -150px;
-  
 `;
 
 const Form = styled.div`
@@ -227,19 +308,22 @@ class InGame extends React.Component {
                         <Phase></Phase>
                     </HUDContainer>
                     <PlayerContainer>
-                        <Player></Player><Player></Player>
+                        <TopLeftPlayer></TopLeftPlayer>
+                        <TopRightPlayer></TopRightPlayer>
                     </PlayerContainer>
                     <PlayerContainer>
-                        <Player></Player><Player></Player>
+                        <MidLeftPlayer></MidLeftPlayer>
+                        <MidRightPlayer></MidRightPlayer>
                     </PlayerContainer>
                     <TableContainer>
                         <Table></Table>
                     </TableContainer>
                     <PlayerContainer>
-                        <Player></Player><Player></Player>
+                        <MidLeftPlayer2></MidLeftPlayer2>
+                        <MidRightPlayer2></MidRightPlayer2>
                     </PlayerContainer>
                     <PlayerContainer>
-                        <Player></Player>
+                        <BottomPlayer></BottomPlayer>
                     </PlayerContainer>
                 </Game>
         );
