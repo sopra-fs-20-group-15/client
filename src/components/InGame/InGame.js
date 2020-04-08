@@ -9,6 +9,57 @@ import { Button } from '../../views/design/Button';
 //percentage for values relative to the browser
 //absolute for absolute values
 
+const GuessedCards = styled.div`
+  width: 80px;
+  height: 110px;
+  
+  position: absolute;
+  bottom: 3%;
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+`;
+
+const Deck = styled.div`
+  width: 170px;
+  height: 230px;
+  
+  position: absolute;
+  bottom: 3%;
+  left: 18%;
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+`;
+
+const ActiveCard = styled.div`
+  width: 180px;
+  height: 255px;
+  
+  position: absolute;
+  bottom: 0%;
+  left: 60%;
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+`;
+
+//The position of ActiveCard, Deck and GuessedCards are relative to BoardContainer
+//because of line 57,43
+const BoardContainer = styled.div`
+  width: 550px;
+  height: 300px;
+  display: inline-block;
+  
+  position: relative;
+
+  // border: 3px solid #000000;
+  // box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
+`;
+
 const Game = styled.div`
   position: relative;
   width: 100%;
@@ -63,6 +114,7 @@ const Phase = styled.div`
 const HUDContainer = styled.div`
 `;
 
+//Player 2
 const TopLeftPlayer = styled.div`
   width: 350px;
   height: 130px;
@@ -76,6 +128,7 @@ const TopLeftPlayer = styled.div`
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
 `;
 
+//Player 3
 const TopRightPlayer = styled.div`
   width: 350px;
   height: 130px;
@@ -90,6 +143,7 @@ const TopRightPlayer = styled.div`
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
 `;
 
+//Player 4
 const MidLeftPlayer = styled.div`
   width: 350px;
   height: 130px;
@@ -103,6 +157,7 @@ const MidLeftPlayer = styled.div`
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
 `;
 
+//Player 5
 const MidRightPlayer = styled.div`
   width: 350px;
   height: 130px;
@@ -117,6 +172,7 @@ const MidRightPlayer = styled.div`
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
 `;
 
+//Player 6
 const MidLeftPlayer2 = styled.div`
   width: 350px;
   height: 130px;
@@ -130,6 +186,7 @@ const MidLeftPlayer2 = styled.div`
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
 `;
 
+//Player 7
 const MidRightPlayer2 = styled.div`
   width: 350px;
   height: 130px;
@@ -144,6 +201,7 @@ const MidRightPlayer2 = styled.div`
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
 `;
 
+//Player 1
 const BottomPlayer = styled.div`
   width: 350px;
   height: 130px;
@@ -167,6 +225,10 @@ const Table = styled.div`
   
   margin-top: -250px;
   margin-bottom: -200px;
+  
+  align-items: center;
+  justify-content: center;
+  display: fix;
   
   background: linear-gradient(180deg, #CF7C00 0%, rgba(147, 88, 0, 0.0302086) 96.98%, rgba(114, 68, 0, 0) 100%), #773900;
   border: 3px solid #000000;
@@ -244,8 +306,8 @@ class InGame extends React.Component {
     constructor() {
         super();
         this.state = {
-            username: null,
-            password: null
+            // username: null,
+            // password: null
         };
     }
     /**
@@ -316,7 +378,13 @@ class InGame extends React.Component {
                         <MidRightPlayer></MidRightPlayer>
                     </PlayerContainer>
                     <TableContainer>
-                        <Table></Table>
+                        <Table>
+                            <BoardContainer>
+                            <GuessedCards></GuessedCards>
+                            <Deck></Deck>
+                            <ActiveCard></ActiveCard>
+                            </BoardContainer>
+                        </Table>
                     </TableContainer>
                     <PlayerContainer>
                         <MidLeftPlayer2></MidLeftPlayer2>
