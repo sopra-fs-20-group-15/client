@@ -365,18 +365,22 @@ class InGame extends React.Component {
     render() {
         return (
                 <Game>
+                    {/*Timer and Phase*/}
                     <HUDContainer>
                         <Timer></Timer>
                         <Phase></Phase>
                     </HUDContainer>
+                    {/*First Player Row*/}
                     <PlayerContainer>
                         <TopLeftPlayer></TopLeftPlayer>
                         <TopRightPlayer></TopRightPlayer>
                     </PlayerContainer>
+                    {/*Second Player Row*/}
                     <PlayerContainer>
                         <MidLeftPlayer></MidLeftPlayer>
                         <MidRightPlayer></MidRightPlayer>
                     </PlayerContainer>
+                    {/*The GameBoard and its Content*/}
                     <TableContainer>
                         <Table>
                             <BoardContainer>
@@ -386,6 +390,7 @@ class InGame extends React.Component {
                             </BoardContainer>
                         </Table>
                     </TableContainer>
+                    {/*Third Player Row*/}
                     <PlayerContainer>
                         <MidLeftPlayer2></MidLeftPlayer2>
                         <MidRightPlayer2></MidRightPlayer2>
