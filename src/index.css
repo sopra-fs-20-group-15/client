@@ -43,6 +43,14 @@ button {
   border-radius: 10px;
 }
 
+/* This code makes sure that the JustOneLogo is in the center horizontally. */
+.center{
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  margin-left: -135px;
+}
+
 GridItemTitle {
   background: #FCC812;
   font-family: "Happy Monkey", sans-serif;

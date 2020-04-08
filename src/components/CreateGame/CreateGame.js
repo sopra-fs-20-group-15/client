@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import TriangleBackground from '../../views/TriangleBackground.png'
+import JustOneLogo from '../../views/JustOneLogo.png'
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-import Header from "../../views/Header";
 
 
 // "text-decoration-skip-ink: none" is used to make sure that the brackets are underlined too
@@ -123,6 +123,10 @@ const ButtonGroup = styled.div`
   right: 30%;
 `;
 
+const background = {
+    backgroundImage: "url(" + TriangleBackground + ")"
+};
+
 
 class CreateGame extends Component{
     constructor(props) {
@@ -145,7 +149,6 @@ class CreateGame extends Component{
         this.handleIncreaseDevils = this.handleIncreaseDevils.bind(this);
 
     }
-
 
     async createGame() {
         try {
@@ -217,8 +220,17 @@ class CreateGame extends Component{
         // Example: if the key is username, this statement is the equivalent to the following one:
         // this.setState({'username': value});
         // making sure that the new number of players does not violate the constraints imposed by the game rules
+        this.setState({[key]: value});
+    }
+
+    handleMaxNrOfPlayersInput(key, value) {
+        // Example: if the key is username, this statement is the equivalent to the following one:
+        // this.setState({'username': value});
+        // making sure that the new number of players does not violate the constraints imposed by the game rules
         if (this.state.numberOfDevils + this.state.numberOfAngels + value <= 7) {
             this.setState({[key]: value});
+        } else {
+            alert("You have already reached the maximum! The number of bots plus the players allowed to join your game would exceed seven!")
         }
     }
 
@@ -230,6 +242,8 @@ class CreateGame extends Component{
             this.setState({numberOfAngels: this.state.numberOfAngels - 1}, () => {
                 console.log(this.state.numberOfAngels)
             });
+        } else {
+            alert("The number of bots cannot be negative!")
         }
     };
 
@@ -241,6 +255,8 @@ class CreateGame extends Component{
             this.setState({numberOfAngels: this.state.numberOfAngels + 1}, () => {
                 console.log(this.state.numberOfAngels)
             });
+        } else {
+            alert("No more bots can be added!")
         }
     };
 
@@ -249,6 +265,8 @@ class CreateGame extends Component{
             this.setState({numberOfDevils: this.state.numberOfDevils - 1}, () => {
                 console.log(this.state.numberOfDevils)
             });
+        } else {
+            alert("The number of bots cannot be negative!")
         }
     };
 
@@ -257,16 +275,15 @@ class CreateGame extends Component{
             this.setState({numberOfDevils: this.state.numberOfDevils + 1}, () => {
                 console.log(this.state.numberOfDevils)
             });
+        } else {
+            alert("No more bots can be added!")
         }
     };
 
     render() {
         return (
-            <BaseContainer>
-                <div>
-                    <Header height={"100"} />
-                </div>
-                <img src={TriangleBackground}/>
+            <BaseContainer style={background}>
+                <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
                 <GridContainer>
                     <GridItemTitle> Game Name </GridItemTitle>
                     <GridItemInput>
@@ -278,7 +295,7 @@ class CreateGame extends Component{
 
                     <GridItemTitle> Max. Number of Players </GridItemTitle>
                     <GridItemInput>
-                        <select value={this.state.maxNumberOfPlayers} onChange={e => {this.handleInputChange('maxNumberOfPlayers', parseInt(e.target.value))}}>
+                        <select value={this.state.maxNumberOfPlayers} onChange={e => {this.handleMaxNrOfPlayersInput('maxNumberOfPlayers', parseInt(e.target.value))}}>
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>

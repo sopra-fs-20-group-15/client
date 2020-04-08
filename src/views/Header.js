@@ -10,7 +10,6 @@ import {BaseContainer} from "../helpers/layout";
  * https://www.styled-components.com/
  */
 const Container = styled.div`
-  height: 270px;
   background: ${props => props.background};
   display: flex;
   justify-content: center;
@@ -37,7 +36,7 @@ const JustOneLogo = require("./JustOneLogo.png");
 
 const Header = props => {
   return (
-    <Container height={props.height}>
+    <Container>
         <img src={JustOneLogo}/>
     </Container>
   );
