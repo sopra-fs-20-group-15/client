@@ -21,10 +21,48 @@ const GuessedCards = styled.div`
   box-sizing: border-box;
   
   font-size: 50px;
-  font-weight: bold;
+  // font-weight: bold;
   text-align: center;
   line-height: 110px;
   color: #52ff02;
+`;
+const GuessedCards1 = styled.div`
+  width: 80px;
+  height: 110px;
+  
+  position: absolute;
+  bottom: 2%;
+  left: 0.5%
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+  
+  font-size: 50px;
+  // font-weight: bold;
+  text-align: center;
+  line-height: 110px;
+  color: #52ff02;
+`;
+const GuessedCards2 = styled.div`
+  width: 80px;
+  height: 110px;
+  
+  position: absolute;
+  bottom: 1%;
+  left: 1%
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+  
+  font-size: 50px;
+  // font-weight: bold;
+  text-align: center;
+  line-height: 110px;
+  color: #52ff02;
+  
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
 `;
 
 const Deck = styled.div`
@@ -40,9 +78,45 @@ const Deck = styled.div`
   box-sizing: border-box;
   
   font-size: 100px;
-  font-weight: bold;
+  // font-weight: bold;
   text-align: center;
   line-height: 230px;
+`;
+const Deck1 = styled.div`
+  width: 170px;
+  height: 230px;
+  
+  position: absolute;
+  bottom: 2%;
+  left: 19%;
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+  
+  font-size: 100px;
+  // font-weight: bold;
+  text-align: center;
+  line-height: 230px;
+`;
+const Deck2 = styled.div`
+  width: 170px;
+  height: 230px;
+  
+  position: absolute;
+  bottom: 1%;
+  left: 20%;
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+  
+  font-size: 100px;
+  // font-weight: bold;
+  text-align: center;
+  line-height: 230px;
+  
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
 `;
 
 const ActiveCard = styled.div`
@@ -56,6 +130,8 @@ const ActiveCard = styled.div`
   background: #FFFFFF;
   border: 2px solid #000000;
   box-sizing: border-box;
+  
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
 `;
 
 const First = styled.div`
@@ -229,7 +305,7 @@ const FifthWord = styled.div`
 `;
 
 //The position of ActiveCard, Deck and GuessedCards are relative to BoardContainer
-//because of line 57,43
+//because of position: relative and absolute
 const BoardContainer = styled.div`
   width: 550px;
   height: 300px;
@@ -306,6 +382,8 @@ const TopLeftPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 3
@@ -321,6 +399,8 @@ const TopRightPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 4
@@ -335,6 +415,8 @@ const MidLeftPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 5
@@ -350,6 +432,8 @@ const MidRightPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 6
@@ -359,11 +443,13 @@ const MidLeftPlayer2 = styled.div`
   display: inline-block;
   
   margin-top: 2%;
-  margin-left: 3%;
+  margin-left: 2%;
   
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 7
@@ -374,11 +460,13 @@ const MidRightPlayer2 = styled.div`
   float: right;
   
   margin-top: 2%;
-  margin-right: 3%;
+  margin-right: 2%;
   
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 const PlayerDiv = styled.div`
@@ -403,18 +491,22 @@ const BottomPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 
 const PlayerContainer = styled.div`
 `;
 
+
+
 const Table = styled.div`
   width: 1000px;
   height: 500px;
   border-radius: 1000px/500px;
   
-  margin-top: -250px;
+  margin-top: -225px;
   margin-bottom: -200px;
   
   align-items: center;
@@ -523,6 +615,7 @@ const Phase1Circle = styled.div`
     background: #05FF00;
     left: 26px;
     top: 20px;
+    border: 2px solid #000000;
 `;
 
 const Phase2Circle = styled.div`
@@ -533,6 +626,7 @@ const Phase2Circle = styled.div`
     background: #817857;
     left: 82px;
     top: 20px;
+    border: 2px solid #000000;
 `;
 
 const Phase3Circle = styled.div`
@@ -543,6 +637,7 @@ const Phase3Circle = styled.div`
     background: #817857;
     left: 138px;
     top: 20px;
+    border: 2px solid #000000;
 `;
 
 const Phase4Circle = styled.div`
@@ -553,6 +648,7 @@ const Phase4Circle = styled.div`
     background: #817857;
     left: 194px;
     top: 20px;
+    border: 2px solid #000000;
 `;
 
 /**
@@ -663,21 +759,25 @@ class InGame extends React.Component {
                     <TableContainer>
                         <Table>
                             <BoardContainer>
-                            <GuessedCards> 3 </GuessedCards>
-                            <Deck> 7 </Deck>
-                            <ActiveCard>
-                                {/* The words are only placeholders, as are the numbers */}
-                                <First> 1. </First>
-                                <FirstWord> Chocolate </FirstWord>
-                                <Second> 2. </Second>
-                                <SecondWord> Barbie </SecondWord>
-                                <Third> 3. </Third>
-                                <ThirdWord> Marmite </ThirdWord>
-                                <Forth> 4. </Forth>
-                                <ForthWord> Motherfucker </ForthWord>
-                                <Fifth> 5. </Fifth>
-                                <FifthWord> Weather forecast </FifthWord>
-                            </ActiveCard>
+                                <GuessedCards2></GuessedCards2>
+                                <GuessedCards1></GuessedCards1>
+                                <GuessedCards> 3 </GuessedCards>
+                                <Deck2></Deck2>
+                                <Deck1></Deck1>
+                                <Deck> 7 </Deck>
+                                <ActiveCard>
+                                    {/* The words are only placeholders, as are the numbers */}
+                                    <First> 1. </First>
+                                    <FirstWord> Chocolate </FirstWord>
+                                    <Second> 2. </Second>
+                                    <SecondWord> Barbie </SecondWord>
+                                    <Third> 3. </Third>
+                                    <ThirdWord> Marmite </ThirdWord>
+                                    <Forth> 4. </Forth>
+                                    <ForthWord> Motherfucker </ForthWord>
+                                    <Fifth> 5. </Fifth>
+                                    <FifthWord> Weather forecast </FifthWord>
+                                </ActiveCard>
                             </BoardContainer>
                         </Table>
                     </TableContainer>
