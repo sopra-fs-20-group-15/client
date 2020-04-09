@@ -331,6 +331,7 @@ class CreateGame extends Component{
                     <ButtonContainer>
                         <Button
                             width="50%"
+                            disabled={!this.state.gameName}
                             onClick={() => {
                                 this.createGame();
                             }}
