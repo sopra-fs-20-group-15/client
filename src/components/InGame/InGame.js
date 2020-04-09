@@ -21,7 +21,7 @@ const GuessedCards = styled.div`
   box-sizing: border-box;
   
   font-size: 50px;
-  font-weight: bold;
+  // font-weight: bold;
   text-align: center;
   line-height: 110px;
   color: #52ff02;
@@ -40,7 +40,7 @@ const Deck = styled.div`
   box-sizing: border-box;
   
   font-size: 100px;
-  font-weight: bold;
+  // font-weight: bold;
   text-align: center;
   line-height: 230px;
 `;
@@ -229,7 +229,7 @@ const FifthWord = styled.div`
 `;
 
 //The position of ActiveCard, Deck and GuessedCards are relative to BoardContainer
-//because of line 57,43
+//because of position: relative and absolute
 const BoardContainer = styled.div`
   width: 550px;
   height: 300px;
@@ -512,6 +512,7 @@ const Phase1Circle = styled.div`
     background: #05FF00;
     left: 26px;
     top: 20px;
+    border: 2px solid #000000;
 `;
 
 const Phase2Circle = styled.div`
@@ -522,6 +523,7 @@ const Phase2Circle = styled.div`
     background: #817857;
     left: 82px;
     top: 20px;
+    border: 2px solid #000000;
 `;
 
 const Phase3Circle = styled.div`
@@ -532,6 +534,7 @@ const Phase3Circle = styled.div`
     background: #817857;
     left: 138px;
     top: 20px;
+    border: 2px solid #000000;
 `;
 
 const Phase4Circle = styled.div`
@@ -542,6 +545,7 @@ const Phase4Circle = styled.div`
     background: #817857;
     left: 194px;
     top: 20px;
+    border: 2px solid #000000;
 `;
 
 /**
