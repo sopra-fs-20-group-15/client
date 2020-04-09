@@ -667,11 +667,15 @@ class InGame extends React.Component {
      * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
      * These fields are then handled in the onChange() methods in the resp. InputFields
      */
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            // username: null,
-            // password: null
+            remainingCards: 13,
+            guessedCards: 0,
+            currentCard: null,
+            phase: null,
+            round: 1,
+            secondsLeft: 30
         };
     }
     /**
@@ -733,8 +737,8 @@ class InGame extends React.Component {
                     <HUDContainer>
                         <Timer>
                             {/*Placeholders -> will need props!*/}
-                            <Round> Round 13 </Round>
-                            <Seconds> 30 </Seconds>
+                            <Round> Round {this.state.round} </Round>
+                            <Seconds> {this.state.secondsLeft} </Seconds>
                         </Timer>
                         <Phase>
                             <Phase1Circle/>
@@ -742,7 +746,7 @@ class InGame extends React.Component {
                             <Phase3Circle/>
                             <Phase4Circle/>
                             {/* need props here, just placeholder for now*/}
-                            <PhaseMessage> Choose Number </PhaseMessage>
+                            <PhaseMessage> {this.state.phase} </PhaseMessage>
                         </Phase>
                     </HUDContainer>
                     {/*First Player Row*/}
@@ -761,22 +765,22 @@ class InGame extends React.Component {
                             <BoardContainer>
                                 <GuessedCards2></GuessedCards2>
                                 <GuessedCards1></GuessedCards1>
-                                <GuessedCards> 3 </GuessedCards>
+                                <GuessedCards> {this.state.guessedCards} </GuessedCards>
                                 <Deck2></Deck2>
                                 <Deck1></Deck1>
-                                <Deck> 7 </Deck>
+                                <Deck> {this.state.remainingCards} </Deck>
                                 <ActiveCard>
                                     {/* The words are only placeholders, as are the numbers */}
                                     <First> 1. </First>
-                                    <FirstWord> Chocolate </FirstWord>
+                                    <FirstWord> {this.state.currentCard[0]} </FirstWord>
                                     <Second> 2. </Second>
-                                    <SecondWord> Barbie </SecondWord>
+                                    <SecondWord> {this.state.currentCard[1]} </SecondWord>
                                     <Third> 3. </Third>
-                                    <ThirdWord> Marmite </ThirdWord>
+                                    <ThirdWord> {this.state.currentCard[2]} </ThirdWord>
                                     <Forth> 4. </Forth>
-                                    <ForthWord> Motherfucker </ForthWord>
+                                    <ForthWord> {this.state.currentCard[3]} </ForthWord>
                                     <Fifth> 5. </Fifth>
-                                    <FifthWord> Weather forecast </FifthWord>
+                                    <FifthWord> {this.state.currentCard[4]} </FifthWord>
                                 </ActiveCard>
                             </BoardContainer>
                         </Table>
