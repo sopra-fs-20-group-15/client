@@ -381,6 +381,17 @@ const MidRightPlayer2 = styled.div`
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
 `;
 
+const PlayerDiv = styled.div`
+  width: 350px;
+  height: 130px;
+  display: inline-block;
+  float: right;
+    
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+`;
+
 //Player 1
 const BottomPlayer = styled.div`
   width: 350px;
@@ -673,7 +684,7 @@ class InGame extends React.Component {
                     {/*Third Player Row*/}
                     <PlayerContainer>
                         <MidLeftPlayer2></MidLeftPlayer2>
-                        <MidRightPlayer2></MidRightPlayer2>
+                        <PlayerDiv style={{marginTop:"2%", marginLeft:"3%"}}></PlayerDiv>
                     </PlayerContainer>
                     <PlayerContainer>
                         <BottomPlayer></BottomPlayer>

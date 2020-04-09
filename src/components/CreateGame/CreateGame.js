@@ -161,6 +161,7 @@ class CreateGame extends Component{
             });
 
             const response = await api.post('/games', requestBody);
+            //const response = {data: {parameters}}
 
             localStorage.setItem('gameId', response.data.id);
 
