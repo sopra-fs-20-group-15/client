@@ -8,10 +8,9 @@ export const SMALL_WIDTH = 768;
 
 //padding used to be 15
 export const BaseContainer = styled.div`
+  position: relative;
   margin-left: auto;
-  padding-left: 0px;
   margin-right: auto;
-  padding-right: 0px;
   width: ${DESKTOP_WIDTH}px;
   height: ${DESKTOP_HEIGHT}px;
 `;

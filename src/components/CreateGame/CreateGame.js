@@ -100,7 +100,7 @@ const InputField = styled.input`
     color: rgba(0, 0, 0, 0.5);
   }
   position: absolute;
-  width: 50%;
+  width: 45%;
   height: 40px;
   background: rgba(203, 189, 140, 0.54);
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -157,7 +157,7 @@ class CreateGame extends Component{
                 maxNumberOfPlayers: this.state.maxNumberOfPlayers,
                 numberOfAngels: this.state.numberOfAngels,
                 numberOfDevils: this.state.numberOfDevils,
-                password: null
+                password: this.state.password
             });
 
             const response = await api.post('/games', requestBody);
@@ -289,8 +289,8 @@ class CreateGame extends Component{
                     <GridItemTitle> Game Name </GridItemTitle>
                     <GridItemInput>
                         <InputField
-                        placeholder="Enter here.."
-                        onChange={e => {this.handleInputChange('gameName', e.target.value)}}
+                            placeholder="Enter here.."
+                            onChange={e => {this.handleInputChange('gameName', e.target.value)}}
                         />
                     </GridItemInput>
 
