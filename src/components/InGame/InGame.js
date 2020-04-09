@@ -26,6 +26,42 @@ const GuessedCards = styled.div`
   line-height: 110px;
   color: #52ff02;
 `;
+const GuessedCards1 = styled.div`
+  width: 80px;
+  height: 110px;
+  
+  position: absolute;
+  bottom: 2%;
+  left: 0.5%
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+  
+  font-size: 50px;
+  // font-weight: bold;
+  text-align: center;
+  line-height: 110px;
+  color: #52ff02;
+`;
+const GuessedCards2 = styled.div`
+  width: 80px;
+  height: 110px;
+  
+  position: absolute;
+  bottom: 1%;
+  left: 1%
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+  
+  font-size: 50px;
+  // font-weight: bold;
+  text-align: center;
+  line-height: 110px;
+  color: #52ff02;
+`;
 
 const Deck = styled.div`
   width: 170px;
@@ -34,6 +70,40 @@ const Deck = styled.div`
   position: absolute;
   bottom: 3%;
   left: 18%;
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+  
+  font-size: 100px;
+  // font-weight: bold;
+  text-align: center;
+  line-height: 230px;
+`;
+const Deck1 = styled.div`
+  width: 170px;
+  height: 230px;
+  
+  position: absolute;
+  bottom: 2%;
+  left: 19%;
+
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+  
+  font-size: 100px;
+  // font-weight: bold;
+  text-align: center;
+  line-height: 230px;
+`;
+const Deck2 = styled.div`
+  width: 170px;
+  height: 230px;
+  
+  position: absolute;
+  bottom: 1%;
+  left: 20%;
 
   background: #FFFFFF;
   border: 2px solid #000000;
@@ -656,21 +726,25 @@ class InGame extends React.Component {
                     <TableContainer>
                         <Table>
                             <BoardContainer>
-                            <GuessedCards> 3 </GuessedCards>
-                            <Deck> 7 </Deck>
-                            <ActiveCard>
-                                {/* The words are only placeholders, as are the numbers */}
-                                <First> 1. </First>
-                                <FirstWord> Chocolate </FirstWord>
-                                <Second> 2. </Second>
-                                <SecondWord> Barbie </SecondWord>
-                                <Third> 3. </Third>
-                                <ThirdWord> Marmite </ThirdWord>
-                                <Forth> 4. </Forth>
-                                <ForthWord> Motherfucker </ForthWord>
-                                <Fifth> 5. </Fifth>
-                                <FifthWord> Weather forecast </FifthWord>
-                            </ActiveCard>
+                                <GuessedCards2></GuessedCards2>
+                                <GuessedCards1></GuessedCards1>
+                                <GuessedCards> 3 </GuessedCards>
+                                <Deck2></Deck2>
+                                <Deck1></Deck1>
+                                <Deck> 7 </Deck>
+                                <ActiveCard>
+                                    {/* The words are only placeholders, as are the numbers */}
+                                    <First> 1. </First>
+                                    <FirstWord> Chocolate </FirstWord>
+                                    <Second> 2. </Second>
+                                    <SecondWord> Barbie </SecondWord>
+                                    <Third> 3. </Third>
+                                    <ThirdWord> Marmite </ThirdWord>
+                                    <Forth> 4. </Forth>
+                                    <ForthWord> Motherfucker </ForthWord>
+                                    <Fifth> 5. </Fifth>
+                                    <FifthWord> Weather forecast </FifthWord>
+                                </ActiveCard>
                             </BoardContainer>
                         </Table>
                     </TableContainer>
