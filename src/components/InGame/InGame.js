@@ -61,6 +61,8 @@ const GuessedCards2 = styled.div`
   text-align: center;
   line-height: 110px;
   color: #52ff02;
+  
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
 `;
 
 const Deck = styled.div`
@@ -113,6 +115,8 @@ const Deck2 = styled.div`
   // font-weight: bold;
   text-align: center;
   line-height: 230px;
+  
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
 `;
 
 const ActiveCard = styled.div`
@@ -126,6 +130,8 @@ const ActiveCard = styled.div`
   background: #FFFFFF;
   border: 2px solid #000000;
   box-sizing: border-box;
+  
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
 `;
 
 const First = styled.div`
@@ -376,6 +382,8 @@ const TopLeftPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 3
@@ -391,6 +399,8 @@ const TopRightPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 4
@@ -405,6 +415,8 @@ const MidLeftPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 5
@@ -420,6 +432,8 @@ const MidRightPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 6
@@ -429,11 +443,13 @@ const MidLeftPlayer2 = styled.div`
   display: inline-block;
   
   margin-top: 2%;
-  margin-left: 3%;
+  margin-left: 2%;
   
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 7
@@ -444,11 +460,13 @@ const MidRightPlayer2 = styled.div`
   float: right;
   
   margin-top: 2%;
-  margin-right: 3%;
+  margin-right: 2%;
   
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 //Player 1
@@ -462,18 +480,22 @@ const BottomPlayer = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  
+  position: relative;
 `;
 
 
 const PlayerContainer = styled.div`
 `;
 
+
+
 const Table = styled.div`
   width: 1000px;
   height: 500px;
   border-radius: 1000px/500px;
   
-  margin-top: -250px;
+  margin-top: -225px;
   margin-bottom: -200px;
   
   align-items: center;
