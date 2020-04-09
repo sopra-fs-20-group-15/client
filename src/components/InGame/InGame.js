@@ -26,10 +26,6 @@ const GuessedCards = styled.div`
 const Deck = styled.div`
   width: 170px;
   height: 230px;
-  
-  // position: absolute;
-  // bottom: 3%;
-  // left: 18%;
 
   background: #FFFFFF;
   border: 2px solid #000000;
@@ -65,9 +61,6 @@ const Number = styled.div`
     
     font-family: Happy Monkey;
     font-size: 20px;
-    
-    // color: #00CDCD;
-    // top: 17.5px;
 `;
 
 const Word = styled.div`
@@ -79,14 +72,11 @@ const Word = styled.div`
     margin-right: auto;
     
     border-style: solid;
-    border-color: #00CDCD;
     
     font-family: Happy Monkey;
     font-size: 15px;
     justify-content: center;
     display: flex;
-    
-    top: 17.5px;
 `;
 
 //The position of ActiveCard, Deck and GuessedCards are relative to BoardContainer
@@ -97,9 +87,6 @@ const BoardContainer = styled.div`
   display: inline-block;
   
   position: relative;
-
-  // border: 3px solid #000000;
-  // box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
 `;
 
 const Game = styled.div`
@@ -175,6 +162,7 @@ const Table = styled.div`
   height: 500px;
   border-radius: 1000px/500px;
   
+  //allows player HUD to overlap the Table (ich bin so ein genius guy)
   margin-top: -225px;
   margin-bottom: -200px;
   
@@ -195,7 +183,6 @@ const TableContainer = styled.div`
   display: fix;
   align-items: center;
   justify-content: center;
-  //allows player HUD to overlap the Table (ich bin so ein genius guy)
 `;
 
 const Form = styled.div`
@@ -281,7 +268,6 @@ const PhaseCircle = styled.div`
     height: 30px;
     width: 30px;
     border-radius: 50%;
-    // background: #05FF00;
     background: #817857;
     top: 20px;
     border: 2px solid #000000;
