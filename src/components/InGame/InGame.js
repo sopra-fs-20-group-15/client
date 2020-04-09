@@ -12,111 +12,32 @@ import { Button } from '../../views/design/Button';
 const GuessedCards = styled.div`
   width: 80px;
   height: 110px;
-  
-  position: absolute;
-  bottom: 3%;
 
   background: #FFFFFF;
   border: 2px solid #000000;
   box-sizing: border-box;
   
   font-size: 50px;
-  // font-weight: bold;
   text-align: center;
   line-height: 110px;
   color: #52ff02;
-`;
-const GuessedCards1 = styled.div`
-  width: 80px;
-  height: 110px;
-  
-  position: absolute;
-  bottom: 2%;
-  left: 0.5%
-
-  background: #FFFFFF;
-  border: 2px solid #000000;
-  box-sizing: border-box;
-  
-  font-size: 50px;
-  // font-weight: bold;
-  text-align: center;
-  line-height: 110px;
-  color: #52ff02;
-`;
-const GuessedCards2 = styled.div`
-  width: 80px;
-  height: 110px;
-  
-  position: absolute;
-  bottom: 1%;
-  left: 1%
-
-  background: #FFFFFF;
-  border: 2px solid #000000;
-  box-sizing: border-box;
-  
-  font-size: 50px;
-  // font-weight: bold;
-  text-align: center;
-  line-height: 110px;
-  color: #52ff02;
-  
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
 `;
 
 const Deck = styled.div`
   width: 170px;
   height: 230px;
   
-  position: absolute;
-  bottom: 3%;
-  left: 18%;
+  // position: absolute;
+  // bottom: 3%;
+  // left: 18%;
 
   background: #FFFFFF;
   border: 2px solid #000000;
   box-sizing: border-box;
   
   font-size: 100px;
-  // font-weight: bold;
   text-align: center;
   line-height: 230px;
-`;
-const Deck1 = styled.div`
-  width: 170px;
-  height: 230px;
-  
-  position: absolute;
-  bottom: 2%;
-  left: 19%;
-
-  background: #FFFFFF;
-  border: 2px solid #000000;
-  box-sizing: border-box;
-  
-  font-size: 100px;
-  // font-weight: bold;
-  text-align: center;
-  line-height: 230px;
-`;
-const Deck2 = styled.div`
-  width: 170px;
-  height: 230px;
-  
-  position: absolute;
-  bottom: 1%;
-  left: 20%;
-
-  background: #FFFFFF;
-  border: 2px solid #000000;
-  box-sizing: border-box;
-  
-  font-size: 100px;
-  // font-weight: bold;
-  text-align: center;
-  line-height: 230px;
-  
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
 `;
 
 const ActiveCard = styled.div`
@@ -134,7 +55,7 @@ const ActiveCard = styled.div`
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
 `;
 
-const First = styled.div`
+const Number = styled.div`
     position: absolute;
     padding: 4px 0;
     height: 30px;
@@ -144,72 +65,12 @@ const First = styled.div`
     
     font-family: Happy Monkey;
     font-size: 20px;
-    color: #00CDCD;
     
-    top: 17.5px;
+    // color: #00CDCD;
+    // top: 17.5px;
 `;
 
-const Second = styled.div`
-    position: absolute;
-    padding: 4px 0;
-    height: 30px;
-    width: 10%;
-    margin-left: 8px;
-    margin-right: auto;
-    
-    font-family: Happy Monkey;
-    font-size: 20px;
-    color: #42c202;
-    
-    top: 65px;
-`;
-
-const Third = styled.div`
-    position: absolute;
-    padding: 4px 0;
-    height: 30px;
-    width: 10%;
-    margin-left: 8px;
-    margin-right: auto;
-    
-    font-family: Happy Monkey;
-    font-size: 20px;
-    color: #db3d3d;
-    
-    top: 112.5px;
-`;
-
-const Forth = styled.div`
-    position: absolute;
-    padding: 4px 0;
-    height: 30px;
-    width: 10%;
-    margin-left: 8px;
-    margin-right: auto;
-    
-    font-family: Happy Monkey;
-    font-size: 20px;
-    color: #fc9229;
-    
-    top: 160px;
-`;
-
-const Fifth = styled.div`
-    position: absolute;
-    padding: 4px 0;
-    height: 30px;
-    width: 10%;
-    margin-left: 8px;
-    margin-right: auto;
-    
-    font-family: Happy Monkey;
-    font-size: 20px;
-    color: #ffe203;
-    
-    top: 207.5px;
-`;
-
-const FirstWord = styled.div`
+const Word = styled.div`
     position: relative;
     padding: 5px 0;
     height: 30px;
@@ -226,82 +87,6 @@ const FirstWord = styled.div`
     display: flex;
     
     top: 17.5px;
-`;
-
-const SecondWord = styled.div`
-    position: relative;
-    padding: 5px 0;
-    height: 30px;
-    width: 80%;
-    margin-left: 30px;
-    margin-right: auto;
-    
-    border-style: solid;
-    border-color: #42c202;
-    
-    font-family: Happy Monkey;
-    font-size: 15px;
-    justify-content: center;
-    display: flex;
-    
-    top: 35px;
-`;
-
-const ThirdWord = styled.div`
-    position: relative;
-    padding: 5px 0;
-    height: 30px;
-    width: 80%;
-    margin-left: 30px;
-    margin-right: auto;
-    
-    border-style: solid;
-    border-color: #db3d3d;
-    
-    font-family: Happy Monkey;
-    font-size: 15px;
-    justify-content: center;
-    display: flex;
-    
-    top: 52.5px;
-`;
-
-const ForthWord = styled.div`
-    position: relative;
-    padding: 5px 0;
-    height: 30px;
-    width: 80%;
-    margin-left: 30px;
-    margin-right: auto;
-    
-    border-style: solid;
-    border-color: #fc9229;
-    
-    font-family: Happy Monkey;
-    font-size: 15px;
-    justify-content: center;
-    display: flex;
-    
-    top: 70px;
-`;
-
-const FifthWord = styled.div`
-    position: relative;
-    padding: 5px 0;
-    height: 30px;
-    width: 80%;
-    margin-left: 30px;
-    margin-right: auto;
-    
-    border-style: solid;
-    border-color: #ffe203;
-    
-    font-family: Happy Monkey;
-    font-size: 15px;
-    justify-content: center;
-    display: flex;
-    
-    top: 87.5px;
 `;
 
 //The position of ActiveCard, Deck and GuessedCards are relative to BoardContainer
@@ -370,136 +155,20 @@ const Phase = styled.div`
 const HUDContainer = styled.div`
 `;
 
-//Player 2
-const TopLeftPlayer = styled.div`
+const Player = styled.div`
   width: 350px;
   height: 130px;
   display: inline-block;
-  
-  margin-top: -8%;
-  margin-left: 20%;
-  
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
-  
-  position: relative;
-`;
-
-//Player 3
-const TopRightPlayer = styled.div`
-  width: 350px;
-  height: 130px;
-  display: inline-block;
-  float: right;
-  
-  margin-top: -8%;
-  margin-right: 20%;
-  
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
-  
-  position: relative;
-`;
-
-//Player 4
-const MidLeftPlayer = styled.div`
-  width: 350px;
-  height: 130px;
-  display: inline-block;
-  
-  margin-top: 2%;
-  margin-left: 0%;
-  
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
-  
-  position: relative;
-`;
-
-//Player 5
-const MidRightPlayer = styled.div`
-  width: 350px;
-  height: 130px;
-  display: inline-block;
-  float: right;
-  
-  margin-top: 2%;
-  margin-right: 0%;
-  
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
-  
-  position: relative;
-`;
-
-//Player 6
-const MidLeftPlayer2 = styled.div`
-  width: 350px;
-  height: 130px;
-  display: inline-block;
-  
-  margin-top: 2%;
-  margin-left: 2%;
-  
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
-  
-  position: relative;
-`;
-
-//Player 7
-const MidRightPlayer2 = styled.div`
-  width: 350px;
-  height: 130px;
-  display: inline-block;
-  float: right;
-  
-  margin-top: 2%;
-  margin-right: 2%;
-  
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
-  
-  position: relative;
-`;
-
-const PlayerDiv = styled.div`
-  width: 350px;
-  height: 130px;
-  display: inline-block;
-  float: right;
     
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
-`;
-
-//Player 1
-const BottomPlayer = styled.div`
-  width: 350px;
-  height: 130px;
-  
-  margin-top: 2%;
-  margin: 0 auto;
-  
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
   
   position: relative;
 `;
 
-
 const PlayerContainer = styled.div`
 `;
-
-
 
 const Table = styled.div`
   width: 1000px;
@@ -607,46 +276,13 @@ const PhaseMessage = styled.div`
     display: flex;
 `;
 
-const Phase1Circle = styled.div`
+const PhaseCircle = styled.div`
     position: absolute;
     height: 30px;
     width: 30px;
     border-radius: 50%;
-    background: #05FF00;
-    left: 26px;
-    top: 20px;
-    border: 2px solid #000000;
-`;
-
-const Phase2Circle = styled.div`
-    position: absolute;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
+    // background: #05FF00;
     background: #817857;
-    left: 82px;
-    top: 20px;
-    border: 2px solid #000000;
-`;
-
-const Phase3Circle = styled.div`
-    position: absolute;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-    background: #817857;
-    left: 138px;
-    top: 20px;
-    border: 2px solid #000000;
-`;
-
-const Phase4Circle = styled.div`
-    position: absolute;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-    background: #817857;
-    left: 194px;
     top: 20px;
     border: 2px solid #000000;
 `;
@@ -737,57 +373,57 @@ class InGame extends React.Component {
                             <Seconds> 30 </Seconds>
                         </Timer>
                         <Phase>
-                            <Phase1Circle/>
-                            <Phase2Circle/>
-                            <Phase3Circle/>
-                            <Phase4Circle/>
+                            <PhaseCircle style={{left:"26px"}}/>
+                            <PhaseCircle style={{left:"82px"}}/>
+                            <PhaseCircle style={{left:"138px"}}/>
+                            <PhaseCircle style={{left:"194px"}}/>
                             {/* need props here, just placeholder for now*/}
                             <PhaseMessage> Choose Number </PhaseMessage>
                         </Phase>
                     </HUDContainer>
                     {/*First Player Row*/}
                     <PlayerContainer>
-                        <TopLeftPlayer></TopLeftPlayer>
-                        <TopRightPlayer></TopRightPlayer>
+                        <Player style={{marginTop:"-8%", marginLeft:"20%"}}></Player>
+                        <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}></Player>
                     </PlayerContainer>
                     {/*Second Player Row*/}
                     <PlayerContainer>
-                        <MidLeftPlayer></MidLeftPlayer>
-                        <MidRightPlayer></MidRightPlayer>
+                        <Player style={{marginTop:"2%", marginLeft:"0%"}}></Player>
+                        <Player style={{marginTop:"2%", marginRight:"0%", float:"right"}}></Player>
                     </PlayerContainer>
                     {/*The GameBoard and its Content*/}
                     <TableContainer>
                         <Table>
                             <BoardContainer>
-                                <GuessedCards2></GuessedCards2>
-                                <GuessedCards1></GuessedCards1>
-                                <GuessedCards> 3 </GuessedCards>
-                                <Deck2></Deck2>
-                                <Deck1></Deck1>
-                                <Deck> 7 </Deck>
+                                <GuessedCards style={{position:"absolute",left:"1.5%" ,bottom:"1%"}}></GuessedCards>
+                                <GuessedCards style={{position:"absolute",left:"0.75%" ,bottom:"2%"}}></GuessedCards>
+                                <GuessedCards style={{position:"absolute", bottom:"3%"}}> 3 </GuessedCards>
+                                <Deck style={{position:"absolute", bottom:"1%", left:"20%"}}></Deck>
+                                <Deck style={{position:"absolute", bottom:"2%", left:"19%"}}></Deck>
+                                <Deck style={{position:"absolute", bottom:"3%", left:"18%"}}> 7 </Deck>
                                 <ActiveCard>
                                     {/* The words are only placeholders, as are the numbers */}
-                                    <First> 1. </First>
-                                    <FirstWord> Chocolate </FirstWord>
-                                    <Second> 2. </Second>
-                                    <SecondWord> Barbie </SecondWord>
-                                    <Third> 3. </Third>
-                                    <ThirdWord> Marmite </ThirdWord>
-                                    <Forth> 4. </Forth>
-                                    <ForthWord> Motherfucker </ForthWord>
-                                    <Fifth> 5. </Fifth>
-                                    <FifthWord> Weather forecast </FifthWord>
+                                    <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
+                                    <Word style={{borderColor:"#00CDCD", top:"17.5px"}}> Chocolate </Word>
+                                    <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
+                                    <Word style={{borderColor:"#42c202", top:"35px"}}> Barbie </Word>
+                                    <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
+                                    <Word style={{borderColor:"#db3d3d", top:"52.5px"}}> Marmite </Word>
+                                    <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
+                                    <Word style={{borderColor:"#fc9229", top:"70px"}}> Motherfucker </Word>
+                                    <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
+                                    <Word style={{borderColor:"#ffe203", top:"87.5px"}}> Weather forecast </Word>
                                 </ActiveCard>
                             </BoardContainer>
                         </Table>
                     </TableContainer>
                     {/*Third Player Row*/}
                     <PlayerContainer>
-                        <MidLeftPlayer2></MidLeftPlayer2>
-                        <PlayerDiv style={{marginTop:"2%", marginLeft:"3%"}}></PlayerDiv>
+                        <Player style={{marginTop:"2%", marginLeft:"2%"}}></Player>
+                        <Player style={{marginTop:"2%", marginRight:"2%", float:"right"}}></Player>
                     </PlayerContainer>
                     <PlayerContainer>
-                        <BottomPlayer></BottomPlayer>
+                        <Player style={{marginTop:"1%", marginLeft:"38%"}}></Player>
                     </PlayerContainer>
                 </Game>
         );
