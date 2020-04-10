@@ -147,9 +147,7 @@ const Player = styled.div`
   height: 130px;
   display: inline-block;
     
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
+  border: 2px solid #000000;
   
   position: relative;
 `;
@@ -198,20 +196,6 @@ const Form = styled.div`
   border-radius: 5px;
   background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
   transition: opacity 0.5s ease, transform 0.5s ease;
-`;
-
-const InputField = styled.input`
-  &::placeholder {
-    color: rgba(255, 255, 255, 1.0);
-  }
-  height: 35px;
-  padding-left: 15px;
-  margin-left: -4px;
-  border: none;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
 `;
 
 const Label = styled.label`
@@ -271,6 +255,91 @@ const PhaseCircle = styled.div`
     background: #817857;
     top: 20px;
     border: 2px solid #000000;
+`;
+
+//Player HUD related stuff
+
+const ReadyField = styled.div`
+  height: 70px;
+  width: 70px;
+  
+  position: absolute;
+  bottom: 5%;
+  right: 0%;
+  
+  background: #CBBD8C;
+  border: 3px solid #000000;
+  border-radius: 100px;
+  
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 70px;
+  display: flex;
+`;
+
+const InputField = styled.div`
+  height: 55px;
+  width: 240px;
+  
+  position: absolute;
+  bottom: 0%;
+  
+  background: #CBBD8C;
+  border: 3px solid #000000;
+  border-radius: 20px;
+  
+  padding-top: 3%;
+  padding-left: 1.5%;
+  
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const NameField = styled.div`
+  height: 45px;
+  width: 160px;
+  
+  position: absolute;
+  bottom: 34%;
+  left: 1%;
+  
+  background: #FCC812;
+  border: 3px solid #000000;
+  border-radius: 20px;
+
+  padding-top: 1%;
+  padding-left: 1.5%;
+  
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const ScoreField = styled.div`
+  height: 35px;
+  width: 60px;
+  
+  position: absolute;
+  bottom: 36%;
+  left: 43%;
+  
+  padding-left: 4.5%;
+  padding-top: 0.25%;
+  
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+`;
+
+const GuessedCardsField = styled.div`
 `;
 
 /**
@@ -369,7 +438,12 @@ class InGame extends React.Component {
                     </HUDContainer>
                     {/*First Player Row*/}
                     <PlayerContainer>
-                        <Player style={{marginTop:"-8%", marginLeft:"20%"}}></Player>
+                        <Player style={{marginTop:"-8%", marginLeft:"20%"}}>
+                            <ScoreField>699</ScoreField>
+                            <NameField>2.PussySlayer69</NameField>
+                            <InputField>Parent</InputField>
+                            <ReadyField></ReadyField>
+                        </Player>
                         <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}></Player>
                     </PlayerContainer>
                     {/*Second Player Row*/}
