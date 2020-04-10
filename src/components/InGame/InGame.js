@@ -289,44 +289,23 @@ class InGame extends React.Component {
      * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
      * These fields are then handled in the onChange() methods in the resp. InputFields
      */
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            // username: null,
-            // password: null
+            remainingCards: 13,
+            guessedCards: 0,
+            currentCard: null,
+            mysteryWord: null,
+            phase: null,
+            round: 1,
+            secondsLeft: 30,
+            players: null,
+            activePlayer: null,
+            clues: null,
+            guess: null,
+            scores: null
         };
     }
-    /**
-     * HTTP POST request is sent to the backend.
-     * If the request is successful, a new user is returned to the front-end
-     * and its token is stored in the localStorage.
-     */
-    // async login() {
-    //     try {
-    //         const requestBody = JSON.stringify({
-    //             username: this.state.username,
-    //             password: this.state.password,
-    //         });
-    //         const response = await api.put( '/login', requestBody);
-    //
-    //         // Store the token into the local storage.
-    //         localStorage.setItem('token', response.data.token);
-    //         localStorage.setItem('id', response.data.id);
-    //
-    //         // Login successfully worked --> navigate to the route /game in the GameRouter
-    //         this.props.history.push(`/overview`);
-    //     } catch (error) {
-    //         alert(`Something went wrong during the login: \n${handleError(error)}`);
-    //     }
-    // }
-
-    // async register(){
-    //     try{
-    //         this.props.history.push("/register")
-    //     } catch (error){
-    //         alert ("Something went wrong while trying to return to the registration screen")
-    //     }
-    // }
 
     /**
      *  Every time the user enters something in the input field, the state gets updated.
@@ -355,8 +334,8 @@ class InGame extends React.Component {
                     <HUDContainer>
                         <Timer>
                             {/*Placeholders -> will need props!*/}
-                            <Round> Round 13 </Round>
-                            <Seconds> 30 </Seconds>
+                            <Round> Round {this.state.round} </Round>
+                            <Seconds> {this.state.secondsLeft} </Seconds>
                         </Timer>
                         <Phase>
                             <PhaseCircle style={{left:"26px"}}/>
@@ -364,7 +343,7 @@ class InGame extends React.Component {
                             <PhaseCircle style={{left:"138px"}}/>
                             <PhaseCircle style={{left:"194px"}}/>
                             {/* need props here, just placeholder for now*/}
-                            <PhaseMessage> Choose Number </PhaseMessage>
+                            <PhaseMessage> {this.state.phase} </PhaseMessage>
                         </Phase>
                     </HUDContainer>
                     {/*First Player Row*/}
@@ -390,15 +369,15 @@ class InGame extends React.Component {
                                 <ActiveCard>
                                     {/* The words are only placeholders, as are the numbers */}
                                     <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
-                                    <Word style={{borderColor:"#00CDCD", top:"17.5px"}}> Chocolate </Word>
+                                    <Word style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
                                     <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
-                                    <Word style={{borderColor:"#42c202", top:"35px"}}> Barbie </Word>
+                                    <Word style={{borderColor:"#42c202", top:"35px"}}> {this.state.currentCard[1]} </Word>
                                     <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
-                                    <Word style={{borderColor:"#db3d3d", top:"52.5px"}}> Marmite </Word>
+                                    <Word style={{borderColor:"#db3d3d", top:"52.5px"}}> {this.state.currentCard[2]} </Word>
                                     <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
-                                    <Word style={{borderColor:"#fc9229", top:"70px"}}> Motherfucker </Word>
+                                    <Word style={{borderColor:"#fc9229", top:"70px"}}> {this.state.currentCard[3]} </Word>
                                     <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
-                                    <Word style={{borderColor:"#ffe203", top:"87.5px"}}> Weather forecast </Word>
+                                    <Word style={{borderColor:"#ffe203", top:"87.5px"}}> {this.state.currentCard[4]} </Word>
                                 </ActiveCard>
                             </BoardContainer>
                         </Table>
