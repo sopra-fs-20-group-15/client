@@ -146,8 +146,6 @@ const Player = styled.div`
   width: 350px;
   height: 130px;
   display: inline-block;
-    
-  border: 2px solid #000000;
   
   position: relative;
 `;
@@ -265,7 +263,7 @@ const ReadyField = styled.div`
   
   position: absolute;
   bottom: 5%;
-  right: 0%;
+  right: 5%;
   
   background: #CBBD8C;
   border: 3px solid #000000;
@@ -276,6 +274,7 @@ const ReadyField = styled.div`
   font-weight: normal;
   font-size: 70px;
   display: flex;
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
 `;
 
 const InputField = styled.div`
@@ -290,7 +289,7 @@ const InputField = styled.div`
   border-radius: 20px;
   
   padding-top: 3%;
-  padding-left: 1.5%;
+  padding-left: 2%;
   
   font-family: Happy Monkey;
   font-style: normal;
@@ -312,13 +311,13 @@ const NameField = styled.div`
   border: 3px solid #000000;
   border-radius: 20px;
 
-  padding-top: 1%;
+  padding-top: 1.25%;
   padding-left: 1.5%;
   
   font-family: Happy Monkey;
   font-style: normal;
   font-weight: normal;
-  font-size: 20px;
+  font-size: 18px;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
@@ -331,15 +330,40 @@ const ScoreField = styled.div`
   bottom: 36%;
   left: 43%;
   
-  padding-left: 4.5%;
-  padding-top: 0.25%;
+  text-align: center;
+  padding-left: 5%
+  padding-right: 3%;
+  padding-top: 0.60%;
   
   background: #FFFFFF;
   border: 2px solid #000000;
   box-sizing: border-box;
+  
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 17px;
 `;
 
 const GuessedCardsField = styled.div`
+  height: 50px;
+  width: 50px;
+  
+  position: absolute;
+  // top: 5%;
+  // left: 12%;
+  
+  padding-top: 0.5%;
+  align-items: center;
+  text-align: center;
+  
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 23px;
 `;
 
 /**
@@ -439,17 +463,40 @@ class InGame extends React.Component {
                     {/*First Player Row*/}
                     <PlayerContainer>
                         <Player style={{marginTop:"-8%", marginLeft:"20%"}}>
-                            <ScoreField>699</ScoreField>
-                            <NameField>2.PussySlayer69</NameField>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}>2</GuessedCardsField>
+                            <ScoreField>969</ScoreField>
+                            <NameField>2.TheLegend27</NameField>
                             <InputField>Parent</InputField>
                             <ReadyField></ReadyField>
                         </Player>
-                        <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}></Player>
+                        <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}>0</GuessedCardsField>
+                            <ScoreField>9</ScoreField>
+                            <NameField>3.xXPussySlayer69Xx</NameField>
+                            <InputField>Reproduction</InputField>
+                            <ReadyField></ReadyField>
+                        </Player>
                     </PlayerContainer>
                     {/*Second Player Row*/}
                     <PlayerContainer>
-                        <Player style={{marginTop:"2%", marginLeft:"0%"}}></Player>
-                        <Player style={{marginTop:"2%", marginRight:"0%", float:"right"}}></Player>
+                        <Player style={{marginTop:"2%", marginLeft:"0%"}}>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                            <ScoreField></ScoreField>
+                            <NameField></NameField>
+                            <InputField></InputField>
+                            <ReadyField></ReadyField>
+                        </Player>
+                        <Player style={{marginTop:"2%", marginRight:"0%", float:"right"}}>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                            <ScoreField></ScoreField>
+                            <NameField></NameField>
+                            <InputField></InputField>
+                            <ReadyField></ReadyField>
+                        </Player>
                     </PlayerContainer>
                     {/*The GameBoard and its Content*/}
                     <TableContainer>
@@ -479,11 +526,32 @@ class InGame extends React.Component {
                     </TableContainer>
                     {/*Third Player Row*/}
                     <PlayerContainer>
-                        <Player style={{marginTop:"2%", marginLeft:"2%"}}></Player>
-                        <Player style={{marginTop:"2%", marginRight:"2%", float:"right"}}></Player>
+                        <Player style={{marginTop:"2%", marginLeft:"2%"}}>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                            <ScoreField></ScoreField>
+                            <NameField></NameField>
+                            <InputField></InputField>
+                            <ReadyField></ReadyField>
+                        </Player>
+                        <Player style={{marginTop:"2%", marginRight:"2%", float:"right"}}>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                            <ScoreField></ScoreField>
+                            <NameField></NameField>
+                            <InputField></InputField>
+                            <ReadyField></ReadyField>
+                        </Player>
                     </PlayerContainer>
                     <PlayerContainer>
-                        <Player style={{marginTop:"1%", marginLeft:"38%"}}></Player>
+                        <Player style={{marginTop:"1%", marginLeft:"38%"}}>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                            <ScoreField></ScoreField>
+                            <NameField></NameField>
+                            <InputField></InputField>
+                            <ReadyField></ReadyField>
+                        </Player>
                     </PlayerContainer>
                 </Game>
         );
