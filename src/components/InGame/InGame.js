@@ -673,42 +673,17 @@ class InGame extends React.Component {
             remainingCards: 13,
             guessedCards: 0,
             currentCard: null,
+            mysteryWord: null,
             phase: null,
             round: 1,
-            secondsLeft: 30
+            secondsLeft: 30,
+            players: null,
+            activePlayer: null,
+            clues: null,
+            guess: null,
+            scores: null
         };
     }
-    /**
-     * HTTP POST request is sent to the backend.
-     * If the request is successful, a new user is returned to the front-end
-     * and its token is stored in the localStorage.
-     */
-    // async login() {
-    //     try {
-    //         const requestBody = JSON.stringify({
-    //             username: this.state.username,
-    //             password: this.state.password,
-    //         });
-    //         const response = await api.put( '/login', requestBody);
-    //
-    //         // Store the token into the local storage.
-    //         localStorage.setItem('token', response.data.token);
-    //         localStorage.setItem('id', response.data.id);
-    //
-    //         // Login successfully worked --> navigate to the route /game in the GameRouter
-    //         this.props.history.push(`/overview`);
-    //     } catch (error) {
-    //         alert(`Something went wrong during the login: \n${handleError(error)}`);
-    //     }
-    // }
-
-    // async register(){
-    //     try{
-    //         this.props.history.push("/register")
-    //     } catch (error){
-    //         alert ("Something went wrong while trying to return to the registration screen")
-    //     }
-    // }
 
     /**
      *  Every time the user enters something in the input field, the state gets updated.
