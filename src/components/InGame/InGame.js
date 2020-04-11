@@ -259,7 +259,7 @@ const ReadyField = styled.button`
     transform: translateY(-2px);
   }
   cursor: ${props => (props.disabled ? "default" : "pointer")};
-  opacity: ${props => (props.disabled ? 0.4 : 1)};
+  // opacity: ${props => (props.disabled ? 0.8 : 1)};
   
   height: 70px;
   width: 70px;
@@ -272,6 +272,7 @@ const ReadyField = styled.button`
   border: 3px solid #000000;
   border-radius: 100px;
   
+  text-position: absolute;
   font-family: Happy Monkey;
   font-style: normal;
   font-weight: normal;
@@ -469,7 +470,7 @@ class InGame extends React.Component {
 
     async test() {
         try {
-            this.props.history.push(`/gamecreate/`);
+            this.props.history.push(`/creategame/`);
         } catch (error) {
             alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
             this.props.history.push('/lobbyOverview');
@@ -531,9 +532,12 @@ class InGame extends React.Component {
                             <NameField>2.TheLegend27</NameField>
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                                    {e => {this.handleInputChange('gameId', e.target.value);}}/>
                             </InputField>
-                            <ReadyField></ReadyField>
+                            <ReadyField disabled={!this.state.gameId}
+                                        onClick={() => {this.test();}}>
+                                <p hidden={!this.state.gameId}>...</p>
+                            </ReadyField>
                         </Player>
                         {/*Player 3*/}
                         <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}>
