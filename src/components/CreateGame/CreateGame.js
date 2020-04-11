@@ -332,7 +332,8 @@ class CreateGame extends Component{
                     <ButtonContainer>
                         <Button
                             width="50%"
-                            disabled={!this.state.gameName}
+                            // The trim() method lets us check for empty strings that
+                            disabled={!this.state.gameName || this.state.gameName.trim() === "" || (this.state.password && this.state.password.trim() === "")}
                             onClick={() => {
                                 this.createGame();
                             }}
