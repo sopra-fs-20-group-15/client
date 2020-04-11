@@ -18,14 +18,16 @@ const Seconds = styled.div`
 
 const Message = styled.div`
     position: absolute;
-    top: 30px;
+    top: 70px;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    line-height: 1.0;
     font-family: Happy Monkey;
-    text-decoration: underline;
-    font-size: 28px;
+    font-size: 40px;
+    font-weight: bold;
     justify-content: center;
+    text-align: center;
     display: flex;
 `;
 
@@ -33,7 +35,7 @@ class Timer extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            seconds: 30
+            seconds: 5
         };
     }
 
