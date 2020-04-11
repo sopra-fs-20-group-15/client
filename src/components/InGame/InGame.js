@@ -387,9 +387,9 @@ class InGame extends React.Component {
         this.state = {
             remainingCards: 13,
             guessedCards: 0,
-            currentCard: null,
+            currentCard: ["Motherfucker", "Volvo", "Marmite", "Furry", "Camper"],
             mysteryWord: null,
-            phase: null,
+            phase: "Choose Number",
             round: 1,
             secondsLeft: 30,
             players: null,
@@ -419,6 +419,8 @@ class InGame extends React.Component {
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
     componentDidMount() {}
+
+
 
     render() {
         return (
