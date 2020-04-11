@@ -416,15 +416,42 @@ class InGame extends React.Component {
             guessedCards: 0,
             currentCard: ["Motherfucker", "Volvo", "Marmite", "Furry", "Camper"],
             mysteryWord: null,
-            phase: "Choose Number",
+            phaseNumber: 1,
+            phase: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
             round: 1,
-            secondsLeft: 30,
-            players: null,
-            activePlayer: null,
+            secondsLeft: 15,
+            // temporary list of strings and active player (for test purpose)
+            players: ["Joe","Minh","Kai","Charlotte","Raphy"],
+            activePlayer: "Minh",
             clues: null,
             guess: null,
             scores: null
         };
+    }
+
+    //clears previous phase and sets up the new one (like resetting input, timer and other stuff) NOT FINISHED YET
+    switchPhase() {
+        if (this.state.phaseNumber == 4) { this.setState({round: this.state.round+1}); }
+        let nextPhase = [2,3,4,1];
+        let nextTimer = [45,45,15,15];
+        this.switchPhaseHUD(this.state.phaseNumber);
+        this.setState({
+            phaseNumber: nextPhase[this.state.phaseNumber-1],
+            secondsLeft: nextTimer[this.state.phaseNumber-1]
+        });
+
+    }
+
+    switchPhaseHUD(id) {
+        let greyPhase = document.getElementById("phase"+id);
+        greyPhase.style.backgroundColor = "#817857";
+        if (id != 4) {
+            let greenPhase = document.getElementById("phase"+(id+1));
+            greenPhase.style.backgroundColor = "#05FF00";
+        } else {
+            let greenPhase = document.getElementById("phase"+(1));
+            greenPhase.style.backgroundColor = "#05FF00";
+        }
     }
 
     async getNewCard() {
@@ -468,19 +495,6 @@ class InGame extends React.Component {
         }
     }
 
-    async test() {
-        try {
-            this.props.history.push(`/creategame/`);
-        } catch (error) {
-            alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
-            this.props.history.push('/lobbyOverview');
-        }
-    }
-
-
-
-
-
     /**
      *  Every time the user enters something in the input field, the state gets updated.
      * @param key (the key of the state for identifying the field that needs to be updated)
@@ -514,12 +528,12 @@ class InGame extends React.Component {
                             <Seconds> {this.state.secondsLeft} </Seconds>
                         </Timer>
                         <Phase>
-                            <PhaseCircle style={{left:"26px"}}/>
-                            <PhaseCircle style={{left:"82px"}}/>
-                            <PhaseCircle style={{left:"138px"}}/>
-                            <PhaseCircle style={{left:"194px"}}/>
+                            <PhaseCircle id={"phase1"} style={{left:"26px", backgroundColor:"#05FF00"}}/>
+                            <PhaseCircle id={"phase2"} style={{left:"82px"}}/>
+                            <PhaseCircle id={"phase3"} style={{left:"138px"}}/>
+                            <PhaseCircle id={"phase4"} style={{left:"194px"}}/>
                             {/* need props here, just placeholder for now*/}
-                            <PhaseMessage> {this.state.phase} </PhaseMessage>
+                            <PhaseMessage> {this.state.phase[this.state.phaseNumber-1]} </PhaseMessage>
                         </Phase>
                     </HUDContainer>
                     {/*First Player Row*/}
@@ -535,7 +549,7 @@ class InGame extends React.Component {
                                     {e => {this.handleInputChange('gameId', e.target.value);}}/>
                             </InputField>
                             <ReadyField disabled={!this.state.gameId}
-                                        onClick={() => {this.test();}}>
+                                        onClick={() => {this.switchPhase();}}>
                                 <p hidden={!this.state.gameId}>...</p>
                             </ReadyField>
                         </Player>
