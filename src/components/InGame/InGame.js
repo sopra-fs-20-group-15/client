@@ -385,6 +385,7 @@ class InGame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            gameId: null,
             remainingCards: 13,
             guessedCards: 0,
             currentCard: ["Motherfucker", "Volvo", "Marmite", "Furry", "Camper"],
@@ -398,6 +399,22 @@ class InGame extends React.Component {
             guess: null,
             scores: null
         };
+    }
+
+    async getNewCard() {
+        try {
+            //vlt noch ein check if deck has cards in it
+            //gets a new card and decrease deck size by 1
+            const response = await api.get('/games/'+this.state.gameId+"/cards/"+localStorage.getItem("token"));
+            this.setState({
+                currentCard: response.data,
+                remainingCards: this.state.remainingCards-1
+            });
+
+
+        } catch (error) {
+            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`)
+        }
     }
 
     /**
