@@ -111,7 +111,7 @@ const Game = styled.div`
   background: linear-gradient(180deg, #005C0F 0%, rgba(0, 147, 23, 0) 100%), #05F400;
 `;
 
-const Timer1 = styled.div`
+const TimerContainer = styled.div`
   position: relative;
   width: 175px;
   height: 175px;
@@ -428,11 +428,10 @@ class InGame extends React.Component {
                 <Game>
                     {/*Timer and Phase*/}
                     <HUDContainer>
-                        <Timer1>
-                            {/*Placeholders -> will need props!*/}
+                        <TimerContainer>
                             <Round> Round {this.state.round} </Round>
-                            <Timer/>
-                        </Timer1>
+                            <div> {this.state.round === 2 || this.state.round === 3 ? <Timer/> : null} </div>
+                        </TimerContainer>
                         <Phase>
                             <PhaseCircle style={{left:"26px"}}/>
                             <PhaseCircle style={{left:"82px"}}/>
