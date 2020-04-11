@@ -93,7 +93,7 @@ class Register extends React.Component {
         password: this.state.password,
       });
       // eslint-disable-next-line
-      const response = await api.post('/users', requestBody);
+      const response = await api.post('/players', requestBody);
 
       // registration successfully worked --> navigate to the route /login
       this.props.history.push(`/login`);
