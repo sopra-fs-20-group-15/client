@@ -387,6 +387,10 @@ class InGame extends React.Component {
         this.state = {
             // username: null,
             // password: null
+            phase: 1,
+            phaseMessage: "Choose Number",
+            round: 1,
+            second: 30
         };
     }
     /**
@@ -448,8 +452,8 @@ class InGame extends React.Component {
                     <HUDContainer>
                         <Timer>
                             {/*Placeholders -> will need props!*/}
-                            <Round> Round 13 </Round>
-                            <Seconds> 30 </Seconds>
+                            <Round> Round {this.state.round} </Round>
+                            <Seconds> {this.state.second} </Seconds>
                         </Timer>
                         <Phase>
                             <PhaseCircle style={{left:"26px"}}/>
@@ -457,7 +461,7 @@ class InGame extends React.Component {
                             <PhaseCircle style={{left:"138px"}}/>
                             <PhaseCircle style={{left:"194px"}}/>
                             {/* need props here, just placeholder for now*/}
-                            <PhaseMessage> Choose Number </PhaseMessage>
+                            <PhaseMessage> {this.state.phaseMessage} </PhaseMessage>
                         </Phase>
                     </HUDContainer>
                     {/*First Player Row*/}
