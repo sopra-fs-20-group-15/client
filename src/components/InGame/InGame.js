@@ -385,6 +385,7 @@ class InGame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            gameId: null,
             remainingCards: 13,
             guessedCards: 0,
             currentCard: ["Motherfucker", "Volvo", "Marmite", "Furry", "Camper"],
@@ -399,6 +400,50 @@ class InGame extends React.Component {
             scores: null
         };
     }
+
+    async getNewCard() {
+        try {
+            //vlt noch ein check if deck has cards in it
+            //gets a new card and decrease deck size by 1
+            const response = await api.get('/games/'+this.state.gameId+"/cards/"+localStorage.getItem("token"));
+
+            this.setState({
+                currentCard: response.data,
+                remainingCards: this.state.remainingCards-1
+            });
+        } catch (error) {
+            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`)
+        }
+    }
+
+    //sets the mystery word and cross out all other words
+    async setMysteryWord(wordId) {
+        try {
+            const requestBody = JSON.stringify({
+                wordId: wordId,
+                playerToken: localStorage.getItem("token")
+            });
+
+            const response = await api.post('/games/'+this.state.gameId+"/cards/", requestBody);
+            this.setState({
+                mysteryWord: response.data
+            });
+
+            var i;
+            for (i=0 ; i<this.state.currentCard.length ; i++) {
+                if (wordId-1 != i) {
+                    var lineThroughWord = document.getElementById("word"+(i+1));
+                    lineThroughWord.style.textDecoration = "line-through";
+                }
+            }
+        }
+
+         catch (error) {
+            alert(`Something went wrong while determine the Mystery Word: \n${handleError(error)}`)
+        }
+    }
+
+
 
     /**
      *  Every time the user enters something in the input field, the state gets updated.
@@ -418,7 +463,7 @@ class InGame extends React.Component {
      * You may call setState() immediately in componentDidMount().
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
-    componentDidMount() {}
+    componentDidMount(){}
 
 
 
@@ -492,15 +537,15 @@ class InGame extends React.Component {
                                 <ActiveCard>
                                     {/* The words are only placeholders, as are the numbers */}
                                     <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
-                                    <Word style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
+                                    <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
                                     <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
-                                    <Word style={{borderColor:"#42c202", top:"35px"}}> {this.state.currentCard[1]} </Word>
+                                    <Word id={"word2"} style={{borderColor:"#42c202", top:"35px"}}> {this.state.currentCard[1]} </Word>
                                     <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
-                                    <Word style={{borderColor:"#db3d3d", top:"52.5px"}}> {this.state.currentCard[2]} </Word>
+                                    <Word id={"word3"} style={{borderColor:"#db3d3d", top:"52.5px"}}> {this.state.currentCard[2]} </Word>
                                     <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
-                                    <Word style={{borderColor:"#fc9229", top:"70px"}}> {this.state.currentCard[3]} </Word>
+                                    <Word id={"word4"} style={{borderColor:"#fc9229", top:"70px"}}> {this.state.currentCard[3]} </Word>
                                     <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
-                                    <Word style={{borderColor:"#ffe203", top:"87.5px"}}> {this.state.currentCard[4]} </Word>
+                                    <Word id={"word5"} style={{borderColor:"#ffe203", top:"87.5px"}}> {this.state.currentCard[4]} </Word>
                                 </ActiveCard>
                             </BoardContainer>
                         </Table>
