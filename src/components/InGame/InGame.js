@@ -104,9 +104,6 @@ const Game = styled.div`
   min-width: 1366px;
   min-height: 768px;
   
-  //determines the layer of the div component (-1 = background)
-  z-index: -1;
-  
   background: linear-gradient(180deg, #005C0F 0%, rgba(0, 147, 23, 0) 100%), #05F400;
 `;
 
@@ -171,7 +168,7 @@ const Table = styled.div`
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
   
-  z-index: -1;
+  // z-index: -1;
 `;
 
 
@@ -257,7 +254,13 @@ const PhaseCircle = styled.div`
 
 //Player HUD related stuff
 
-const ReadyField = styled.div`
+const ReadyField = styled.button`
+  &:hover {
+    transform: translateY(-2px);
+  }
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
+  opacity: ${props => (props.disabled ? 0.4 : 1)};
+  
   height: 70px;
   width: 70px;
   
@@ -298,6 +301,28 @@ const InputField = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
+const Input = styled.input`
+&::placeholder {
+    color: rgba(0, 0, 0, 1.0);
+  }
+  height: 55px;
+  width: 240px;
+  
+  padding-bottom: 10%;
+  padding-left: 5%;
+  
+  background: #CBBD8C;
+  border:none;
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+
 
 const NameField = styled.div`
   height: 45px;
@@ -437,11 +462,21 @@ class InGame extends React.Component {
                 }
             }
         }
-
          catch (error) {
             alert(`Something went wrong while determine the Mystery Word: \n${handleError(error)}`)
         }
     }
+
+    async test() {
+        try {
+            this.props.history.push(`/gamecreate/`);
+        } catch (error) {
+            alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
+            this.props.history.push('/lobbyOverview');
+        }
+    }
+
+
 
 
 
@@ -488,39 +523,55 @@ class InGame extends React.Component {
                     </HUDContainer>
                     {/*First Player Row*/}
                     <PlayerContainer>
+                        {/*Player 2*/}
                         <Player style={{marginTop:"-8%", marginLeft:"20%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>2</GuessedCardsField>
                             <ScoreField>969</ScoreField>
                             <NameField>2.TheLegend27</NameField>
-                            <InputField>Parent</InputField>
+                            <InputField>
+                                <Input placeholder="Enter here.." onChange=
+                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                            </InputField>
                             <ReadyField></ReadyField>
                         </Player>
+                        {/*Player 3*/}
                         <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>0</GuessedCardsField>
                             <ScoreField>9</ScoreField>
                             <NameField>3.xXPussySlayer69Xx</NameField>
-                            <InputField>Reproduction</InputField>
+                            <InputField>
+                                <Input placeholder="Enter here.." onChange=
+                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                            </InputField>
                             <ReadyField></ReadyField>
                         </Player>
                     </PlayerContainer>
                     {/*Second Player Row*/}
                     <PlayerContainer>
+                        {/*Player 4*/}
                         <Player style={{marginTop:"2%", marginLeft:"0%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
                             <NameField></NameField>
-                            <InputField></InputField>
+                            <InputField>
+                                <Input placeholder="Enter here.." onChange=
+                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                            </InputField>
                             <ReadyField></ReadyField>
                         </Player>
+                        {/*Player 5*/}
                         <Player style={{marginTop:"2%", marginRight:"0%", float:"right"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
                             <NameField></NameField>
-                            <InputField></InputField>
+                            <InputField>
+                                <Input placeholder="Enter here.." onChange=
+                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                            </InputField>
                             <ReadyField></ReadyField>
                         </Player>
                     </PlayerContainer>
@@ -552,30 +603,42 @@ class InGame extends React.Component {
                     </TableContainer>
                     {/*Third Player Row*/}
                     <PlayerContainer>
+                        {/*Player 6*/}
                         <Player style={{marginTop:"2%", marginLeft:"2%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
                             <NameField></NameField>
-                            <InputField></InputField>
+                            <InputField>
+                                <Input placeholder="Enter here.." onChange=
+                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                            </InputField>
                             <ReadyField></ReadyField>
                         </Player>
+                        {/*Player 7*/}
                         <Player style={{marginTop:"2%", marginRight:"2%", float:"right"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
                             <NameField></NameField>
-                            <InputField></InputField>
+                            <InputField>
+                                <Input placeholder="Enter here.." onChange=
+                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                            </InputField>
                             <ReadyField></ReadyField>
                         </Player>
                     </PlayerContainer>
                     <PlayerContainer>
+                        {/*Player 1*/}
                         <Player style={{marginTop:"1%", marginLeft:"38%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
                             <NameField></NameField>
-                            <InputField></InputField>
+                            <InputField>
+                                <Input placeholder="Enter here.." onChange=
+                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                            </InputField>
                             <ReadyField></ReadyField>
                         </Player>
                     </PlayerContainer>
