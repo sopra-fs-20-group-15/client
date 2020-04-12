@@ -10,7 +10,7 @@ import { Redirect } from "react-router-dom";
  * @Guard
  * @param props
  */
-export const OverViewGuard = props => {
+export const LobbyOverviewGuard = props => {
   if (localStorage.getItem("token")) {
     return props.children;
   }

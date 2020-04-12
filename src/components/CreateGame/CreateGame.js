@@ -166,7 +166,7 @@ class CreateGame extends Component{
             localStorage.setItem('gameId', response.data.id);
 
             // registration successfully worked --> navigate to the route /login
-            this.props.history.push(`/games/` + this.props.match.params.id);
+            this.props.history.push(`/lobby/` + this.props.match.params.id);
         } catch (error) {
             alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
             this.props.history.push('/lobbyOverview');

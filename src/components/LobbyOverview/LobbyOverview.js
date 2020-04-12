@@ -8,6 +8,7 @@ import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import Header from "../../views/Header";
 import JustOneLogo from "../../views/JustOneLogo.png";
+import TriangleBackground from '../../views/TriangleBackground.png'
 
 
 const GridItemTitle = styled.div`
@@ -23,6 +24,17 @@ const GridItemTitle = styled.div`
   text-decoration-skip-ink: none;
 `;
 
+const GridNormalItem = styled.div`
+  background: #ECDD8F;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background: #FCC812;
+  font-family: Happy Monkey;
+  font-size: 24px;
+
+`;
+
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: auto auto auto auto auto;
@@ -35,7 +47,7 @@ const GridContainer = styled.div`
   left: 316px;
   right: 316px;
   top: 260px;
-  bottom: 312px;
+  bottom: 200px;
   overflow-y: scroll;
   
   
@@ -61,14 +73,29 @@ const PlayerContainer = styled.li`
   justify-content: center;
 `;
 
+const background = {
+  backgroundImage: "url(" + TriangleBackground + ")"
+};
+
+const ButtonGroup = styled.div`
+  position: absolute;
+  bottom: 5%;
+  left: 30%;
+  right: 30%;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
 
 
 class LobbyOverview extends Component {
   constructor() {
     super();
     this.state = {
-      users: null,
-      userForProfile: null
+      games: [1, 2]
     };
   }
 
@@ -128,48 +155,38 @@ class LobbyOverview extends Component {
     return (
         <BaseContainer style={background}>
           <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
+          {!this.state.games ? (
+              <div> There are no games available at the moment! </div>
+              ) : (
           <GridContainer>
-            <GridItemTitle> Game Name </GridItemTitle>
-            <GridItemInput>
-              <InputField
-                  placeholder="Enter here.."
-                  onChange={e => {this.handleInputChange('gameName', e.target.value)}}
-              />
-            </GridItemInput>
-
-            <GridItemTitle> Private/Public </GridItemTitle>
-            <GridItemInput>
-              <select value={this.state.maxNumberOfPlayers} onChange={e => {this.handleMaxNrOfPlayersInput('maxNumberOfPlayers', parseInt(e.target.value))}}>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-              </select>
-            </GridItemInput>
-
-            <GridItemTitle> Players </GridItemTitle>
-            <GridItemInput>
-              <Minus onClick={this.handleDecreaseAngels.bind(this)}> - </Minus>
-              <Number> {this.state.numberOfAngels} </Number>
-              <Plus onClick={this.handleIncreaseAngels.bind(this)}> + </Plus>
-            </GridItemInput>
-
-            <GridItemTitle> Bots </GridItemTitle>
-            <GridItemInput>
-              <Minus onClick={this.handleDecreaseDevils.bind(this)}> - </Minus>
-              <Number> {this.state.numberOfDevils} </Number>
-              <Plus onClick={this.handleIncreaseDevils.bind(this)}> + </Plus>
-            </GridItemInput>
-
-            <GridItemTitle> Choose Game </GridItemTitle>
-            <GridItemInput>
-              <InputField
-                  placeholder="Enter here.."
-                  onChange={e => {this.handleInputChange('password', e.target.value)}}
-              />
-            </GridItemInput>
+            <GridItemTitle> A </GridItemTitle>
+            <GridItemTitle> B </GridItemTitle>
+            <GridItemTitle> C </GridItemTitle>
+            <GridItemTitle> D </GridItemTitle>
+            <GridItemTitle> E </GridItemTitle>
+            {this.state.games.map(game =>{
+              return (
+                  <div>
+                    <div>
+                      <GridNormalItem> 1 </GridNormalItem>
+                    </div>
+                    <div>
+                      <GridNormalItem> 2 </GridNormalItem>
+                    </div>
+                    <div>
+                      <GridNormalItem> 3 </GridNormalItem>
+                    </div>
+                    <div>
+                      <GridNormalItem> 4 </GridNormalItem>
+                    </div>
+                    <div>
+                      <GridNormalItem> 5 </GridNormalItem>
+                    </div>
+                  </div>
+              )
+            })}
           </GridContainer>
+          )}
 
           <ButtonGroup>
             <ButtonContainer>
