@@ -2,11 +2,8 @@ import React, {Component, Fragment} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import Player from '../../views/Player';
-import { Spinner } from '../../views/design/Spinner';
-import { Button } from '../../views/design/Button';
+import { Button, LogoutButton } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-import Header from "../../views/Header";
 import JustOneLogo from "../../views/JustOneLogo.png";
 import TriangleBackground from '../../views/TriangleBackground.png'
 
@@ -32,7 +29,6 @@ const GridNormalItem = styled.div`
   display: flex;
   font-family: Happy Monkey;
   font-size: 24px;
-
 `;
 
 const GridContainer = styled.div`
@@ -51,26 +47,27 @@ const GridContainer = styled.div`
   bottom: 200px;
   overflow-y: scroll;
   
-  border-style: solid;
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
-const Container = styled(BaseContainer)`
-  color: white;
-  text-align: center;
+const BotContainer = styled.div`
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-gap: 3px 3px;
+  background-color: #000000;
+  position: relative;
+  
+  box-sizing: border-box;
 `;
 
-const Games = styled.ul`
-  list-style: none;
-  padding-left: 0;
-`;
-
-const PlayerContainer = styled.li`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const BotCell = styled.li`
+  background: #ECDD8F;
   justify-content: center;
+  align-items: center;
+  display: flex;
+  font-family: Happy Monkey;
+  font-size: 24px;
 `;
 
 const background = {
@@ -84,10 +81,25 @@ const ButtonGroup = styled.div`
   right: 30%;
 `;
 
+const LogoutButtonContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 15px;
+  justify-content: center;
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
+`;
+
+const ChooseGameContainer = styled.div`
+  background: #ECDD8F;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
 `;
 
 
@@ -154,6 +166,16 @@ class LobbyOverview extends Component {
   render() {
     return (
         <BaseContainer style={background}>
+          <LogoutButtonContainer>
+            <LogoutButton
+                width="255px"
+                onClick={() => {
+                  this.props.history.push('/login');
+                }}
+            >
+              Logout
+            </LogoutButton>
+          </LogoutButtonContainer>
           <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
           {!this.state.games ? (
               <GridContainer>
@@ -177,8 +199,13 @@ class LobbyOverview extends Component {
                        <GridNormalItem> 1 </GridNormalItem>
                        <GridNormalItem> 2 </GridNormalItem>
                        <GridNormalItem> 3 </GridNormalItem>
-                       <GridNormalItem> 4 </GridNormalItem>
-                       <GridNormalItem> 5 </GridNormalItem>
+                       <BotContainer>
+                         <BotCell> Angels: </BotCell>
+                         <BotCell> Devils: </BotCell>
+                       </BotContainer>
+                       <ChooseGameContainer>
+                         <input type="radio" id="game" name="game"/>
+                       </ChooseGameContainer>
                      </Fragment>
                  )})}
           </GridContainer>
