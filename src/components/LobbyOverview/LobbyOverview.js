@@ -7,10 +7,42 @@ import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import Header from "../../views/Header";
+import JustOneLogo from "../../views/JustOneLogo.png";
 
 
+const GridItemTitle = styled.div`
+  background: #FCC812;
+  font-family: Happy Monkey;
+  font-size: 24px;
+  text-decoration: underline;
+  text-transform: uppercase;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  text-decoration-skip-ink: none;
+`;
 
-
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  grid-gap: 3px 3px;
+  background-color: #000000;
+  border-radius: 25px;
+  border-style: solid;
+  position: absolute;
+  
+  left: 316px;
+  right: 316px;
+  top: 260px;
+  bottom: 312px;
+  overflow-y: scroll;
+  
+  
+  border: 1px solid #FFFFFF;
+  box-sizing: border-box;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -94,39 +126,86 @@ class LobbyOverview extends Component {
 
   render() {
     return (
-        <Container>
-          <div><Header height={"100"} /></div>
-          <h2>User Overview </h2>
-          <p>To inspect user click the user field:</p>
-          {!this.state.users ? (
-              <Spinner />
-          ) : (
-              <div>
-                <Games>
-                  {this.state.users.map(user => {
-                    return (
-                        <PlayerContainer onClick={() => {
-                          this.props.history.push({
-                            pathname: '/profile/'+user.id
-                          })
-                        }} key={user.id}>
-                          <Player user={user} />
-                        </PlayerContainer>
-                    );
-                  })}
-                  
-                </Games>
-                <Button
-                    width={"30%"}
-                    onClick={() => {
-                      this.logout();
-                    }}
-                >
-                  Logout
-                </Button>
-              </div>
-          )}
-        </Container>
+        <BaseContainer style={background}>
+          <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
+          <GridContainer>
+            <GridItemTitle> Game Name </GridItemTitle>
+            <GridItemInput>
+              <InputField
+                  placeholder="Enter here.."
+                  onChange={e => {this.handleInputChange('gameName', e.target.value)}}
+              />
+            </GridItemInput>
+
+            <GridItemTitle> Private/Public </GridItemTitle>
+            <GridItemInput>
+              <select value={this.state.maxNumberOfPlayers} onChange={e => {this.handleMaxNrOfPlayersInput('maxNumberOfPlayers', parseInt(e.target.value))}}>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+              </select>
+            </GridItemInput>
+
+            <GridItemTitle> Players </GridItemTitle>
+            <GridItemInput>
+              <Minus onClick={this.handleDecreaseAngels.bind(this)}> - </Minus>
+              <Number> {this.state.numberOfAngels} </Number>
+              <Plus onClick={this.handleIncreaseAngels.bind(this)}> + </Plus>
+            </GridItemInput>
+
+            <GridItemTitle> Bots </GridItemTitle>
+            <GridItemInput>
+              <Minus onClick={this.handleDecreaseDevils.bind(this)}> - </Minus>
+              <Number> {this.state.numberOfDevils} </Number>
+              <Plus onClick={this.handleIncreaseDevils.bind(this)}> + </Plus>
+            </GridItemInput>
+
+            <GridItemTitle> Choose Game </GridItemTitle>
+            <GridItemInput>
+              <InputField
+                  placeholder="Enter here.."
+                  onChange={e => {this.handleInputChange('password', e.target.value)}}
+              />
+            </GridItemInput>
+          </GridContainer>
+
+          <ButtonGroup>
+            <ButtonContainer>
+              <Button
+                  width="50%"
+                  disabled={!this.state.game}
+                  // gameLobby is a temporary name
+                  onClick={() => {
+                    this.props.history.push('/gameLobby');
+                  }}
+              >
+                Join Lobby
+              </Button>
+            </ButtonContainer>
+            <ButtonContainer>
+              <Button
+                  width="50%"
+                  onClick={() => {
+                    this.props.history.push('/createGame');
+                  }}
+              >
+                Create Lobby
+              </Button>
+            </ButtonContainer>
+            <ButtonContainer>
+              <Button
+                  width="50%"
+                  onClick={() => {
+                    this.props.history.push('/leaderboard');
+                  }}
+              >
+                See Leaderboard
+              </Button>
+            </ButtonContainer>
+          </ButtonGroup>
+        </BaseContainer>
     );
   }
 }
