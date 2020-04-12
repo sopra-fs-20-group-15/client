@@ -4,6 +4,7 @@ import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../../views/design/Button';
+import Timer from "../timer/Timer";
 
 //margin padding stuff:
 //percentage for values relative to the browser
@@ -107,7 +108,7 @@ const Game = styled.div`
   background: linear-gradient(180deg, #005C0F 0%, rgba(0, 147, 23, 0) 100%), #05F400;
 `;
 
-const Timer = styled.div`
+const TimerContainer = styled.div`
   position: relative;
   width: 175px;
   height: 175px;
@@ -528,11 +529,10 @@ class InGame extends React.Component {
                 <Game>
                     {/*Timer and Phase*/}
                     <HUDContainer>
-                        <Timer>
-                            {/*Placeholders -> will need props!*/}
+                        <TimerContainer>
                             <Round> Round {this.state.round} </Round>
-                            <Seconds> {this.state.secondsLeft} </Seconds>
-                        </Timer>
+                            <div> {this.state.round === 2 || this.state.round === 3 ? <Timer/> : null} </div>
+                        </TimerContainer>
                         <Phase>
                             <PhaseCircle id={"phase1"} style={{left:"26px", backgroundColor:"#05FF00"}}/>
                             <PhaseCircle id={"phase2"} style={{left:"82px"}}/>
