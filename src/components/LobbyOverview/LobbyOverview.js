@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
@@ -15,6 +15,7 @@ const GridItemTitle = styled.div`
   background: #FCC812;
   font-family: Happy Monkey;
   font-size: 24px;
+  font-weight: bold;
   text-decoration: underline;
   text-transform: uppercase;
   text-align: center;
@@ -29,7 +30,6 @@ const GridNormalItem = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
-  background: #FCC812;
   font-family: Happy Monkey;
   font-size: 24px;
 
@@ -37,12 +37,13 @@ const GridNormalItem = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
+  grid-template-columns: 210px 133px 126px 150px auto;
   grid-gap: 3px 3px;
   background-color: #000000;
   border-radius: 25px;
   border-style: solid;
   position: absolute;
+  grid-auto-rows: 74px;
   
   left: 316px;
   right: 316px;
@@ -50,8 +51,7 @@ const GridContainer = styled.div`
   bottom: 200px;
   overflow-y: scroll;
   
-  
-  border: 1px solid #FFFFFF;
+  border-style: solid;
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
@@ -95,7 +95,7 @@ class LobbyOverview extends Component {
   constructor() {
     super();
     this.state = {
-      games: [1, 2]
+      games: [1, 2, 3, 4]
     };
   }
 
@@ -156,37 +156,33 @@ class LobbyOverview extends Component {
         <BaseContainer style={background}>
           <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
           {!this.state.games ? (
-              <div> There are no games available at the moment! </div>
+              <GridContainer>
+                <GridItemTitle> A </GridItemTitle>
+                <GridItemTitle> B </GridItemTitle>
+                <GridItemTitle> C </GridItemTitle>
+                <GridItemTitle> D </GridItemTitle>
+                <GridItemTitle> E </GridItemTitle>
+                <div> There are no games available at the moment! </div>
+              </GridContainer>
               ) : (
           <GridContainer>
-            <GridItemTitle> A </GridItemTitle>
-            <GridItemTitle> B </GridItemTitle>
-            <GridItemTitle> C </GridItemTitle>
-            <GridItemTitle> D </GridItemTitle>
-            <GridItemTitle> E </GridItemTitle>
-            {this.state.games.map(game =>{
-              return (
-                  <div>
-                    <div>
-                      <GridNormalItem> 1 </GridNormalItem>
-                    </div>
-                    <div>
-                      <GridNormalItem> 2 </GridNormalItem>
-                    </div>
-                    <div>
-                      <GridNormalItem> 3 </GridNormalItem>
-                    </div>
-                    <div>
-                      <GridNormalItem> 4 </GridNormalItem>
-                    </div>
-                    <div>
-                      <GridNormalItem> 5 </GridNormalItem>
-                    </div>
-                  </div>
-              )
-            })}
+            <GridItemTitle> Game </GridItemTitle>
+            <GridItemTitle> Private/ Public </GridItemTitle>
+            <GridItemTitle> Players </GridItemTitle>
+            <GridItemTitle> Bots </GridItemTitle>
+            <GridItemTitle> Choose Game </GridItemTitle>
+               {this.state.games.map(game =>{
+                 return (
+                     <Fragment>
+                       <GridNormalItem> 1 </GridNormalItem>
+                       <GridNormalItem> 2 </GridNormalItem>
+                       <GridNormalItem> 3 </GridNormalItem>
+                       <GridNormalItem> 4 </GridNormalItem>
+                       <GridNormalItem> 5 </GridNormalItem>
+                     </Fragment>
+                 )})}
           </GridContainer>
-          )}
+              )}
 
           <ButtonGroup>
             <ButtonContainer>
