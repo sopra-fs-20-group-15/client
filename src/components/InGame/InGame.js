@@ -495,6 +495,12 @@ class InGame extends React.Component {
         }
     }
 
+    test() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        this.props.history.push('/login');
+    }
+
     /**
      *  Every time the user enters something in the input field, the state gets updated.
      * @param key (the key of the state for identifying the field that needs to be updated)
@@ -563,7 +569,10 @@ class InGame extends React.Component {
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
                             </InputField>
-                            <ReadyField></ReadyField>
+                            <ReadyField disabled={!this.state.gameId}
+                                        onClick={() => {this.test();}}>
+                                <p hidden={!this.state.gameId}>...</p>
+                            </ReadyField>
                         </Player>
                     </PlayerContainer>
                     {/*Second Player Row*/}
