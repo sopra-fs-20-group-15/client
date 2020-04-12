@@ -21,7 +21,8 @@ const GridItemTitle = styled.div`
   align-items: center;
   display: flex;
   text-decoration-skip-ink: none;
-  border: 1.5px solid;
+  border-bottom: 3px solid;
+  height: 65px;
 `;
 
 const GridNormalItem = styled.div`
@@ -30,39 +31,51 @@ const GridNormalItem = styled.div`
   align-items: center;
   display: flex;
   font-family: Happy Monkey;
-  font-size: 24px;
-  border: 1.20px solid;
+  font-size: 22px;
+  border-bottom: 2.50px solid;
+  height: 55px;
 `;
 
 const UIContainer = styled.div`
-  display: grid;
-  grid-template-columns: 300px;
+  height: 350px;
+  width: 800px;
+  position: absolute;
+  
+  left: 21%
+  top: 33%;
+  bottom: 20%;
+  
+  // border: 1px solid #000000;
+`;
+
+const ChatContainer = styled.div`
   background-color: #ECDD8F;
   border-radius: 25px;
   border-style: solid;
   position: absolute;
+  max-height: 350px;
+  display: inline-block;
+  height: 350px;
+  width: 400px;
   
-  left: 25%;
-  top: 33%;
-  bottom: 20%;
   overflow-y: scroll;
+  right: 0%;
   
   border: 3px solid;
-  // box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: 300px;
-  background-color: #ECDD8F;
+  background-color: #BDAF7E;
   border-radius: 25px;
   border-style: solid;
   position: absolute;
+  height: 350px;
+  width: 400px;
+  display: inline-block;
   
-  left: 25%;
-  top: 33%;
-  bottom: 20%;
   overflow-y: scroll;
   
   border: 3px solid;
@@ -142,8 +155,9 @@ class Lobby extends React.Component {
             <BaseContainer style={background}>
                 <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
 
+                <UIContainer>
                     <GridContainer>
-                        <GridItemTitle> Players </GridItemTitle>
+                        <GridItemTitle> Players (5/7)</GridItemTitle>
                         {this.state.players.map(user => {
                             return (
                                 <Fragment>
@@ -151,6 +165,8 @@ class Lobby extends React.Component {
                                 </Fragment>
                             )})}
                     </GridContainer>
+                    <ChatContainer></ChatContainer>
+                </UIContainer>
 
                 <ButtonGroup>
                     <ButtonContainer>
