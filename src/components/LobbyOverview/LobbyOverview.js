@@ -1,42 +1,113 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import Player from '../../views/Player';
-import { Spinner } from '../../views/design/Spinner';
-import { Button } from '../../views/design/Button';
+import { Button, LogoutButton } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-import Header from "../../views/Header";
+import JustOneLogo from "../../views/JustOneLogo.png";
+import TriangleBackground from '../../views/TriangleBackground.png'
 
 
-
-
-
-const Container = styled(BaseContainer)`
-  color: white;
+const GridItemTitle = styled.div`
+  background: #FCC812;
+  font-family: Happy Monkey;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: underline;
+  text-transform: uppercase;
   text-align: center;
-`;
-
-const Games = styled.ul`
-  list-style: none;
-  padding-left: 0;
-`;
-
-const PlayerContainer = styled.li`
-  display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  display: flex;
+  text-decoration-skip-ink: none;
+`;
+
+const GridNormalItem = styled.div`
+  background: #ECDD8F;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-family: Happy Monkey;
+  font-size: 24px;
+`;
+
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: 210px 133px 126px 150px auto;
+  grid-gap: 3px 3px;
+  background-color: #000000;
+  border-radius: 25px;
+  border-style: solid;
+  position: absolute;
+  grid-auto-rows: 74px;
+  
+  left: 316px;
+  right: 316px;
+  top: 260px;
+  bottom: 200px;
+  overflow-y: scroll;
+  
+  box-sizing: border-box;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const BotContainer = styled.div`
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-gap: 3px 3px;
+  background-color: #000000;
+  position: relative;
+  
+  box-sizing: border-box;
+`;
+
+const BotCell = styled.li`
+  background: #ECDD8F;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-family: Happy Monkey;
+  font-size: 24px;
+`;
+
+const background = {
+  backgroundImage: "url(" + TriangleBackground + ")"
+};
+
+const ButtonGroup = styled.div`
+  position: absolute;
+  bottom: 5%;
+  left: 30%;
+  right: 30%;
+`;
+
+const LogoutButtonContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 15px;
   justify-content: center;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const ChooseGameContainer = styled.div`
+  background: #ECDD8F;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+`;
 
 
 class LobbyOverview extends Component {
   constructor() {
     super();
     this.state = {
-      users: null,
-      userForProfile: null
+      games: [["ListenUp", "Private", 3, 4, 1, 2], ["HalfTheWorldAway", "Public", 1, 7, 0, 0], ["TheMasterplan", "Private", 2, 6, 0, 1], ["LiveForever", "Public", 2, 3, 3, 0]]
     };
   }
 
@@ -94,39 +165,88 @@ class LobbyOverview extends Component {
 
   render() {
     return (
-        <Container>
-          <div><Header height={"100"} /></div>
-          <h2>User Overview </h2>
-          <p>To inspect user click the user field:</p>
-          {!this.state.users ? (
-              <Spinner />
-          ) : (
-              <div>
-                <Games>
-                  {this.state.users.map(user => {
-                    return (
-                        <PlayerContainer onClick={() => {
-                          this.props.history.push({
-                            pathname: '/profile/'+user.id
-                          })
-                        }} key={user.id}>
-                          <Player user={user} />
-                        </PlayerContainer>
-                    );
-                  })}
-                  
-                </Games>
-                <Button
-                    width={"30%"}
-                    onClick={() => {
-                      this.logout();
-                    }}
-                >
-                  Logout
-                </Button>
-              </div>
-          )}
-        </Container>
+        <BaseContainer style={background}>
+          <LogoutButtonContainer>
+            <LogoutButton
+                width="255px"
+                onClick={() => {
+                  this.props.history.push('/login');
+                }}
+            >
+              Logout
+            </LogoutButton>
+          </LogoutButtonContainer>
+          <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
+          {!this.state.games ? (
+              <GridContainer>
+                <GridItemTitle> A </GridItemTitle>
+                <GridItemTitle> B </GridItemTitle>
+                <GridItemTitle> C </GridItemTitle>
+                <GridItemTitle> D </GridItemTitle>
+                <GridItemTitle> E </GridItemTitle>
+                <div> There are no games available at the moment! </div>
+              </GridContainer>
+              ) : (
+          <GridContainer>
+            <GridItemTitle> Game </GridItemTitle>
+            <GridItemTitle> Private/ Public </GridItemTitle>
+            <GridItemTitle> Players </GridItemTitle>
+            <GridItemTitle> Bots </GridItemTitle>
+            <GridItemTitle> Choose Game </GridItemTitle>
+               {this.state.games.map(game => {
+                 return (
+                     // using "Fragment" allows use to render multiple components in this function
+                     <Fragment>
+                       <GridNormalItem> 1 </GridNormalItem>
+                       <GridNormalItem> 2 </GridNormalItem>
+                       <GridNormalItem> 3 </GridNormalItem>
+                       <BotContainer>
+                         <BotCell> Angels: </BotCell>
+                         <BotCell> Devils: </BotCell>
+                       </BotContainer>
+                       <ChooseGameContainer>
+                         <input type="radio" id="game" name="name" value={this.state.games.indexOf(game)}/>
+                       </ChooseGameContainer>
+                     </Fragment>
+                 )})}
+          </GridContainer>
+              )}
+
+          <ButtonGroup>
+            <ButtonContainer>
+              <Button
+                  width="50%"
+                  disabled={!this.state.game}
+                  // gameLobby is a temporary name
+                  onClick={() => {
+                    this.props.history.push('/gameLobby');
+                  }}
+              >
+                Join Lobby
+              </Button>
+            </ButtonContainer>
+            <ButtonContainer>
+              <Button
+                  width="50%"
+                  onClick={() => {
+                    this.props.history.push('/createGame');
+                  }}
+              >
+                Create Lobby
+              </Button>
+            </ButtonContainer>
+            <ButtonContainer>
+              <Button
+                  width="50%"
+                  onClick={() => {
+                    this.props.history.push('/leaderboard');
+                  }}
+              >
+                See Leaderboard
+              </Button>
+            </ButtonContainer>
+          </ButtonGroup>
+        </BaseContainer>
     );
   }
 }

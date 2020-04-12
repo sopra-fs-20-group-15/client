@@ -6,8 +6,8 @@ import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../login/Login";
-import OverView from "../../LobbyOverview/LobbyOverview";
-import {OverViewGuard} from "../routeProtectors/OverViewGuard";
+import LobbyOverview from "../../LobbyOverview/LobbyOverview";
+import {LobbyOverviewGuard} from "../routeProtectors/LobbyOverviewGuard";
 import {ProfileGuard} from "../routeProtectors/ProfileGuard";
 import Profile from "../../Profile/Profile";
 import {ProfileEditGuard} from "../routeProtectors/ProfileEditGuard";
@@ -40,11 +40,11 @@ class AppRouter extends React.Component {
               )}
             />
             <Route
-                path="/overview"
+                path="/lobbyOverview"
                 render={()=> (
-                    <OverViewGuard>
-                        <OverView />
-                    </OverViewGuard>
+                    //<LobbyOverviewGuard>
+                        <LobbyOverview />
+                    //</LobbyOverviewGuard>
                 )}
             />
             <Route
