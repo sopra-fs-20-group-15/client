@@ -107,7 +107,7 @@ class LobbyOverview extends Component {
   constructor() {
     super();
     this.state = {
-      games: [1, 2, 3, 4]
+      games: [["ListenUp", "Private", 3, 4, 1, 2], ["HalfTheWorldAway", "Public", 1, 7, 0, 0], ["TheMasterplan", "Private", 2, 6, 0, 1], ["LiveForever", "Public", 2, 3, 3, 0]]
     };
   }
 
@@ -193,8 +193,9 @@ class LobbyOverview extends Component {
             <GridItemTitle> Players </GridItemTitle>
             <GridItemTitle> Bots </GridItemTitle>
             <GridItemTitle> Choose Game </GridItemTitle>
-               {this.state.games.map(game =>{
+               {this.state.games.map(game => {
                  return (
+                     // using "Fragment" allows use to render multiple components in this function
                      <Fragment>
                        <GridNormalItem> 1 </GridNormalItem>
                        <GridNormalItem> 2 </GridNormalItem>
@@ -204,7 +205,7 @@ class LobbyOverview extends Component {
                          <BotCell> Devils: </BotCell>
                        </BotContainer>
                        <ChooseGameContainer>
-                         <input type="radio" id="game" name="game"/>
+                         <input type="radio" id="game" name="name" value={this.state.games.indexOf(game)}/>
                        </ChooseGameContainer>
                      </Fragment>
                  )})}
