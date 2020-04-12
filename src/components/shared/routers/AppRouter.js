@@ -15,6 +15,8 @@ import ProfileEdit from "../../ProfileEdit/ProfileEdit"
 import CreateGame from "../../CreateGame/CreateGame";
 import {InGameGuard} from "../routeProtectors/InGameGuard";
 import InGame from "../../InGame/InGame";
+import {LobbyGuard} from "../routeProtectors/LobbyGuard";
+import Lobby from "../../Lobby/Lobby";
 
 /**
  * Main router of your application.
@@ -74,11 +76,19 @@ class AppRouter extends React.Component {
               )}
              />
               <Route
-                  path="/gamelobby"
+                  path="/gameLobby"
                   render={() => (
                       // <InGameGuard>
                           <InGame />
                       // </InGameGuard>
+                  )}
+              />
+              <Route
+                  path="/lobby"
+                  render={() => (
+                      // <LobbyGuard>
+                      <Lobby />
+                      // </LobbyGuard>
                   )}
               />
              <Route
