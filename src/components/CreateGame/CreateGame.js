@@ -4,7 +4,7 @@ import TriangleBackground from '../../views/TriangleBackground.png'
 import JustOneLogo from '../../views/JustOneLogo.png'
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import { Button } from '../../views/design/Button';
+import {Button, LogoutButton} from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 
 
@@ -123,6 +123,13 @@ const ButtonGroup = styled.div`
   bottom: 5%;
   left: 30%;
   right: 30%;
+`;
+
+const LogoutButtonContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 15px;
+  justify-content: center;
 `;
 
 const background = {
@@ -287,6 +294,16 @@ class CreateGame extends Component{
         return (
             <BaseContainer style={background}>
                 <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
+                <LogoutButtonContainer>
+                    <LogoutButton
+                        width="255px"
+                        onClick={() => {
+                            this.props.history.push('/login');
+                        }}
+                    >
+                        Logout
+                    </LogoutButton>
+                </LogoutButtonContainer>
                 <GridContainer>
                     <GridItemTitle> Game Name </GridItemTitle>
                     <GridItemInput>
