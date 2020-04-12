@@ -496,6 +496,8 @@ class InGame extends React.Component {
         }
     }
 
+    handleInput() {}
+
     test() {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
@@ -531,7 +533,7 @@ class InGame extends React.Component {
                     <HUDContainer>
                         <TimerContainer>
                             <Round> Round {this.state.round} </Round>
-                            <div> {this.state.round === 2 || this.state.round === 3 ? <Timer/> : null} </div>
+                            <div> {this.state.phaseNumber === 2 || this.state.phaseNumber === 3 ? <Timer/> : null} </div>
                         </TimerContainer>
                         <Phase>
                             <PhaseCircle id={"phase1"} style={{left:"26px", backgroundColor:"#05FF00"}}/>
@@ -549,7 +551,7 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>2</GuessedCardsField>
                             <ScoreField>969</ScoreField>
-                            <NameField>2.TheLegend27</NameField>
+                            <NameField>2.{this.state.players[1]}</NameField>
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('gameId', e.target.value);}}/>
