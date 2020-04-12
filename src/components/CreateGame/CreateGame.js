@@ -23,6 +23,7 @@ const GridItemTitle = styled.div`
   text-decoration-skip-ink: none;
 `;
 
+// we need overflow-y: scroll so the border of the corner cells does not overlap the grid container
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: 300px auto;
@@ -35,6 +36,7 @@ const GridContainer = styled.div`
   left: 27.71%;
   right: 27.71%;
   top: 35%;
+  overflow-y: scroll;
 `;
 
 const GridItemInput = styled.div`
