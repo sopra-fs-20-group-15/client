@@ -431,7 +431,7 @@ class InGame extends React.Component {
     }
 
     //clears previous phase and sets up the new one (like resetting input, timer and other stuff) NOT FINISHED YET
-    switchPhase() {
+/*    switchPhase() {
         if (this.state.phaseNumber == 4) { this.setState({round: this.state.round+1}); }
         let nextPhase = [2,3,4,1];
         let nextTimer = [45,45,15,15];
@@ -441,6 +441,17 @@ class InGame extends React.Component {
             secondsLeft: nextTimer[this.state.phaseNumber-1]
         });
 
+    }*/
+
+    //I try to use this method to fix the timer issue
+    switchPhase() {
+        this.switchPhaseHUD(this.state.phaseNumber);
+        if (this.state.phaseNumber === 4) {
+            this.setState({round: this.state.round + 1});
+            this.setState({phaseNumber: 1});
+        } else {
+            this.setState({phaseNumber: this.state.phaseNumber + 1});
+        }
     }
 
     switchPhaseHUD(id) {
@@ -527,13 +538,23 @@ class InGame extends React.Component {
 
 
     render() {
+        // this construction of the variable name for the different timer seconds helps us to render the timer dynamically
+        let t = {};
+        let a = 1;
+        let b = 2;
+        let c = 3;
+        let d = 4;
+        t['timer' + a] = 15;
+        t['timer' + b] = 30;
+        t['timer' + c] = 30;
+        t['timer' + d] = 20;
         return (
                 <Game>
                     {/*Timer and Phase*/}
                     <HUDContainer>
                         <TimerContainer>
                             <Round> Round {this.state.round} </Round>
-                            <div> {this.state.phaseNumber === 2 || this.state.phaseNumber === 3 ? <Timer/> : null} </div>
+                            <Timer seconds={t['timer' + this.state.phaseNumber]}/>
                         </TimerContainer>
                         <Phase>
                             <PhaseCircle id={"phase1"} style={{left:"26px", backgroundColor:"#05FF00"}}/>
