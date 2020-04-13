@@ -170,7 +170,7 @@ class CreateGame extends Component{
                 // is this variable necessary? -> possible for backend to decide base on whether password is null?
                 gameType: (this.state.password === null ? "PUBLIC" : "PRIVATE"),
                 password: this.state.password,
-                playerToken: localStorage.getItem('playerToken')
+                playerToken: localStorage.getItem('token')
             });
 
             const response = await api.post('/games', requestBody);
@@ -179,7 +179,7 @@ class CreateGame extends Component{
             localStorage.setItem('gameId', response.data.gameId);
 
             // registration successfully worked --> navigate to the route /login
-            this.props.history.push(`/lobby/` + this.props.match.params.gameId);
+            this.props.history.push(`/lobby/` + response.data.gameId);
         } catch (error) {
             alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
             this.props.history.push('/lobbyOverview');

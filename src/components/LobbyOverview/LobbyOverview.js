@@ -123,7 +123,7 @@ class LobbyOverview extends Component {
       });
 
       // eslint-disable-next-line
-      await api.put('/logout', requestBody);
+      // await api.put('/logout', requestBody);
 
       // token shows that user is logged in -> removing it shows that he has logged out
       localStorage.removeItem('token');
