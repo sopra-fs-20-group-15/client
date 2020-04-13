@@ -481,6 +481,24 @@ class InGame extends React.Component {
         }
     }
 
+    async giveClue() {
+        try {
+            const requestBody = JSON.stringify({
+                clue: this.state.clues,
+                playerToken: this.props.match.params.id
+            });
+
+            const response = await api.post('/games/'+this.state.gameId+"/cards");
+
+            this.setState({
+                currentCard: response.data,
+                remainingCards: this.state.remainingCards-1
+            });
+        } catch (error) {
+            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`)
+        }
+    }
+
     //sets the mystery word and cross out all other words
     async setMysteryWord(wordId) {
         try {
@@ -542,18 +560,18 @@ class InGame extends React.Component {
             const response2 = await api.get('/games/'+this.props.params.gameId+'/players');
 
             // Get the returned players and update the state using the data from the GET request
-            this.setState({ players: response.data });
+            this.setState({ players: response1.data });
 
             // This is just some data for you to see what is available.
             // Feel free to remove it.
-            console.log('request to:', response.request.responseURL);
-            console.log('status code:', response.status);
-            console.log('status text:', response.statusText);
-            console.log('requested data:', response.data);
+            console.log('request to:', response1.request.responseURL);
+            console.log('status code:', response1.status);
+            console.log('status text:', response1.statusText);
+            console.log('requested data:', response1.data);
 
             // See here to get more data.
             // (as I understand it, console.log is used to print information, in this case probably the users)
-            console.log(response);
+            console.log(response1);
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
         }

@@ -121,18 +121,17 @@ class LobbyOverview extends Component {
         token: localStorage.getItem("token"),
         id: localStorage.getItem("id"),
       });
+
       // eslint-disable-next-line
       const response = await api.put('/logout', requestBody);
 
-      // Logout successfully worked --> navigate to the route /login
+      // token shows that user is logged in -> removing it shows that he has logged out
       localStorage.removeItem('token');
-      localStorage.removeItem('id');
+
+      // Logout successfully worked --> navigate to the route /login
       this.props.history.push(`/login`);
     } catch (error) {
       alert(`Something went wrong during the logout: \n${handleError(error)}`)
-      this.props.history.push('/login');
-      localStorage.removeItem('token');
-      localStorage.removeItem('id');
     }
 
   }
