@@ -83,28 +83,9 @@ const GridContainer = styled.div`
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
-const BotContainer = styled.div`
-  display: grid;
-  grid-template-rows: auto auto;
-  grid-gap: 3px 3px;
-  background-color: #000000;
-  position: relative;
-  
-  box-sizing: border-box;
-`;
-
-const BotCell = styled.li`
-  background: #ECDD8F;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  font-family: Happy Monkey;
-  font-size: 24px;
-`;
-
 const ButtonGroup = styled.div`
   position: absolute;
-  bottom: 5%;
+  bottom: 10%;
   left: 30%;
   right: 30%;
 `;
@@ -138,16 +119,36 @@ class Lobby extends React.Component {
     constructor() {
         super();
         this.state = {
-            players: ["Enura","SlyLutheraner","xX_YasuoOnly_Xx","JamiesRightHand69","SuperCamper1337"]
+            players: ["Enura","SlyLutheraner","xX_YasuoOnly_Xx","JamiesRightHand69","SuperCamper1337", "TheLegend27"]
         };
     }
 
-    handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
-        this.setState({ [key]: value });
+    async startGame() {
+        try {
+            await api.post('/games/'+1);
+            //temporary "gamelobby"
+            this.props.history.push('/gamelobby');
+        } catch (error) {
+            alert(`Something went wrong while starting the Game: \n${handleError(error)}`);
+        }
     }
 
+    async leaveLobby() {
+        try {
+            const requestBody = JSON.stringify({
+                token: localStorage.getItem('token'),
+                id: localStorage.getItem('id')
+            });
+
+            await api.delete('/games/'+1+'/players', requestBody);
+
+            this.props.history.push('/lobbyOverview');
+        } catch (error) {
+            alert(`Something went wrong while leaving the Lobby: \n${handleError(error)}`);
+        }
+    }
+
+    //needs to gather info about the lobby!!!
     componentDidMount() {}
 
     render() {
@@ -157,7 +158,7 @@ class Lobby extends React.Component {
 
                 <UIContainer>
                     <GridContainer>
-                        <GridItemTitle> Players (5/7)</GridItemTitle>
+                        <GridItemTitle> Players (6/7)</GridItemTitle>
                         {this.state.players.map(user => {
                             return (
                                 <Fragment>
@@ -169,38 +170,33 @@ class Lobby extends React.Component {
                 </UIContainer>
 
                 <ButtonGroup>
-                    <ButtonContainer>
-                    {/*    <Button*/}
-                    {/*        width="50%"*/}
-                    {/*        disabled={!this.state.game}*/}
-                    {/*        // gameLobby is a temporary name*/}
-                    {/*        onClick={() => {*/}
-                    {/*            this.props.history.push('/gameLobby');*/}
-                    {/*        }}*/}
-                    {/*    >*/}
-                    {/*        Join Lobby*/}
-                    {/*    </Button>*/}
-                    {/*</ButtonContainer>*/}
-                    {/*<ButtonContainer>*/}
-                    {/*    <Button*/}
-                    {/*        width="50%"*/}
-                    {/*        onClick={() => {*/}
-                    {/*            this.props.history.push('/createGame');*/}
-                    {/*        }}*/}
-                    {/*    >*/}
-                    {/*        Create Lobby*/}
-                    {/*    </Button>*/}
-                    {/*</ButtonContainer>*/}
-                    {/*<ButtonContainer>*/}
-                    {/*    <Button*/}
-                    {/*        width="50%"*/}
-                    {/*        onClick={() => {*/}
-                    {/*            this.props.history.push('/leaderboard');*/}
-                    {/*        }}*/}
-                    {/*    >*/}
-                    {/*        See Leaderboard*/}
-                    {/*    </Button>*/}
-                    </ButtonContainer>
+                    {/*Checks if the Player's token is equal to the Host's (but not yet tho)*/}
+                    {this.state.players[0] == "Sly" ? (
+                        <ButtonContainer>
+                            <Button
+                                width="50%"
+                                //check if enough players?
+                                // disabled={!this.state.game}
+                                // gameLobby is a temporary name
+                                onClick={() => {
+                                    this.startGame();
+                                }}
+                            >
+                                Start Game
+                            </Button>
+                        </ButtonContainer>
+                    ):(
+                        <ButtonContainer>
+                            <Button
+                                width="50%"
+                                onClick={() => {
+                                    this.leaveLobby();
+                                }}
+                            >
+                                Leave Lobby
+                            </Button>
+                        </ButtonContainer>
+                    )}
                 </ButtonGroup>
             </BaseContainer>
         );
