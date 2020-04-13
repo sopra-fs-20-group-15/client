@@ -93,11 +93,11 @@ class Login extends React.Component {
       const response = await api.put( '/login', requestBody);
 
       // Store the token into the local storage.
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('playerToken', response.data.token);
       localStorage.setItem('id', response.data.id);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
-      this.props.history.push(`/overview`);
+      this.props.history.push(`/lobbyOverview`);
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
     }

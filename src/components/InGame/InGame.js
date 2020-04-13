@@ -431,7 +431,7 @@ class InGame extends React.Component {
     }
 
     //clears previous phase and sets up the new one (like resetting input, timer and other stuff) NOT FINISHED YET
-    switchPhase() {
+/*    switchPhase() {
         if (this.state.phaseNumber == 4) { this.setState({round: this.state.round+1}); }
         let nextPhase = [2,3,4,1];
         let nextTimer = [45,45,15,15];
@@ -441,6 +441,17 @@ class InGame extends React.Component {
             secondsLeft: nextTimer[this.state.phaseNumber-1]
         });
 
+    }*/
+
+    //I try to use this method to fix the timer issue
+    switchPhase() {
+        this.switchPhaseHUD(this.state.phaseNumber);
+        if (this.state.phaseNumber === 4) {
+            this.setState({round: this.state.round + 1});
+            this.setState({phaseNumber: 1});
+        } else {
+            this.setState({phaseNumber: this.state.phaseNumber + 1});
+        }
     }
 
     switchPhaseHUD(id) {
@@ -460,6 +471,24 @@ class InGame extends React.Component {
             //vlt noch ein check if deck has cards in it
             //gets a new card and decrease deck size by 1
             const response = await api.get('/games/'+this.state.gameId+"/cards/"+localStorage.getItem("token"));
+
+            this.setState({
+                currentCard: response.data,
+                remainingCards: this.state.remainingCards-1
+            });
+        } catch (error) {
+            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`)
+        }
+    }
+
+    async giveClue() {
+        try {
+            const requestBody = JSON.stringify({
+                clue: this.state.clues,
+                playerToken: this.props.match.params.id
+            });
+
+            const response = await api.post('/games/'+this.state.gameId+"/cards");
 
             this.setState({
                 currentCard: response.data,
@@ -522,18 +551,46 @@ class InGame extends React.Component {
      * You may call setState() immediately in componentDidMount().
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
-    componentDidMount(){}
+    async componentDidMount() {
+        try {
+            // using a GET request we fetch a list of players
+            const response = await api.get('/games/' + localStorage.getItem('gameId') + '/players');
+
+            // Get the returned players and update the state using the data from the GET request
+            this.setState({ players: response.data });
+
+            // This is just some data for you to see what is available.
+            // Feel free to remove it.
+            console.log('requested data:', response.data);
+
+            // See here to get more data.
+            // (as I understand it, console.log is used to print information, in this case probably the users)
+            console.log(response);
+        } catch (error) {
+            alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
+        }
+    }
 
 
 
     render() {
+        // this construction of the variable name for the different timer seconds helps us to render the timer dynamically
+        let t = {};
+        let a = 1;
+        let b = 2;
+        let c = 3;
+        let d = 4;
+        t['timer' + a] = 15;
+        t['timer' + b] = 30;
+        t['timer' + c] = 30;
+        t['timer' + d] = 20;
         return (
                 <Game>
                     {/*Timer and Phase*/}
                     <HUDContainer>
                         <TimerContainer>
                             <Round> Round {this.state.round} </Round>
-                            <div> {this.state.phaseNumber === 2 || this.state.phaseNumber === 3 ? <Timer/> : null} </div>
+                            <Timer seconds={t['timer' + this.state.phaseNumber]}/>
                         </TimerContainer>
                         <Phase>
                             <PhaseCircle id={"phase1"} style={{left:"26px", backgroundColor:"#05FF00"}}/>
