@@ -554,24 +554,18 @@ class InGame extends React.Component {
     async componentDidMount() {
         try {
             // using a GET request we fetch a list of players
-            const response1 = await api.get('/games/'+this.props.params.gameId+'/players');
-
-            // using a GET request we fetch a list of players
-            const response2 = await api.get('/games/'+this.props.params.gameId+'/players');
+            const response = await api.get('/games/' + localStorage.getItem('gameId') + '/players');
 
             // Get the returned players and update the state using the data from the GET request
-            this.setState({ players: response1.data });
+            this.setState({ players: response.data });
 
             // This is just some data for you to see what is available.
             // Feel free to remove it.
-            console.log('request to:', response1.request.responseURL);
-            console.log('status code:', response1.status);
-            console.log('status text:', response1.statusText);
-            console.log('requested data:', response1.data);
+            console.log('requested data:', response.data);
 
             // See here to get more data.
             // (as I understand it, console.log is used to print information, in this case probably the users)
-            console.log(response1);
+            console.log(response);
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
         }
