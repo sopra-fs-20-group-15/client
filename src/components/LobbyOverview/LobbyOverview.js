@@ -107,7 +107,8 @@ class LobbyOverview extends Component {
   constructor() {
     super();
     this.state = {
-      games: [["ListenUp", "Private", 3, 4, 1, 2], ["HalfTheWorldAway", "Public", 1, 7, 0, 0], ["TheMasterplan", "Private", 2, 6, 0, 1], ["LiveForever", "Public", 2, 3, 3, 0]]
+      games: [["ListenUp", "Private", 3, 4, 1, 2], ["HalfTheWorldAway", "Public", 1, 7, 0, 0], ["TheMasterplan", "Private", 2, 6, 0, 1], ["LiveForever", "Public", 2, 3, 3, 0]],
+      chosenGame: null
     };
   }
 
@@ -137,6 +138,19 @@ class LobbyOverview extends Component {
 
   }
 
+  async selectGame() {
+    var radios = document.getElementsByName('name');
+
+    for (var i = 0, length = radios.length; i < length; i++) {
+      if (radios[i].checked) {
+        // do whatever you want with the checked radio
+        console.log('checked', radios[i]);
+
+        // only one radio can be logically checked, don't check the rest
+        break;
+      }
+    }
+  }
 
   async componentDidMount() {
     // try {
@@ -205,7 +219,8 @@ class LobbyOverview extends Component {
                          <BotCell> Devils: </BotCell>
                        </BotContainer>
                        <ChooseGameContainer>
-                         <input type="radio" id="game" name="name" value={this.state.games.indexOf(game)}/>
+                         {/** this.state.games.indexOf(game) identifies each game using its (unique) index in this.state.games */}
+                         <input type="radio" name="game" value={this.state.games.indexOf(game)} onClick={() => {this.setState({chosenGame: this.state.games.indexOf(game)})}}/>
                        </ChooseGameContainer>
                      </Fragment>
                  )})}
@@ -219,7 +234,6 @@ class LobbyOverview extends Component {
                   disabled={!this.state.game}
                   // gameLobby is a temporary name
                   onClick={() => {
-                    this.props.history.push('/gameLobby');
                   }}
               >
                 Join Lobby
