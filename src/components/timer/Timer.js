@@ -56,6 +56,16 @@ class Timer extends Component{
         }, 1000)
     }
 
+    /** This method makes sure that if this.props.seconds changes, the state of the timer is changed accordingly.
+     * Since all phases have a different duration, the state always changes, and therefore (since every state change
+     * triggers a re-rendering) the Timer component is re-rendered every time. */
+    componentDidUpdate(prevProps) {
+        // conditional statement prevents infinite loop
+        if (this.props.seconds !== prevProps.seconds) {
+            this.setState({ seconds: this.props.seconds });
+        }
+    }
+
     async componentWillUnmount() {
         clearInterval(this.myInterval)
     }

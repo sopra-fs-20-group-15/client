@@ -574,8 +574,8 @@ class InGame extends React.Component {
         let d = 4;
         t['timer' + a] = 15;
         t['timer' + b] = 30;
-        t['timer' + c] = 30;
-        t['timer' + d] = 20;
+        t['timer' + c] = 20;
+        t['timer' + d] = 10;
         return (
                 <Game>
                     {/*Timer and Phase*/}
