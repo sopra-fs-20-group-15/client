@@ -39,7 +39,8 @@ class Timer extends Component{
         };
     }
 
-
+    /** Is it any problem that I removed the clearInterval()?
+     * -> How else fix the problem of timer getting stuck? */
     async componentDidMount() {
         this.myInterval = setInterval(() => {
             const{seconds} = this.state;
@@ -50,9 +51,9 @@ class Timer extends Component{
                 }))
             }
 
-            if (seconds === 0) {
+            /*if (seconds === 0) {
                 clearInterval(this.myInterval)
-            }
+            }*/
         }, 1000)
     }
 
@@ -66,6 +67,7 @@ class Timer extends Component{
         }
     }
 
+    /** necessary? */
     async componentWillUnmount() {
         clearInterval(this.myInterval)
     }
