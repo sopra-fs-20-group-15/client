@@ -213,7 +213,7 @@ class LobbyOverview extends Component {
             <ButtonContainer>
               <Button
                   width="50%"
-                  disabled={!this.state.chosenLobby}
+                  disabled={this.state.chosenLobby === null}
                   onClick={() => {
                   }}
               >
