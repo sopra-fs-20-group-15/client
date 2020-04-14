@@ -20,6 +20,7 @@ const GridItemTitle = styled.div`
   align-items: center;
   display: flex;
   text-decoration-skip-ink: none;
+  outline-style: solid;
 `;
 
 const GridNormalItem = styled.div`
@@ -29,13 +30,15 @@ const GridNormalItem = styled.div`
   display: flex;
   font-family: Happy Monkey;
   font-size: 24px;
+  outline-style: solid;
+
 `;
 
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: 210px 133px 126px 150px auto;
   grid-gap: 3px 3px;
-  background-color: #000000;
+  background-color: #ECDD8F;
   border-radius: 25px;
   border-style: solid;
   position: absolute;
@@ -51,6 +54,21 @@ const GridContainer = styled.div`
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
+const ErrorMessage = styled.div`
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row-start: 2;
+  grid-row-end: 5;
+  
+  background: #ECDD8F;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  font-family: Happy Monkey;
+  font-size: 40px;
+`;
+
 const BotContainer = styled.div`
   display: grid;
   grid-template-rows: auto auto;
@@ -59,6 +77,7 @@ const BotContainer = styled.div`
   position: relative;
   
   box-sizing: border-box;
+  outline-style: solid;
 `;
 
 const BotCell = styled.li`
@@ -100,6 +119,7 @@ const ChooseGameContainer = styled.div`
   align-items: center;
   display: flex;
   position: relative;
+  outline-style: solid;
 `;
 
 
@@ -173,41 +193,48 @@ class LobbyOverview extends Component {
             </LogoutButton>
           </LogoutButtonContainer>
           <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
-          {!this.state.lobbies ? (
+            {/** The first condition is needed if no game has been created yet. Before the GET request for the available
+             lobbies has been processed (takes a few milliseconds), this.state.lobbies equals null. After the request
+             has finished processing, this.state.lobbies now equals an empty array. Without the first condition an error
+             would occur, since the render() method would try to get the length of a null value (first phase, before
+             GET request has been processed).*/}
+          {!this.state.lobbies || !(this.state.lobbies.length > 0) ? (
+              <GridContainer>
+                  <GridItemTitle> Game </GridItemTitle>
+                  <GridItemTitle> Private/ Public </GridItemTitle>
+                  <GridItemTitle> Players </GridItemTitle>
+                  <GridItemTitle> Bots </GridItemTitle>
+                  <GridItemTitle> Choose Game </GridItemTitle>
+                  <ErrorMessage>
+                      There are no games available at the moment! Why don't you create one yourself, you lazy fuck?
+                  </ErrorMessage>
+              </GridContainer>
+              ) : (
               <GridContainer>
                 <GridItemTitle> Game </GridItemTitle>
                 <GridItemTitle> Private/ Public </GridItemTitle>
                 <GridItemTitle> Players </GridItemTitle>
                 <GridItemTitle> Bots </GridItemTitle>
                 <GridItemTitle> Choose Game </GridItemTitle>
-                <GridNormalItem> There are no games available at the moment! </GridNormalItem>
+                   {this.state.lobbies.map(lobby => {
+                     return (
+                         // using "Fragment" allows use to render multiple components in this function
+                         <Fragment>
+                           <GridNormalItem> {lobby.gameName} </GridNormalItem>
+                           <GridNormalItem> {lobby.gameType} </GridNormalItem>
+                           <GridNormalItem> {lobby.numOfActualPlayers}/{lobby.numOfDesiredPlayers} </GridNormalItem>
+                           <BotContainer>
+                             <BotCell> Angels: {lobby.numOfAngels} </BotCell>
+                             <BotCell> Devils: {lobby.numOfDevils}</BotCell>
+                           </BotContainer>
+                           <ChooseGameContainer>
+                             {/** this.state.games.indexOf(game) identifies each game using its (unique) index in this.state.games */}
+                             <input type="radio" name="game" value={this.state.lobbies.indexOf(lobby)} onClick={() => {this.setState({chosenLobby: this.state.lobbies.indexOf(lobby)})}}/>
+                           </ChooseGameContainer>
+                         </Fragment>
+                     )})}
               </GridContainer>
-              ) : (
-          <GridContainer>
-            <GridItemTitle> Game </GridItemTitle>
-            <GridItemTitle> Private/ Public </GridItemTitle>
-            <GridItemTitle> Players </GridItemTitle>
-            <GridItemTitle> Bots </GridItemTitle>
-            <GridItemTitle> Choose Game </GridItemTitle>
-               {this.state.lobbies.map(lobby => {
-                 return (
-                     // using "Fragment" allows use to render multiple components in this function
-                     <Fragment>
-                       <GridNormalItem> {lobby.gameName} </GridNormalItem>
-                       <GridNormalItem> {lobby.gameType} </GridNormalItem>
-                       <GridNormalItem> {lobby.numOfActualPlayers}/{lobby.numOfDesiredPlayers} </GridNormalItem>
-                       <BotContainer>
-                         <BotCell> Angels: {lobby.numOfAngels} </BotCell>
-                         <BotCell> Devils: {lobby.numOfDevils}</BotCell>
-                       </BotContainer>
-                       <ChooseGameContainer>
-                         {/** this.state.games.indexOf(game) identifies each game using its (unique) index in this.state.games */}
-                         <input type="radio" name="game" value={this.state.lobbies.indexOf(lobby)} onClick={() => {this.setState({chosenLobby: this.state.lobbies.indexOf(lobby)})}}/>
-                       </ChooseGameContainer>
-                     </Fragment>
-                 )})}
-          </GridContainer>
-              )}
+          )}
 
           <ButtonGroup>
             <ButtonContainer>
