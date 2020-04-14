@@ -107,8 +107,8 @@ class LobbyOverview extends Component {
   constructor() {
     super();
     this.state = {
-      games: [["ListenUp", "Private", 3, 4, 1, 2], ["HalfTheWorldAway", "Public", 1, 7, 0, 0], ["TheMasterplan", "Private", 2, 6, 0, 1], ["LiveForever", "Public", 2, 3, 3, 0]],
-      chosenGame: null
+      lobbies: null,
+      chosenLobby: null
     };
   }
 
@@ -116,19 +116,8 @@ class LobbyOverview extends Component {
 
   async logout() {
     try {
-      // eslint-disable-next-line
-
-      const requestBody = JSON.stringify({
-        token: localStorage.getItem("token"),
-        id: localStorage.getItem("id"),
-      });
-
-      // eslint-disable-next-line
-      // await api.put('/logout', requestBody);
-
       // token shows that user is logged in -> removing it shows that he has logged out
       localStorage.removeItem('token');
-      localStorage.removeItem("id");
 
       // Logout successfully worked --> navigate to the route /login
       this.props.history.push(`/login`);
@@ -153,28 +142,21 @@ class LobbyOverview extends Component {
   }
 
   async componentDidMount() {
-    // try {
-    //   const response = await api.get('/users');
-    //   // delays continuous execution of an async operation for 1 second.
-    //   // This is just a fake async call, so that the spinner can be displayed
-    //   // feel free to remove it :)
-    //   await new Promise(resolve => setTimeout(resolve, 1000));
-    //
-    //   // Get the returned users and update the state.
-    //   this.setState({ users: response.data });
-    //
-    //   // This is just some data for you to see what is available.
-    //   // Feel free to remove it.
-    //   console.log('request to:', response.request.responseURL);
-    //   console.log('status code:', response.status);
-    //   console.log('status text:', response.statusText);
-    //   console.log('requested data:', response.data);
-    //
-    //   // See here to get more data.
-    //   console.log(response);
-    // } catch (error) {
-    //   alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
-    // }
+       try {
+            const response = await api.get('/games/lobbies');
+
+            const lobbies = response.data;
+            console.log('response', response);
+            console.log('response data', response.data);
+
+            this.setState({
+              lobbies: lobbies
+            })
+
+       }    catch (error) {
+            alert(`Something went wrong while fetching the lobbies: \n${handleError(error)}`);
+            this.props.history.push("/lobbyOverview")
+       }
   }
 
   render() {
@@ -191,14 +173,14 @@ class LobbyOverview extends Component {
             </LogoutButton>
           </LogoutButtonContainer>
           <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
-          {!this.state.games ? (
+          {!this.state.lobbies ? (
               <GridContainer>
-                <GridItemTitle> A </GridItemTitle>
-                <GridItemTitle> B </GridItemTitle>
-                <GridItemTitle> C </GridItemTitle>
-                <GridItemTitle> D </GridItemTitle>
-                <GridItemTitle> E </GridItemTitle>
-                <div> There are no games available at the moment! </div>
+                <GridItemTitle> Game </GridItemTitle>
+                <GridItemTitle> Private/ Public </GridItemTitle>
+                <GridItemTitle> Players </GridItemTitle>
+                <GridItemTitle> Bots </GridItemTitle>
+                <GridItemTitle> Choose Game </GridItemTitle>
+                <GridNormalItem> There are no games available at the moment! </GridNormalItem>
               </GridContainer>
               ) : (
           <GridContainer>
@@ -207,20 +189,20 @@ class LobbyOverview extends Component {
             <GridItemTitle> Players </GridItemTitle>
             <GridItemTitle> Bots </GridItemTitle>
             <GridItemTitle> Choose Game </GridItemTitle>
-               {this.state.games.map(game => {
+               {this.state.lobbies.map(lobby => {
                  return (
                      // using "Fragment" allows use to render multiple components in this function
                      <Fragment>
-                       <GridNormalItem> 1 </GridNormalItem>
-                       <GridNormalItem> 2 </GridNormalItem>
-                       <GridNormalItem> 3 </GridNormalItem>
+                       <GridNormalItem> {lobby.gameName} </GridNormalItem>
+                       <GridNormalItem> {lobby.gameType} </GridNormalItem>
+                       <GridNormalItem> {lobby.numOfActualPlayers}/{lobby.numOfDesiredPlayers} </GridNormalItem>
                        <BotContainer>
-                         <BotCell> Angels: </BotCell>
-                         <BotCell> Devils: </BotCell>
+                         <BotCell> Angels: {lobby.numOfAngels} </BotCell>
+                         <BotCell> Devils: {lobby.numOfDevils}</BotCell>
                        </BotContainer>
                        <ChooseGameContainer>
                          {/** this.state.games.indexOf(game) identifies each game using its (unique) index in this.state.games */}
-                         <input type="radio" name="game" value={this.state.games.indexOf(game)} onClick={() => {this.setState({chosenGame: this.state.games.indexOf(game)})}}/>
+                         <input type="radio" name="game" value={this.state.lobbies.indexOf(lobby)} onClick={() => {this.setState({chosenLobby: this.state.lobbies.indexOf(lobby)})}}/>
                        </ChooseGameContainer>
                      </Fragment>
                  )})}
@@ -231,8 +213,7 @@ class LobbyOverview extends Component {
             <ButtonContainer>
               <Button
                   width="50%"
-                  disabled={!this.state.game}
-                  // gameLobby is a temporary name
+                  disabled={!this.state.chosenLobby}
                   onClick={() => {
                   }}
               >
