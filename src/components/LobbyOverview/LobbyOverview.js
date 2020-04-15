@@ -56,11 +56,7 @@ const GridContainer = styled.div`
 
 /** The property z-index sets the stack order. Giving it a higher value than the rest (here 2) will make sure the
  * overlay is displayed in front of all other elements. */
-const PasswordOverlayContainer = styled.div`
-  background-color: #ECDD8F;
-  border-radius: 25px;
-  border-style: solid;
-    
+const PasswordOverlayContainer = styled.div`    
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   
@@ -79,6 +75,56 @@ const PasswordOverlayContainer = styled.div`
   align-items: center;
 
   z-index: 2;
+`;
+
+const PasswordContainer = styled.div`
+  background-color: #ECDD8F;
+  border-radius: 25px;
+  border-style: solid;
+  
+  display: none;
+  
+  width: 350px;
+  height: 158px;
+  
+  justify-content: center;
+  align-items: center;
+  
+  font-family: Happy Monkey;
+  font-size: 24px;
+  
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-top: 10px;
+  
+  /* needed for centering */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%) }
+  
+  z-index: 3;
+`;
+
+const InputField = styled.input`
+  &::placeholder {
+    font-family: Happy Monkey;
+    color: rgba(0, 0, 0, 0.5);
+  }
+  position: absolute;
+  height: 40px;
+  background: rgba(203, 189, 140, 0.54);
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  border-color: rgba(203, 189, 140, 0.54);
+  font-family: Happy Monkey;
+  font-size: 16px;
+  
+  
+  width: 90%;
+  left: 5%;
+  top: 50px;
 `;
 
 const ErrorMessage = styled.div`
@@ -140,6 +186,22 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+const OverlayButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  
+  position: absolute
+  top: 100px
+  left: 5%
+  width: 200px;
+  
+  /* needed for centering */
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%) }
+`;
+
 const ChooseGameContainer = styled.div`
   background: #ECDD8F;
   justify-content: center;
@@ -155,7 +217,8 @@ class LobbyOverview extends Component {
         super();
         this.state = {
             lobbies: null,
-            chosenLobby: null
+            chosenLobby: null,
+            password: null
         };
     }
 
@@ -190,11 +253,20 @@ class LobbyOverview extends Component {
     }
 
     async overlayOn() {
+        document.getElementById("passwordContainer").style.display = "block";
         document.getElementById("passwordOverlay").style.display = "block";
     }
 
     async overlayOff() {
+        document.getElementById("passwordContainer").style.display = "none";
         document.getElementById("passwordOverlay").style.display = "none";
+    }
+
+    handleInputChange(key, value) {
+        // Example: if the key is username, this statement is the equivalent to the following one:
+        // this.setState({'username': value});
+        // making sure that the new number of players does not violate the constraints imposed by the game rules
+        this.setState({[key]: value});
     }
 
     async componentDidMount() {
@@ -219,6 +291,24 @@ class LobbyOverview extends Component {
         return (
             <BaseContainer style={background}>
                 <PasswordOverlayContainer id={"passwordOverlay"} onClick={() => {this.overlayOff()}}/>
+                <PasswordContainer id={"passwordContainer"}>
+                    Password:
+                    <InputField
+                        id={"passwordInput"}
+                        placeholder="Enter here.."
+                        onChange={e => {
+                            this.handleInputChange('password', e.target.value);
+                        }}
+                    />
+                    <OverlayButtonContainer>
+                        <Button
+                            width="100%"
+                            onClick={() => {this.overlayOn()}}
+                        >
+                            Confirm
+                        </Button>
+                    </OverlayButtonContainer>
+                </PasswordContainer>
                 <LogoutButtonContainer>
                     <LogoutButton
                         width="255px"
