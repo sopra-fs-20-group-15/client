@@ -203,34 +203,29 @@ class CreateGame extends Component{
     }
 
     handleMaxNrOfPlayersInput(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
-        // making sure that the new number of players does not violate the constraints imposed by the game rules
-        if (this.state.numberOfDevils + this.state.numberOfAngels + value <= 7) {
+        if (this.state.numberOfDevils + this.state.numberOfAngels < value) {
             this.setState({[key]: value});
+        } else if (this.state.numberOfDevils + this.state.numberOfAngels === value) {
+            alert("You have to leave room for yourself!")
         } else {
-            alert("You have already reached the maximum! The number of bots plus the players allowed to join your game would exceed seven!")
+            alert("The maximum number of players is lower than the number of bots!")
         }
     }
 
-    /* state: the data is updated
-    *  callback:  updated value is displayed to the user by calling console.log on the value*/
     handleDecreaseAngels = () => {
-        // making sure the number of bots can't be below zero (because that would make no fucking sense...)
+        /** making sure the number of bots can't be below zero (because that would make no fucking sense...) */
         if (this.state.numberOfAngels !== 0) {
-            this.setState({numberOfAngels: this.state.numberOfAngels - 1}, () => {
-                console.log(this.state.numberOfAngels)
-            });
+            this.setState({numberOfAngels: this.state.numberOfAngels - 1})
         } else {
             alert("The number of bots cannot be negative!")
         }
     };
 
     handleIncreaseAngels = () => {
-        /* making sure that the total number of participants in the game (including bots) does not exceed seven
+        /** making sure that the total number of participants in the game (including bots) does not exceed seven
            (only necessary to check when incrementing, obviously)
            (can this condition be refactored, so it only has to be stated once?) */
-        if (this.state.maxNumberOfPlayers + this.state.numberOfDevils + this.state.numberOfAngels < 7) {
+        if (this.state.numberOfDevils + this.state.numberOfAngels < this.state.maxNumberOfPlayers - 1) {
             this.setState({numberOfAngels: this.state.numberOfAngels + 1}, () => {
                 console.log(this.state.numberOfAngels)
             });
@@ -241,19 +236,15 @@ class CreateGame extends Component{
 
     handleDecreaseDevils = () => {
         if (this.state.numberOfDevils !== 0) {
-            this.setState({numberOfDevils: this.state.numberOfDevils - 1}, () => {
-                console.log(this.state.numberOfDevils)
-            });
+            this.setState({numberOfDevils: this.state.numberOfDevils - 1})
         } else {
             alert("The number of bots cannot be negative!")
         }
     };
 
     handleIncreaseDevils = () => {
-        if (this.state.maxNumberOfPlayers + this.state.numberOfDevils + this.state.numberOfAngels < 7) {
-            this.setState({numberOfDevils: this.state.numberOfDevils + 1}, () => {
-                console.log(this.state.numberOfDevils)
-            });
+        if (this.state.numberOfDevils + this.state.numberOfAngels < this.state.maxNumberOfPlayers - 1) {
+            this.setState({numberOfDevils: this.state.numberOfDevils + 1})
         } else {
             alert("No more bots can be added!")
         }
