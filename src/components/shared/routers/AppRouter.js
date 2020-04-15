@@ -1,17 +1,17 @@
 import React from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import {RegisterGuard} from "../routeProtectors/RegisterGuard";
 import Register from "../../register/Register";
-import { LoginGuard } from "../routeProtectors/LoginGuard";
+import {LoginGuard} from "../routeProtectors/LoginGuard";
 import Login from "../../login/Login";
 import LobbyOverview from "../../LobbyOverview/LobbyOverview";
 import {LobbyOverviewGuard} from "../routeProtectors/LobbyOverviewGuard";
 import CreateGame from "../../CreateGame/CreateGame";
 import {InGameGuard} from "../routeProtectors/InGameGuard";
 import InGame from "../../InGame/InGame";
-import {LobbyGuard} from "../routeProtectors/LobbyGuard";
+import {LobbyGuard} from "../routeProtectors/LobbyGuard.js";
 import Lobby from "../../Lobby/Lobby";
-import {CreateGameGuard} from "../routeProtectors/CreateGameGuard";
+import {CreateGameGuard} from "../routeProtectors/CreateGameGuard.js";
 
 /**
  * Main router of your application.
@@ -23,68 +23,68 @@ import {CreateGameGuard} from "../routeProtectors/CreateGameGuard";
  * Documentation about routing in React: https://reacttraining.com/react-router/web/guides/quick-start
  */
 class AppRouter extends React.Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <Switch>
-          <div>
-            <Route
-                path="/lobbyOverview"
-                render={()=> (
-                    //<LobbyOverviewGuard>
-                        <LobbyOverview />
-                    //</LobbyOverviewGuard>
-                )}
-            />
-            <Route
-              path="/register"
-              render={() => (
-                  <RegisterGuard>
-                      <Register />
-                  </RegisterGuard>
-                )}
-            />
-            <Route
-              path="/login"
-              exact
-              render={() => (
-                <LoginGuard>
-                  <Login />
-                </LoginGuard>
-              )}
-            />
-              <Route
-                  path="/gameLobby"
-                  render={() => (
-                      // <InGameGuard>
-                          <InGame />
-                      // </InGameGuard>
-                  )}
-              />
-              <Route
-                  path="/lobby/:id"
-                  render={() => (
-                      // <LobbyGuard>
-                      <Lobby />
-                      // </LobbyGuard>
-                  )}
-              />
-
-              <Route
-                  path="/createGame"
-                  render={() => (
-                      <CreateGameGuard>
-                          <CreateGame/>
-                      </CreateGameGuard>
-                  )}
-              />
-            <Route path="/" exact render={() => <Redirect to={"/register"} />} />
-          </div>
-        </Switch>
-      </BrowserRouter>
-    );
-  }
+    render() {
+        return (
+            <BrowserRouter>
+                <Switch>
+                    <div>
+                        <Route
+                            path="/lobbyOverview"
+                            render={() => (
+                                <LobbyOverviewGuard>
+                                    <LobbyOverview base={'/lobbyOverview'}/>
+                                </LobbyOverviewGuard>
+                            )}
+                        />
+                        <Route
+                            path="/register"
+                            render={() => (
+                                <RegisterGuard>
+                                    <Register/>
+                                </RegisterGuard>
+                            )}
+                        />
+                        <Route
+                            path="/login"
+                            exact
+                            render={() => (
+                                <LoginGuard>
+                                    <Login/>
+                                </LoginGuard>
+                            )}
+                        />
+                        <Route
+                            path="/gameLobby"
+                            render={() => (
+                                <InGameGuard>
+                                    <InGame/>
+                                </InGameGuard>
+                            )}
+                        />
+                        <Route
+                            path="/lobby/:id"
+                            render={() => (
+                                <LobbyGuard>
+                                    <Lobby/>
+                                </LobbyGuard>
+                            )}
+                        />
+                        <Route
+                            path="/createGame"
+                            render={() => (
+                                <CreateGameGuard>
+                                    <CreateGame/>
+                                </CreateGameGuard>
+                            )}
+                        />
+                        <Route path="/" exact render={() => <Redirect to={"/register"}/>}/>
+                    </div>
+                </Switch>
+            </BrowserRouter>
+        );
+    }
 }
+
 /*
 * Don't forget to export your component!
  */
