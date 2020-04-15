@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import TriangleBackground from '../../views/TriangleBackground.png'
-import JustOneLogo from '../../views/JustOneLogo.png'
+import TriangleBackground from '../../views/pictures/TriangleBackground.png'
+import JustOneLogo from '../../views/pictures/JustOneLogo.png'
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';

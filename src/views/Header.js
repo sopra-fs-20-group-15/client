@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import TriangleBackground from "./TriangleBackground.png";
+import TriangleBackground from "./pictures/TriangleBackground.png";
 import {BaseContainer} from "../helpers/layout";
 
 /**
@@ -22,7 +22,7 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-const JustOneLogo = require("./JustOneLogo.png");
+const JustOneLogo = require("./pictures/JustOneLogo.png");
 
 
 /**

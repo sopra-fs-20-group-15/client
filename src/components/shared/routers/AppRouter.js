@@ -17,6 +17,7 @@ import {InGameGuard} from "../routeProtectors/InGameGuard";
 import InGame from "../../InGame/InGame";
 import {LobbyGuard} from "../routeProtectors/LobbyGuard";
 import Lobby from "../../Lobby/Lobby";
+import {CreateGameGuard} from "../routeProtectors/CreateGameGuard";
 
 /**
  * Main router of your application.
@@ -66,15 +67,6 @@ class AppRouter extends React.Component {
                 </LoginGuard>
               )}
             />
-            <Route
-              path="/profile/:id"
-              exact
-              render={() => (
-                 <ProfileGuard>
-                    <Profile />
-                 </ProfileGuard>
-              )}
-             />
               <Route
                   path="/gameLobby"
                   render={() => (
@@ -91,19 +83,13 @@ class AppRouter extends React.Component {
                       // </LobbyGuard>
                   )}
               />
-             <Route
-                  path="/profile/:id/edit"
-                  exact
-                  render={() => (
-                      <ProfileEditGuard >
-                          <ProfileEdit />
-                      </ProfileEditGuard>
-                  )}
-             />
+
               <Route
                   path="/createGame"
                   render={() => (
-                          <CreateGame />
+                      <CreateGameGuard>
+                          <CreateGame/>
+                      </CreateGameGuard>
                   )}
               />
             <Route path="/" exact render={() => <Redirect to={"/register"} />} />

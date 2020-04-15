@@ -4,8 +4,8 @@ import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
-import JustOneLogo from "../../views/JustOneLogo.png";
-import TriangleBackground from '../../views/TriangleBackground.png'
+import JustOneLogo from "../../views/pictures/JustOneLogo.png";
+import TriangleBackground from '../../views/pictures/TriangleBackground.png'
 
 
 const GridItemTitle = styled.div`
