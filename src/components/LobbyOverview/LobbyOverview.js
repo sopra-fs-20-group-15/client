@@ -161,6 +161,20 @@ class LobbyOverview extends Component {
     }
   }
 
+  async joinLobby() {
+    try {
+      const requestBody = JSON.stringify({
+        playerToken: localStorage.getItem('token'),
+        password:""
+      });
+
+      await api.put('/games/1/players', requestBody);
+      this.props.history.push("/lobby/1")
+    }    catch (error) {
+      alert(`Something went wrong while joining the lobby: \n${handleError(error)}`);
+    }
+  }
+
   async componentDidMount() {
        try {
             const response = await api.get('/games/lobbies');
@@ -242,6 +256,7 @@ class LobbyOverview extends Component {
                   width="50%"
                   disabled={this.state.chosenLobby === null}
                   onClick={() => {
+                    this.joinLobby()
                   }}
               >
                 Join Lobby

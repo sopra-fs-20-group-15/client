@@ -84,7 +84,7 @@ class AppRouter extends React.Component {
                   )}
               />
               <Route
-                  path="/lobby"
+                  path="/lobby/:id"
                   render={() => (
                       // <LobbyGuard>
                       <Lobby />

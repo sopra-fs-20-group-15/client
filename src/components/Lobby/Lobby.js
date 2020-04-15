@@ -149,7 +149,13 @@ class Lobby extends React.Component {
     }
 
     //needs to gather info about the lobby!!!
-    componentDidMount() {}
+    async componentDidMount() {
+        try {
+            const response = await api.get('games/lobbies/'+this.props.match.params.id+"/"+localStorage.getItem("token"));
+        } catch(error) {
+            alert(`Something went wrong while fetching the lobby's data: \n${handleError(error)}`);
+        }
+    }
 
     render() {
         return (
