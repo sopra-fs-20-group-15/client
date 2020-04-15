@@ -220,6 +220,9 @@ class LobbyOverview extends Component {
             chosenLobby: null,
             password: null
         };
+
+        this.interval = setInterval(this.getLobbies, 5000);
+        this.getLobbies = this.getLobbies.bind(this);
     }
 
 
@@ -253,6 +256,15 @@ class LobbyOverview extends Component {
         }
     }
 
+    getLobbies = async () => {
+        const response = await api.get('/games/lobbies');
+        if (response.status === 200) {
+            console.log('response.data', response.data);
+            this.setState({
+                lobbies: response.data
+            })
+        }
+    };
 
     async joinLobby() {
         try {
@@ -298,22 +310,16 @@ class LobbyOverview extends Component {
 
     async componentDidMount() {
         try {
-            const response = await api.get('/games/lobbies');
-
-            const lobbies = response.data;
-            console.log('response', response);
-            console.log('response data', response.data);
-
-            this.setState({
-                lobbies: lobbies
-            })
-
+            this.getLobbies();
         } catch (error) {
             alert(`Something went wrong while fetching the lobbies: \n${handleError(error)}`);
             this.props.history.push("/lobbyOverview")
         }
     }
 
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
 
     render() {
         return (
