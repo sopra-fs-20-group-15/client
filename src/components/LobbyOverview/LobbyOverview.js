@@ -6,6 +6,7 @@ import {Button, LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 import TriangleBackground from '../../views/pictures/TriangleBackground.png'
+import Lobby from "../../views/Lobby";
 
 
 const GridItemTitle = styled.div`
@@ -382,13 +383,7 @@ class LobbyOverview extends Component {
                             return (
                                 // using "Fragment" allows use to render multiple components in this function
                                 <Fragment>
-                                    <GridNormalItem> {lobby.gameName} </GridNormalItem>
-                                    <GridNormalItem> {lobby.gameType} </GridNormalItem>
-                                    <GridNormalItem> {lobby.numOfActualPlayers}/{lobby.numOfDesiredPlayers} </GridNormalItem>
-                                    <BotContainer>
-                                        <BotCell> Angels: {lobby.numOfAngels} </BotCell>
-                                        <BotCell> Devils: {lobby.numOfDevils}</BotCell>
-                                    </BotContainer>
+                                    <Lobby lobby={lobby}/>
                                     <ChooseGameContainer>
                                         {/** this.state.games.indexOf(game) identifies each game using its (unique) index in this.state.games */}
                                         <input type="radio" name="game" value={lobby} onClick={() => {
