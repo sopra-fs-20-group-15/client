@@ -213,8 +213,8 @@ const ChooseGameContainer = styled.div`
 
 
 class LobbyOverview extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             lobbies: null,
             chosenLobby: null,
@@ -258,7 +258,8 @@ class LobbyOverview extends Component {
         try {
             if (this.state.chosenLobby.gameType === "PUBLIC") {
                 const requestBody = JSON.stringify({
-                    playerToken: localStorage.getItem('token')
+                    playerToken: localStorage.getItem('token'),
+                    password: ""
                 });
 
                 const response = await api.put('/games/' + (this.state.lobbies.indexOf(this.state.chosenLobby)+1) + '/players', requestBody);
