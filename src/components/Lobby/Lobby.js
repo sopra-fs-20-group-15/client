@@ -90,21 +90,6 @@ const ButtonGroup = styled.div`
   right: 30%;
 `;
 
-const LogoutButtonContainer = styled.div`
-  position: absolute;
-  top: 20px;
-  left: 15px;
-  justify-content: center;
-`;
-
-const ChooseGameContainer = styled.div`
-  background: #ECDD8F;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  position: relative;
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -119,15 +104,28 @@ class Lobby extends React.Component {
     constructor() {
         super();
         this.state = {
-            players: ["Enura","SlyLutheraner","xX_YasuoOnly_Xx","JamiesRightHand69","SuperCamper1337", "TheLegend27"]
+            activeGameId: null,
+            gameSetUpId: null,
+            gameName: null,
+            hostName: null,
+            players: [""],
+            desiredPlayers: null,
+            actualPlayers: null,
+            angels: null,
+            devils: null
         };
     }
 
     async startGame() {
         try {
-            await api.post('/games/'+1);
+            const requestBody = JSON.stringify({
+                token: localStorage.getItem('token'),
+                id: localStorage.getItem('id')
+            });
+
+            await api.post('/games/'+this.state.gameSetUpId, requestBody);
             //temporary "gamelobby"
-            this.props.history.push('/gamelobby');
+            this.props.history.push('/gameLobby');
         } catch (error) {
             alert(`Something went wrong while starting the Game: \n${handleError(error)}`);
         }
@@ -140,7 +138,7 @@ class Lobby extends React.Component {
                 id: localStorage.getItem('id')
             });
 
-            await api.delete('/games/'+1+'/players', requestBody);
+            await api.delete('/games/'+this.state.gameSetUpId+'/players', requestBody);
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
@@ -152,6 +150,18 @@ class Lobby extends React.Component {
     async componentDidMount() {
         try {
             const response = await api.get('games/lobbies/'+this.props.match.params.id+"/"+localStorage.getItem("token"));
+
+            this.setState({
+                activeGameId: response.data.activeGameId,
+                gameSetUpId: response.data.gameSetUpId,
+                gameName: response.data.gameName,
+                hostName: response.data.hostName,
+                players: response.data.playerNames,
+                desiredPlayers: response.data.numOfDesiredPlayers,
+                actualPlayers: response.data.numOfActualPlayers,
+                angels: response.data.numOfAngels,
+                devils: response.data.numOfDevils
+            });
         } catch(error) {
             alert(`Something went wrong while fetching the lobby's data: \n${handleError(error)}`);
         }
@@ -164,21 +174,30 @@ class Lobby extends React.Component {
 
                 <UIContainer>
                     <GridContainer>
-                        <GridItemTitle> Players (6/7)</GridItemTitle>
+                        <GridItemTitle> {this.state.gameName} ({this.state.actualPlayers}/{this.state.desiredPlayers})</GridItemTitle>
                         {this.state.players.map(user => {
                             return (
                                 <Fragment>
                                     <GridNormalItem> {user} </GridNormalItem>
                                 </Fragment>
                             )})}
+                        <GridNormalItem> Angel-Bots: {this.state.angels} </GridNormalItem>
+                        <GridNormalItem> Devil-Bots: {this.state.devils} </GridNormalItem>
                     </GridContainer>
                     <ChatContainer></ChatContainer>
                 </UIContainer>
 
                 <ButtonGroup>
                     {/*Checks if the Player's token is equal to the Host's (but not yet tho)*/}
-                    {this.state.players[0] == "Sly" ? (
+                    {this.state.players[0] == this.state.hostName ? (
                         <ButtonContainer>
+                            <Button
+                                width="50%"
+                                onClick={() => {
+                                    this.leaveLobby();
+                                }}>
+                                Leave Lobby
+                            </Button>
                             <Button
                                 width="50%"
                                 //check if enough players?
@@ -186,8 +205,7 @@ class Lobby extends React.Component {
                                 // gameLobby is a temporary name
                                 onClick={() => {
                                     this.startGame();
-                                }}
-                            >
+                                }}>
                                 Start Game
                             </Button>
                         </ButtonContainer>
@@ -197,8 +215,7 @@ class Lobby extends React.Component {
                                 width="50%"
                                 onClick={() => {
                                     this.leaveLobby();
-                                }}
-                            >
+                                }}>
                                 Leave Lobby
                             </Button>
                         </ButtonContainer>
