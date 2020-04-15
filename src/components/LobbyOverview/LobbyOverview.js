@@ -268,22 +268,26 @@ class LobbyOverview extends Component {
 
     async joinLobby() {
         try {
-            if (this.state.chosenLobby.gameType === "PUBLIC") {
-                const requestBody = JSON.stringify({
-                    playerToken: localStorage.getItem('token'),
-                    password: ""
-                });
+            if (localStorage.getItem('token')) {
+                if (this.state.chosenLobby.gameType === "PUBLIC") {
+                    const requestBody = JSON.stringify({
+                        playerToken: localStorage.getItem('token'),
+                        password: ""
+                    });
 
-                const response = await api.put('/games/' + (this.state.lobbies.indexOf(this.state.chosenLobby)+1) + '/players', requestBody);
+                    const response = await api.put('/games/' + (this.state.lobbies.indexOf(this.state.chosenLobby) + 1) + '/players', requestBody);
 
-                localStorage.setItem('gameId', response.data.gameId);
+                    localStorage.setItem('gameId', response.data.gameId);
 
-                this.props.history.push('/lobby/' + (this.state.lobbies.indexOf(this.state.chosenLobby)+1))
+                    this.props.history.push('/lobby/' + (this.state.lobbies.indexOf(this.state.chosenLobby) + 1))
 
-            } else if (this.state.chosenLobby.gameType === "PRIVATE") {
-                this.overlayOn();
+                } else if (this.state.chosenLobby.gameType === "PRIVATE") {
+                    this.overlayOn();
+                } else {
+                    alert('Something is wrong with the game type!');
+                }
             } else {
-                alert('Something is wrong with the game type!');
+                alert('In order to join a lobby, you must be logged in!')
             }
         } catch (error) {
             alert(`Something went wrong while trying to join the lobby: \n${handleError(error)}`);
@@ -415,7 +419,8 @@ class LobbyOverview extends Component {
                         <Button
                             width="50%"
                             onClick={() => {
-                                this.props.history.push('/createGame');
+                                (localStorage.getItem('token') ? this.props.history.push('/createGame')
+                                : alert('In order to create a lobby, you must be logged in!'));
                             }}
                         >
                             Create Lobby

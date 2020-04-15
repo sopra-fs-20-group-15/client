@@ -555,7 +555,7 @@ class InGame extends React.Component {
         try {
             // using a GET request we fetch a list of players
             const response = await api.get('/games/' + localStorage.getItem('gameId') + '/players');
-
+            console.log('response data', response.data);
             // Get the returned players and update the state using the data from the GET request
             this.setState({ players: response.data });
         } catch (error) {
