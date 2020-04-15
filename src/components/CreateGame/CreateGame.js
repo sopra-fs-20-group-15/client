@@ -183,7 +183,7 @@ class CreateGame extends Component{
             this.props.history.push(`/lobby/${response.data.gameId}`);
         } catch (error) {
             alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
-            this.props.history.push('/lobbyOverview');
+            // this.props.history.push('/lobbyOverview');
         }
     }
 
