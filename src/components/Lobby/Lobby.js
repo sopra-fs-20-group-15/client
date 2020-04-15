@@ -123,9 +123,9 @@ class Lobby extends React.Component {
                 id: localStorage.getItem('id')
             });
 
-            await api.post('/games/'+this.state.gameSetUpId, requestBody);
+            const response = await api.post('/games/'+this.state.gameSetUpId, requestBody);
             //temporary "gamelobby"
-            this.props.history.push('/gameLobby');
+            this.props.history.push('/gameLobby/'+response.data.id);
         } catch (error) {
             alert(`Something went wrong while starting the Game: \n${handleError(error)}`);
         }
@@ -143,6 +143,20 @@ class Lobby extends React.Component {
             this.props.history.push('/lobbyOverview');
         } catch (error) {
             alert(`Something went wrong while leaving the Lobby: \n${handleError(error)}`);
+        }
+    }
+
+    async terminateGame() {
+        try {
+            const requestBody = JSON.stringify({
+                token: localStorage.getItem('token')
+            });
+
+            await api.delete('/gameSetPps/'+this.state.gameSetUpId, requestBody);
+
+            this.props.history.push('/lobbyOverview');
+        } catch (error) {
+            alert(`Something went wrong while killing the Lobby qwq: \n${handleError(error)}`);
         }
     }
 
@@ -174,32 +188,30 @@ class Lobby extends React.Component {
 
                 <UIContainer>
                     <GridContainer>
-                        <GridItemTitle> {this.state.gameName} ({this.state.actualPlayers}/{this.state.desiredPlayers})</GridItemTitle>
+                        <GridItemTitle> {this.state.gameName} ({this.state.players.length}/{this.state.desiredPlayers})</GridItemTitle>
                         {this.state.players.map(user => {
                             return (
                                 <Fragment>
                                     <GridNormalItem> {user} </GridNormalItem>
                                 </Fragment>
                             )})}
-                        <GridNormalItem> Angel-Bots: {this.state.angels} </GridNormalItem>
-                        <GridNormalItem> Devil-Bots: {this.state.devils} </GridNormalItem>
                     </GridContainer>
                     <ChatContainer></ChatContainer>
                 </UIContainer>
 
                 <ButtonGroup>
                     {/*Checks if the Player's token is equal to the Host's (but not yet tho)*/}
-                    {this.state.players[0] == this.state.hostName ? (
+                    {this.state.players[0] != this.state.hostName ? (
                         <ButtonContainer>
                             <Button
-                                width="50%"
+                                style={{width:"50%",marginRight:"10px"}}
                                 onClick={() => {
-                                    this.leaveLobby();
+                                    this.terminateGame();
                                 }}>
                                 Leave Lobby
                             </Button>
                             <Button
-                                width="50%"
+                                style={{width:"50%",marginRight:"10px"}}
                                 //check if enough players?
                                 // disabled={!this.state.game}
                                 // gameLobby is a temporary name
