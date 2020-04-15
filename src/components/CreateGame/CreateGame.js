@@ -161,34 +161,30 @@ class CreateGame extends Component{
 
     async createGame() {
         try {
-            if (localStorage.getItem('token')) {
-                // requestBody should be in accordance with REST specification for GamePostDTO
-                const requestBody = JSON.stringify({
-                    gameName: this.state.gameName,
-                    numberOfPlayers: this.state.maxNumberOfPlayers,
-                    numberOfAngles: this.state.numberOfAngels,
-                    numberOfDevils: this.state.numberOfDevils,
-                    // is this variable necessary? -> possible for backend to decide base on whether password is null?
-                    gameType: (this.state.password === null ? "PUBLIC" : "PRIVATE"),
-                    password: this.state.password,
-                    playerToken: localStorage.getItem('token')
-                });
+            // requestBody should be in accordance with REST specification for GamePostDTO
+            const requestBody = JSON.stringify({
+                gameName: this.state.gameName,
+                numberOfPlayers: this.state.maxNumberOfPlayers,
+                numberOfAngles: this.state.numberOfAngels,
+                numberOfDevils: this.state.numberOfDevils,
+                // is this variable necessary? -> possible for backend to decide base on whether password is null?
+                gameType: (this.state.password === null ? "PUBLIC" : "PRIVATE"),
+                password: this.state.password,
+                playerToken: localStorage.getItem('token')
+            });
 
-                console.log('request body', requestBody)
+            console.log('request body', requestBody)
 
-                const response = await api.post('/games', requestBody);
+            const response = await api.post('/games', requestBody);
 
-                // player creates a game -> gameId is saved in his local storage
-                // response.data gives us a dictionary with the different return values documented in our REST specifications
-                localStorage.setItem('gameId', response.data.gameId);
+            // player creates a game -> gameId is saved in his local storage
+            // response.data gives us a dictionary with the different return values documented in our REST specifications
+            localStorage.setItem('gameId', response.data.gameId);
 
-                // registration successfully worked --> navigate to the route /login
-                this.props.history.push(`/lobby/${response.data.gameId}`);
-            } else {
-                alert('In order to create a lobby, you must be logged in!')
-            }
+            // registration successfully worked --> navigate to the route /login
+            this.props.history.push(`/lobby/${response.data.gameId}`);
         } catch (error) {
-            alert(`Something went wrong during the creation of the game: \n${handleError(error)}`);
+            alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
             this.props.history.push('/lobbyOverview');
         }
     }
