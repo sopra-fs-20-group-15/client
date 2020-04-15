@@ -236,15 +236,40 @@ class LobbyOverview extends Component {
 
     }
 
+    async joinPrivateLobby() {
+        try {
+            const requestBody = JSON.stringify({
+                playerToken: localStorage.getItem('token'),
+                password: this.state.password
+            });
+
+            const response = await api.put('/games/' + this.state.lobbies.indexOf(this.state.chosenLobby) + '/players', requestBody);
+
+            localStorage.setItem('gameId', response.data.gameId);
+
+            this.props.history.push('/lobby/' + this.state.lobbies.indexOf(this.state.chosenLobby))
+        } catch (error) {
+
+        }
+    }
+
     async joinLobby() {
         try {
             if (this.state.chosenLobby.gameType === "PUBLIC") {
-                await api.put('/games/' + this.state.lobbies.indexOf(this.state.chosenLobby) + '/players', localStorage.getItem('token'))
+                const requestBody = JSON.stringify({
+                    playerToken: localStorage.getItem('token')
+                });
+
+                const response = await api.put('/games/' + (this.state.lobbies.indexOf(this.state.chosenLobby)+1) + '/players', requestBody);
+
+                localStorage.setItem('gameId', response.data.gameId);
+
+                this.props.history.push('/lobby/' + (this.state.lobbies.indexOf(this.state.chosenLobby)+1))
+
             } else if (this.state.chosenLobby.gameType === "PRIVATE") {
                 this.overlayOn();
             } else {
                 alert('Something is wrong with the game type!');
-
             }
         } catch (error) {
             alert(`Something went wrong while trying to join the lobby: \n${handleError(error)}`);
@@ -303,7 +328,7 @@ class LobbyOverview extends Component {
                     <OverlayButtonContainer>
                         <Button
                             width="100%"
-                            onClick={() => {this.overlayOn()}}
+                            onClick={() => {this.joinPrivateLobby()}}
                         >
                             Confirm
                         </Button>
@@ -372,7 +397,7 @@ class LobbyOverview extends Component {
                         <Button
                             width="50%"
                             disabled={this.state.chosenLobby === null}
-                            onClick={() => {this.overlayOn()}}
+                            onClick={() => {this.joinLobby()}}
                         >
                             Join Lobby
                         </Button>
