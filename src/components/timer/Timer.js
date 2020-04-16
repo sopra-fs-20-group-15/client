@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
 import styled from "styled-components";
 

@@ -206,18 +206,6 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
-const Seconds = styled.div`
-    position: absolute;
-    top: 60px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    font-family: Happy Monkey;
-    font-size: 70px;
-    justify-content: center;
-    display: flex;
-`;
-
 const Round = styled.div`
     position: absolute;
     top: 30px;
@@ -490,7 +478,7 @@ class InGame extends React.Component {
                 playerToken: this.props.match.params.id
             });
 
-            const response = await api.post('/games/'+this.state.gameId+"/cards");
+            const response = await api.post('/games/'+this.state.gameId+"/cards", requestBody);
 
             this.setState({
                 currentCard: response.data,
@@ -516,7 +504,7 @@ class InGame extends React.Component {
 
             var i;
             for (i=0 ; i<this.state.currentCard.length ; i++) {
-                if (wordId-1 != i) {
+                if (wordId-1 !== i) {
                     var lineThroughWord = document.getElementById("word"+(i+1));
                     lineThroughWord.style.textDecoration = "line-through";
                 }
@@ -530,20 +518,20 @@ class InGame extends React.Component {
     //handles the input of every player for each phase
     handleInput(playerName, input) {
         //actions of active player
-        if (playerName == this.state.activePlayer) {
-            if (this.state.phaseNumber == 1) {
+        if (playerName === this.state.activePlayer) {
+            if (this.state.phaseNumber === 1) {
                 //choose mystery word
                 this.switchPhase();
             }
-            if (this.state.phaseNumber == 3) {
+            if (this.state.phaseNumber === 3) {
                 //guess mystery word
                 this.switchPhase();
             }
         }
         if (playerName in this.state.passivePlayers) {
-            if (this.state.phaseNumber == 2) {
+            if (this.state.phaseNumber === 2) {
                 //write clues
-                if (this.state.clueNumber == this.state.passivePlayers.length) {
+                if (this.state.clueNumber === this.state.passivePlayers.length) {
                     this.setState({clueNumber: 0});
                     this.switchPhase();
                 } else {
