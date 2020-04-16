@@ -4,8 +4,9 @@ import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
-import JustOneLogo from "../../views/JustOneLogo.png";
-import TriangleBackground from '../../views/TriangleBackground.png'
+import JustOneLogo from "../../views/pictures/JustOneLogo.png";
+import TriangleBackground from '../../views/pictures/TriangleBackground.png'
+import Lobby from "../../views/Lobby";
 
 
 const GridItemTitle = styled.div`
@@ -220,6 +221,9 @@ class LobbyOverview extends Component {
             chosenLobby: null,
             password: null
         };
+
+        this.interval = setInterval(this.getLobbies, 5000);
+        this.getLobbies = this.getLobbies.bind(this);
     }
 
 
@@ -253,6 +257,15 @@ class LobbyOverview extends Component {
         }
     }
 
+    getLobbies = async () => {
+        const response = await api.get('/games/lobbies');
+        if (response.status === 200) {
+            console.log('response.data', response.data);
+            this.setState({
+                lobbies: response.data
+            })
+        }
+    };
 
     async joinLobby() {
         try {
@@ -298,22 +311,16 @@ class LobbyOverview extends Component {
 
     async componentDidMount() {
         try {
-            const response = await api.get('/games/lobbies');
-
-            const lobbies = response.data;
-            console.log('response', response);
-            console.log('response data', response.data);
-
-            this.setState({
-                lobbies: lobbies
-            })
-
+            this.getLobbies();
         } catch (error) {
             alert(`Something went wrong while fetching the lobbies: \n${handleError(error)}`);
             this.props.history.push("/lobbyOverview")
         }
     }
 
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
 
     render() {
         return (
@@ -376,13 +383,7 @@ class LobbyOverview extends Component {
                             return (
                                 // using "Fragment" allows use to render multiple components in this function
                                 <Fragment>
-                                    <GridNormalItem> {lobby.gameName} </GridNormalItem>
-                                    <GridNormalItem> {lobby.gameType} </GridNormalItem>
-                                    <GridNormalItem> {lobby.numOfActualPlayers}/{lobby.numOfDesiredPlayers} </GridNormalItem>
-                                    <BotContainer>
-                                        <BotCell> Angels: {lobby.numOfAngels} </BotCell>
-                                        <BotCell> Devils: {lobby.numOfDevils}</BotCell>
-                                    </BotContainer>
+                                    <Lobby lobby={lobby}/>
                                     <ChooseGameContainer>
                                         {/** this.state.games.indexOf(game) identifies each game using its (unique) index in this.state.games */}
                                         <input type="radio" name="game" value={lobby} onClick={() => {

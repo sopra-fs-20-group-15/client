@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import TriangleBackground from '../../views/TriangleBackground.png'
-import JustOneLogo from '../../views/JustOneLogo.png'
+import TriangleBackground from '../../views/pictures/TriangleBackground.png'
+import JustOneLogo from '../../views/pictures/JustOneLogo.png'
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
@@ -173,6 +173,8 @@ class CreateGame extends Component{
                 playerToken: localStorage.getItem('token')
             });
 
+            console.log('request body', requestBody)
+
             const response = await api.post('/games', requestBody);
 
             // player creates a game -> gameId is saved in his local storage
@@ -204,7 +206,7 @@ class CreateGame extends Component{
 
     handleMaxNrOfPlayersInput(key, value) {
         if (this.state.numberOfDevils + this.state.numberOfAngels < value) {
-            this.setState({[key]: value});
+            this.setState({[key]: value})
         } else if (this.state.numberOfDevils + this.state.numberOfAngels === value) {
             alert("You have to leave room for yourself!")
         } else {
@@ -226,9 +228,7 @@ class CreateGame extends Component{
            (only necessary to check when incrementing, obviously)
            (can this condition be refactored, so it only has to be stated once?) */
         if (this.state.numberOfDevils + this.state.numberOfAngels < this.state.maxNumberOfPlayers - 1) {
-            this.setState({numberOfAngels: this.state.numberOfAngels + 1}, () => {
-                console.log(this.state.numberOfAngels)
-            });
+            this.setState({numberOfAngels: this.state.numberOfAngels + 1})
         } else {
             alert("No more bots can be added!")
         }
@@ -249,6 +249,7 @@ class CreateGame extends Component{
             alert("No more bots can be added!")
         }
     };
+
 
     render() {
         return (
@@ -272,6 +273,10 @@ class CreateGame extends Component{
                             onChange={e => {this.handleInputChange('gameName', e.target.value)}}
                         />
                     </GridItemInput>
+                    {console.log('angels', this.state.numberOfAngels)}
+                    {console.log('devils', this.state.numberOfDevils)}
+                    {console.log('max', this.state.maxNumberOfPlayers)}
+
 
                     <GridItemTitle> Max. Number of Players </GridItemTitle>
                     <GridItemInput>

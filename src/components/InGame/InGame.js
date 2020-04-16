@@ -599,7 +599,6 @@ class InGame extends React.Component {
                 activePlayer: response.data.activPlayerName,
                 passivePlayers: response.data.passivePlayerNames
             });
-
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
         }
@@ -613,8 +612,8 @@ class InGame extends React.Component {
         let c = 3;
         let d = 4;
         t['timer' + a] = 15;
-        t['timer' + b] = 30;
-        t['timer' + c] = 20;
+        t['timer' + b] = 25;
+        t['timer' + c] = 30;
         t['timer' + d] = 10;
         return (
                 <Game>
