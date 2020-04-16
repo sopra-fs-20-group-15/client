@@ -273,9 +273,6 @@ class CreateGame extends Component{
                             onChange={e => {this.handleInputChange('gameName', e.target.value)}}
                         />
                     </GridItemInput>
-                    {console.log('angels', this.state.numberOfAngels)}
-                    {console.log('devils', this.state.numberOfDevils)}
-                    {console.log('max', this.state.maxNumberOfPlayers)}
 
 
                     <GridItemTitle> Max. Number of Players </GridItemTitle>

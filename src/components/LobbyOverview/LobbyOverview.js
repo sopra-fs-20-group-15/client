@@ -218,6 +218,7 @@ class LobbyOverview extends Component {
         this.state = {
             lobbies: null,
             chosenLobby: null,
+            chosenLobbyIndex: null,
             password: null
         };
 
@@ -246,20 +247,25 @@ class LobbyOverview extends Component {
                 password: this.state.password
             });
 
-            const response = await api.put('/games/' + this.state.lobbies.indexOf(this.state.chosenLobby) + '/players', requestBody);
+            {console.log("requestBody (Pr)", requestBody)}
 
+            const response = await api.put('/games/' + (this.state.chosenLobbyIndex+1) + '/players', requestBody);
+
+            console.log("response (Pr)", response);
+
+            /** Don't know whether we'll need that... */
             localStorage.setItem('gameId', response.data.gameId);
 
-            this.props.history.push('/lobby/' + this.state.lobbies.indexOf(this.state.chosenLobby))
+            this.props.history.push('/lobby/' + (this.state.chosenLobbyIndex+1))
         } catch (error) {
-
+            alert(`Something went wrong while trying to join the lobby: \n${handleError(error)}`);
+            this.props.history.push("/lobbyOverview")
         }
     }
 
     getLobbies = async () => {
         const response = await api.get('/games/lobbies');
         if (response.status === 200) {
-            console.log('response.data', response.data);
             this.setState({
                 lobbies: response.data
             })
@@ -274,11 +280,15 @@ class LobbyOverview extends Component {
                     password: ""
                 });
 
-                const response = await api.put('/games/' + (this.state.lobbies.indexOf(this.state.chosenLobby)+1) + '/players', requestBody);
+                {console.log("requestBody (Pu)", requestBody)}
+
+                const response = await api.put('/games/' + (this.state.chosenLobbyIndex+1) + '/players', requestBody);
+
+                console.log("response (Pr)", response);
 
                 localStorage.setItem('gameId', response.data.gameId);
 
-                this.props.history.push('/lobby/' + (this.state.lobbies.indexOf(this.state.chosenLobby)+1))
+                this.props.history.push('/lobby/' + (this.state.chosenLobbyIndex+1))
 
             } else if (this.state.chosenLobby.gameType === "PRIVATE") {
                 this.overlayOn();
@@ -391,8 +401,9 @@ class LobbyOverview extends Component {
                                     </BotContainer>
                                     <ChooseGameContainer>
                                         {/** this.state.games.indexOf(game) identifies each game using its (unique) index in this.state.games */}
-                                        <input type="radio" name="game" value={lobby} onClick={() => {
-                                            this.setState({chosenLobby: lobby})
+                                        <input type="radio" name="game" value={this.state.chosenLobby} onClick={() => {
+                                            this.setState({chosenLobby: lobby});
+                                            this.setState({chosenLobbyIndex: this.state.lobbies.indexOf(lobby)});
                                         }}/>
                                     </ChooseGameContainer>
                                 </Fragment>
