@@ -422,9 +422,10 @@ class InGame extends React.Component {
             round: 1,
             secondsLeft: 15,
             // temporary list of strings and active player (for test purpose)
-            players: ["john", "paul", "george", "richard"],
+            players: ["john", "Minh", "george", "richard"],
             activePlayer: "Minh",
             passivePlayers: null,
+            clueNumber: null,
             clues: null,
             guess: null,
             scores: null
@@ -526,8 +527,31 @@ class InGame extends React.Component {
         }
     }
 
-
-    handleInput() {}
+    //handles the input of every player for each phase
+    handleInput(playerName, input) {
+        //actions of active player
+        if (playerName == this.state.activePlayer) {
+            if (this.state.phaseNumber == 1) {
+                //choose mystery word
+                this.switchPhase();
+            }
+            if (this.state.phaseNumber == 3) {
+                //guess mystery word
+                this.switchPhase();
+            }
+        }
+        if (playerName in this.state.passivePlayers) {
+            if (this.state.phaseNumber == 2) {
+                //write clues
+                if (this.state.clueNumber == this.state.passivePlayers.length) {
+                    this.setState({clueNumber: 0});
+                    this.switchPhase();
+                } else {
+                    this.setState({clueNumber: this.state.clueNumber+1});
+                }
+            }
+        }
+    }
 
     test() {
         localStorage.removeItem('token');
@@ -622,7 +646,7 @@ class InGame extends React.Component {
                                     {e => {this.handleInputChange('gameId', e.target.value);}}/>
                             </InputField>
                             <ReadyField disabled={!this.state.gameId}
-                                        onClick={() => {this.switchPhase();}}>
+                                        onClick={() => {this.handleInput(this.state.players[1],this.state.gameId);}}>
                                 <p hidden={!this.state.gameId}>...</p>
                             </ReadyField>
                         </Player>
