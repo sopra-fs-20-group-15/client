@@ -424,6 +424,7 @@ class InGame extends React.Component {
             // temporary list of strings and active player (for test purpose)
             players: ["john", "paul", "george", "richard"],
             activePlayer: "Minh",
+            passivePlayers: null,
             clues: null,
             guess: null,
             scores: null
@@ -525,6 +526,7 @@ class InGame extends React.Component {
         }
     }
 
+
     handleInput() {}
 
     test() {
@@ -551,19 +553,33 @@ class InGame extends React.Component {
      * You may call setState() immediately in componentDidMount().
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
+    // async componentDidMount() {
+    //     try {
+    //         // using a GET request we fetch a list of players
+    //         const response = await api.get('/games/' + localStorage.getItem('gameId') + '/players');
+    //
+    //         // Get the returned players and update the state using the data from the GET request
+    //         this.setState({ players: response.data });
+    //     } catch (error) {
+    //         alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
+    //     }
+    // }
+
     async componentDidMount() {
         try {
-            // using a GET request we fetch a list of players
-            const response = await api.get('/games/' + localStorage.getItem('gameId') + '/players');
+            const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
 
-            // Get the returned players and update the state using the data from the GET request
-            this.setState({ players: response.data });
+            this.setState({
+                gameId: response.data.id,
+                players: response.data.playerNames,
+                activePlayer: response.data.activPlayerName,
+                passivePlayers: response.data.passivePlayerNames
+            });
+
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
         }
     }
-
-
 
     render() {
         // this construction of the variable name for the different timer seconds helps us to render the timer dynamically
