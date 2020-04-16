@@ -6,7 +6,6 @@ import { Button, LogoutButton } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 import TriangleBackground from '../../views/pictures/TriangleBackground.png'
-import Header from "../../views/Header";
 
 
 const GridItemTitle = styled.div`
