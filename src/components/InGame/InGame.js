@@ -179,33 +179,6 @@ const TableContainer = styled.div`
   justify-content: center;
 `;
 
-const Form = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 60%;
-  height: 420px;
-  font-size: 16px;
-  font-weight: 300;
-  padding-left: 37px;
-  padding-right: 37px;
-  border-radius: 5px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
-  transition: opacity 0.5s ease, transform 0.5s ease;
-`;
-
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-`;
-
 const Round = styled.div`
     position: absolute;
     top: 30px;
@@ -410,9 +383,9 @@ class InGame extends React.Component {
             round: 1,
             secondsLeft: 15,
             // temporary list of strings and active player (for test purpose)
-            players: ["john", "Minh", "george", "richard"],
+            players: ["John", "Minh", "George", "Richard"],
             activePlayer: "Minh",
-            passivePlayers: null,
+            passivePlayers: ["John","George","Richard"],
             clueNumber: null,
             clues: null,
             guess: null,
@@ -447,12 +420,20 @@ class InGame extends React.Component {
     switchPhaseHUD(id) {
         let greyPhase = document.getElementById("phase"+id);
         greyPhase.style.backgroundColor = "#817857";
-        if (id != 4) {
+        if (id !== 4) {
             let greenPhase = document.getElementById("phase"+(id+1));
             greenPhase.style.backgroundColor = "#05FF00";
         } else {
             let greenPhase = document.getElementById("phase"+(1));
             greenPhase.style.backgroundColor = "#05FF00";
+        }
+    }
+
+    async initializeTurn() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while initializing the Turn: \n${handleError(error)}`);
         }
     }
 
@@ -463,29 +444,11 @@ class InGame extends React.Component {
             const response = await api.get('/games/'+this.state.gameId+"/cards/"+localStorage.getItem("token"));
 
             this.setState({
-                currentCard: response.data,
+                currentCard: response.data.list,
                 remainingCards: this.state.remainingCards-1
             });
         } catch (error) {
-            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`)
-        }
-    }
-
-    async giveClue() {
-        try {
-            const requestBody = JSON.stringify({
-                clue: this.state.clues,
-                playerToken: this.props.match.params.id
-            });
-
-            const response = await api.post('/games/'+this.state.gameId+"/cards", requestBody);
-
-            this.setState({
-                currentCard: response.data,
-                remainingCards: this.state.remainingCards-1
-            });
-        } catch (error) {
-            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`)
+            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`);
         }
     }
 
@@ -510,8 +473,34 @@ class InGame extends React.Component {
                 }
             }
         }
-         catch (error) {
+        catch (error) {
             alert(`Something went wrong while determine the Mystery Word: \n${handleError(error)}`)
+        }
+    }
+
+    async getMysteryWord() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while getting the Mystery Word: \n${handleError(error)}`);
+        }
+    }
+
+    async setClue() {
+        try {
+            const requestBody = JSON.stringify({
+                clue: this.state.clues,
+                playerToken: this.props.match.params.id
+            });
+
+            const response = await api.post('/games/'+this.state.gameId+"/cards", requestBody);
+
+            this.setState({
+                currentCard: response.data,
+                remainingCards: this.state.remainingCards-1
+            });
+        } catch (error) {
+            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`)
         }
     }
 
@@ -528,7 +517,7 @@ class InGame extends React.Component {
                 this.switchPhase();
             }
         }
-        if (playerName in this.state.passivePlayers) {
+        if (this.state.passivePlayers.includes(playerName)) {
             if (this.state.phaseNumber === 2) {
                 //write clues
                 if (this.state.clueNumber === this.state.passivePlayers.length) {
@@ -648,7 +637,7 @@ class InGame extends React.Component {
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
                             </InputField>
                             <ReadyField disabled={!this.state.gameId}
-                                        onClick={() => {this.test();}}>
+                                        onClick={() => {this.handleInput(this.state.players[2],this.state.gameId);}}>
                                 <p hidden={!this.state.gameId}>...</p>
                             </ReadyField>
                         </Player>
