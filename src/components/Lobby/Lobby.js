@@ -185,7 +185,6 @@ class Lobby extends React.Component {
             console.log('token', localStorage.getItem('token'))
 
             this.getInfos();
-
         } catch(error) {
             alert(`Something went wrong while fetching the lobby's data: \n${handleError(error)}`);
         }

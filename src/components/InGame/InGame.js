@@ -380,9 +380,8 @@ class InGame extends React.Component {
             mysteryWordId: null,
             mysteryWord: null,
             phaseNumber: 1,
-            phase: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
+            phases: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
             round: 1,
-            secondsLeft: 15,
             // temporary list of strings and active player (for test purpose)
             players: ["John", "Minh", "George", "Richard"],
             activePlayer: "Minh",
@@ -662,7 +661,7 @@ class InGame extends React.Component {
                             <PhaseCircle id={"phase3"} style={{left:"138px"}}/>
                             <PhaseCircle id={"phase4"} style={{left:"194px"}}/>
                             {/* need props here, just placeholder for now*/}
-                            <PhaseMessage> {this.state.phase[this.state.phaseNumber-1]} </PhaseMessage>
+                            <PhaseMessage> {this.state.phases[this.state.phaseNumber-1]} </PhaseMessage>
                         </Phase>
                     </HUDContainer>
                     {/*First Player Row*/}
