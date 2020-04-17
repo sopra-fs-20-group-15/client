@@ -138,7 +138,7 @@ class Lobby extends React.Component {
     async startGame() {
         try {
             const requestBody = JSON.stringify({
-                playerToken: localStorage.getItem('token')
+                token: localStorage.getItem('token')
             });
 
             const response = await api.post('/games/'+this.props.match.params.id, requestBody);
@@ -152,8 +152,7 @@ class Lobby extends React.Component {
     async leaveLobby() {
         try {
             const requestBody = JSON.stringify({
-                // token: localStorage.getItem('token'),
-                playerId: localStorage.getItem('id')
+                token: localStorage.getItem('token')
             });
 
             await api.delete('/games/'+this.props.match.params.id+'/players', requestBody);
@@ -216,14 +215,14 @@ class Lobby extends React.Component {
 
                 <ButtonGroup>
                     {/*Checks if the Player's token is equal to the Host's (but not yet tho)*/}
-                    {this.state.players[0] != this.state.hostName ? (
+                    {localStorage.getItem('username') == this.state.hostName ? (
                         <ButtonContainer>
                             <Button
                                 style={{width:"50%",marginRight:"10px"}}
                                 onClick={() => {
                                     this.terminateGame();
                                 }}>
-                                Leave Lobby
+                                Terminate Game
                             </Button>
                             <Button
                                 style={{width:"50%",marginRight:"10px"}}
