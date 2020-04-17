@@ -420,7 +420,7 @@ class InGame extends React.Component {
             gameId: null,
             remainingCards: 13,
             guessedCards: 0,
-            currentCard: null,
+            currentCard: ["", "", "", "", ""],
             mysteryWordId: null,
             mysteryWord: null,
             phaseNumber: 1,
@@ -477,25 +477,29 @@ class InGame extends React.Component {
 
     async initializeTurn() {
         try {
+            const requestBody = JSON.stringify({
+                playerToken: localStorage.getItem('token')
+            });
 
+            await api.put('/games/' + this.state.gameId + '/initializations', requestBody)
         } catch (error) {
             alert(`Something went wrong while initializing the Turn: \n${handleError(error)}`);
         }
     }
 
-    async drawCard() {
+    async getCard() {
         try {
             /** Button disappears after card is drawn. */
             document.getElementById("drawCard").style.display = "none";
 
-            /** A random card is chosen, it's words are saved and displayed (for the passive players).
-             * The stack of remaining cards is updated. */
+            /** The active card is fetch (already set by initializeTurn()), it's words are saved and displayed
+             * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
 
             console.log('response', response);
 
             this.setState({
-                currentCard: response.data.list,
+                currentCard: response.data.words,
                 remainingCards: this.state.remainingCards-1
             });
 
@@ -681,6 +685,7 @@ class InGame extends React.Component {
 
     async componentDidMount() {
         try {
+
             const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
 
             this.setState({
@@ -689,7 +694,9 @@ class InGame extends React.Component {
                 activePlayer: response.data.activePlayerName,
                 passivePlayers: response.data.passivePlayerNames
             });
-            console.log('state componentDidMount()', this.state)
+
+            this.initializeTurn();
+
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
         }
@@ -810,7 +817,7 @@ class InGame extends React.Component {
                                 <Deck style={{position:"absolute", bottom:"1%", left:"20%"}}></Deck>
                                 <Deck style={{position:"absolute", bottom:"2%", left:"19%"}}></Deck>
                                 <Deck style={{position: "absolute", bottom: "3%", left: "18%"}}>
-                                    <DrawCard id={"drawCard"} onClick={() => this.drawCard()}> Draw Card! </DrawCard>
+                                    <DrawCard id={"drawCard"} onClick={() => this.getCard()}> Draw Card! </DrawCard>
                                     {this.state.remainingCards}
                                 </Deck>
                                 <ActiveCard id={"activeCard"} style={{display:"none"}}>
