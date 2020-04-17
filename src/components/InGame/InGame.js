@@ -668,6 +668,7 @@ class InGame extends React.Component {
                     {/*First Player Row*/}
                     <PlayerContainer>
                         {/*Player 2*/}
+                        {this.state.players.length>=2 ? (
                         <Player style={{marginTop:"-8%", marginLeft:"20%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>2</GuessedCardsField>
@@ -682,12 +683,14 @@ class InGame extends React.Component {
                                 <p hidden={!this.state.gameId}>...</p>
                             </ReadyField>
                         </Player>
+                        ): (<Player/>)}
                         {/*Player 3*/}
+                        {this.state.players.length>=3 ? (
                         <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>0</GuessedCardsField>
                             <ScoreField>9</ScoreField>
-                            <NameField>3. {this.state.players[2].username !== null ? this.state.players[2].username : null}</NameField>
+                            <NameField>3. {this.state.players[2]}</NameField>
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -697,28 +700,31 @@ class InGame extends React.Component {
                                 <p hidden={!this.state.gameId}>...</p>
                             </ReadyField>
                         </Player>
+                        ): (<Player/>)}
                     </PlayerContainer>
                     {/*Second Player Row*/}
                     <PlayerContainer>
                         {/*Player 4*/}
+                        {this.state.players.length>=4 ? (
                         <Player style={{marginTop:"2%", marginLeft:"0%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
-                            <NameField>4. {this.state.players.length >= 4 ? this.state.players[3].username : null}</NameField>
+                            <NameField>4. {this.state.players[3]}</NameField>
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
                             </InputField>
                             <ReadyField></ReadyField>
                         </Player>
+                        ): (<Player/>)}
                         {/*Player 5*/}
                         {this.state.players.length>=5 ? (
                             <Player style={{marginTop:"2%", marginRight:"0%", float:"right"}}>
                                 <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                                 <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                                 <ScoreField></ScoreField>
-                                <NameField>5. {this.state.players.length >= 5 ? this.state.players[4].username : null}</NameField>
+                                <NameField>5. {this.state.players[4]}</NameField>
                                 <InputField>
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -756,43 +762,49 @@ class InGame extends React.Component {
                     {/*Third Player Row*/}
                     <PlayerContainer>
                         {/*Player 6*/}
+                        {this.state.players.length>=6 ? (
                         <Player style={{marginTop:"2%", marginLeft:"2%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
-                            <NameField>6. {this.state.players.length >= 6 ? this.state.players[5].username : null}</NameField>
+                            <NameField>6. {this.state.players[5]}</NameField>
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
                             </InputField>
                             <ReadyField></ReadyField>
                         </Player>
+                        ): (<Player/>)}
                         {/*Player 7*/}
+                        {this.state.players.length>=7 ? (
                         <Player style={{marginTop:"2%", marginRight:"2%", float:"right"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
-                            <NameField>7. {this.state.players.length === 7 ? this.state.players[6].username : null}</NameField>
+                            <NameField>7. {this.state.players[6]}</NameField>
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
                             </InputField>
                             <ReadyField></ReadyField>
                         </Player>
+                        ): (<Player/>)}
                     </PlayerContainer>
                     <PlayerContainer>
                         {/*Player 1*/}
+                        {this.state.players.length>=1 ? (
                         <Player style={{marginTop:"1%", marginLeft:"38%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
-                            <NameField>1. {this.state.players[0].username}</NameField>
+                            <NameField>1. {this.state.players[0]}</NameField>
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
                             </InputField>
                             <ReadyField></ReadyField>
                         </Player>
+                        ): (<Player/>)}
                     </PlayerContainer>
                 </Game>
         );
