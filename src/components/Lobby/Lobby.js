@@ -120,7 +120,6 @@ class Lobby extends React.Component {
 
     getInfos = async () => {
         const response = await api.get('/games/lobbies/'+this.props.match.params.id+"/"+localStorage.getItem("token"));
-        console.log('response', response);
         if (response.status === 200) {
             this.setState({
                 activeGameId: response.data.activeGameId,
@@ -133,9 +132,10 @@ class Lobby extends React.Component {
                 angels: response.data.numOfAngels,
                 devils: response.data.numOfDevils
             });
-            /** Making sure all users are redirected to the active game, after its creation (not just host). */
+            /** Making sure all users are redirected to the active game, after its creation (not just host).
+             * The token gameId makes sure that only the players from the lobby can join the game. */
             if (this.state.activeGameId) {
-                localStorage.setItem('gameId');
+                localStorage.setItem('gameId', this.state.activeGameId);
                 this.props.history.push('/gameLobby/' + this.state.activeGameId);
             }
         }
@@ -186,10 +186,6 @@ class Lobby extends React.Component {
     //needs to gather info about the lobby!!!
     async componentDidMount() {
         try {
-            console.log('id', localStorage.getItem('id'))
-            console.log('gameid',this.props.match.params.id)
-            console.log('token', localStorage.getItem('token'))
-
             this.getInfos();
         } catch(error) {
             alert(`Something went wrong while fetching the lobby's data: \n${handleError(error)}`);
