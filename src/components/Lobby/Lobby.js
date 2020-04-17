@@ -162,7 +162,7 @@ class Lobby extends React.Component {
     //needs to gather info about the lobby!!!
     async componentDidMount() {
         try {
-            const response = await api.get('games/lobbies/'+this.props.match.params.id+"/"+localStorage.getItem("token"));
+            const response = await api.get('games/lobbies/'+localStorage.getItem('gameSetupId')+"/"+localStorage.getItem("token"));
 
             this.setState({
                 activeGameId: response.data.activeGameId,

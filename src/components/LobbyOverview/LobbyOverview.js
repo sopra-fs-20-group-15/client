@@ -247,13 +247,8 @@ class LobbyOverview extends Component {
                 password: this.state.password
             });
 
-            {console.log("requestBody (Pr)", requestBody)}
-
             const response = await api.put('/games/' + (this.state.chosenLobbyIndex+1) + '/players', requestBody);
 
-            console.log("response (Pr)", response);
-
-            /** Don't know whether we'll need that... */
             localStorage.setItem('gameId', response.data.gameId);
 
             this.props.history.push('/lobby/' + (this.state.chosenLobbyIndex+1))
@@ -280,11 +275,7 @@ class LobbyOverview extends Component {
                     password: ""
                 });
 
-                {console.log("requestBody (Pu)", requestBody)}
-
                 const response = await api.put('/games/' + (this.state.chosenLobbyIndex+1) + '/players', requestBody);
-
-                console.log("response (Pr)", response);
 
                 localStorage.setItem('gameId', response.data.gameId);
 
