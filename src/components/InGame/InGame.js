@@ -52,6 +52,27 @@ const ActiveCard = styled.div`
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
 `;
 
+const DrawCard = styled.div`
+    position: absolute;
+    width: 130px;
+    height: 40px;
+    top: 20px;
+    left: 20px;
+    background: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-size: 22px;
+    text-align: center;
+    line-height: normal;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+    cursor: ${props => (props.disabled ? "default" : "pointer")};
+    transition: all 0.3s ease;
+`;
+
 const Number = styled.div`
     position: absolute;
     padding: 4px 0;
@@ -399,7 +420,7 @@ class InGame extends React.Component {
             gameId: null,
             remainingCards: 13,
             guessedCards: 0,
-            currentCard: ["Motherfucker", "Volvo", "Marmite", "Furry", "Camper"],
+            currentCard: null,
             mysteryWordId: null,
             mysteryWord: null,
             phaseNumber: 1,
@@ -412,8 +433,10 @@ class InGame extends React.Component {
             clueNumber: null,
             clues: [],
             guess: null,
-            scores: null
+            scores: null,
+            timer: null
         };
+        console.log('state constructor', this.state)
     }
 
     //clears previous phase and sets up the new one (like resetting input, timer and other stuff) NOT FINISHED YET
@@ -460,20 +483,32 @@ class InGame extends React.Component {
         }
     }
 
-    async getNewCard() {
+    async drawCard() {
         try {
-            //vlt noch ein check if deck has cards in it
-            //gets a new card and decrease deck size by 1
-            const response = await api.get('/games/'+this.state.gameId+"/cards/"+localStorage.getItem("token"));
+            /** Button disappears after card is drawn. */
+            document.getElementById("drawCard").style.display = "none";
+
+            /** A random card is chosen, it's words are saved and displayed (for the passive players).
+             * The stack of remaining cards is updated. */
+            const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
+
+            console.log('response', response);
 
             this.setState({
                 currentCard: response.data.list,
                 remainingCards: this.state.remainingCards-1
             });
+
+            console.log('after drawing card', this.state);
+
+            /** Card is displayed after having been drawn. */
+            document.getElementById("activeCard").style.display = "block";
+
         } catch (error) {
-            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`);
+            alert(`Something went wrong while trying to get a new card: \n${handleError(error)}`);
         }
     }
+
 
     //sets the mystery word and cross out all other words
     async determineMysteryWord(wordId) {
@@ -648,14 +683,13 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
 
-            console.log('response', response);
-
             this.setState({
                 gameId: localStorage.getItem('gameId'),
                 players: response.data.playerNames,
                 activePlayer: response.data.activePlayerName,
                 passivePlayers: response.data.passivePlayerNames
             });
+            console.log('state componentDidMount()', this.state)
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
         }
@@ -663,22 +697,23 @@ class InGame extends React.Component {
 
     render() {
         // this construction of the variable name for the different timer seconds helps us to render the timer dynamically
-        let t = {};
-        let a = 1;
-        let b = 2;
-        let c = 3;
-        let d = 4;
-        t['timer' + a] = 15;
-        t['timer' + b] = 25;
-        t['timer' + c] = 30;
-        t['timer' + d] = 10;
+        // let t = {};
+        // let a = 1;
+        // let b = 2;
+        // let c = 3;
+        // let d = 4;
+        // t['timer' + a] = 15;
+        // t['timer' + b] = 25;
+        // t['timer' + c] = 30;
+        // t['timer' + d] = 10;
+        // -> maybe needed later
         return (
                 <Game>
                     {/*Timer and Phase*/}
                     <HUDContainer>
                         <TimerContainer>
                             <Round> Round {this.state.round} </Round>
-                            <Timer seconds={t['timer' + this.state.phaseNumber]}/>
+                            <Timer seconds={this.state.timer}/>
                         </TimerContainer>
                         <Phase>
                             <PhaseCircle id={"phase1"} style={{left:"26px", backgroundColor:"#05FF00"}}/>
@@ -774,8 +809,11 @@ class InGame extends React.Component {
                                 <GuessedCards style={{position:"absolute", bottom:"3%"}}> 3 </GuessedCards>
                                 <Deck style={{position:"absolute", bottom:"1%", left:"20%"}}></Deck>
                                 <Deck style={{position:"absolute", bottom:"2%", left:"19%"}}></Deck>
-                                <Deck style={{position:"absolute", bottom:"3%", left:"18%"}}> 7 </Deck>
-                                <ActiveCard>
+                                <Deck style={{position: "absolute", bottom: "3%", left: "18%"}}>
+                                    <DrawCard id={"drawCard"} onClick={() => this.drawCard()}> Draw Card! </DrawCard>
+                                    {this.state.remainingCards}
+                                </Deck>
+                                <ActiveCard id={"activeCard"} style={{display:"none"}}>
                                     {/* The words are only placeholders, as are the numbers */}
                                     <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
                                     <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
