@@ -453,14 +453,13 @@ class InGame extends React.Component {
     }
 
     //sets the mystery word and cross out all other words
-    async setMysteryWord(wordId) {
+    async determineMysteryWord(wordId) {
         try {
             const requestBody = JSON.stringify({
-                wordId: wordId,
-                playerToken: localStorage.getItem("token")
+                wordId: wordId
             });
 
-            const response = await api.post('/games/'+this.state.gameId+"/cards/", requestBody);
+            const response = await api.put('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'), requestBody);
             this.setState({
                 mysteryWord: response.data
             });
