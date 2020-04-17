@@ -113,16 +113,35 @@ class Lobby extends React.Component {
             angels: null,
             devils: null
         };
+
+        this.interval = setInterval(this.getInfos, 5000);
+        this.getInfos = this.getInfos.bind(this);
     }
+
+    getInfos = async () => {
+        const response = await api.get('/games/lobbies/'+this.props.match.params.id+"/"+localStorage.getItem("token"));
+        if (response.status === 200) {
+            this.setState({
+                activeGameId: response.data.activeGameId,
+                gameSetUpId: response.data.gameSetUpId,
+                gameName: response.data.gameName,
+                hostName: response.data.hostName,
+                players: response.data.playerNames,
+                desiredPlayers: response.data.numOfDesiredPlayers,
+                actualPlayers: response.data.numOfActualPlayers,
+                angels: response.data.numOfAngels,
+                devils: response.data.numOfDevils
+            })
+        }
+    };
 
     async startGame() {
         try {
             const requestBody = JSON.stringify({
-                token: localStorage.getItem('token'),
-                id: localStorage.getItem('id')
+                playerToken: localStorage.getItem('token')
             });
 
-            const response = await api.post('/games/'+this.state.gameSetUpId, requestBody);
+            const response = await api.post('/games/'+this.props.match.params.id, requestBody);
             //temporary "gamelobby"
             this.props.history.push('/gameLobby/'+response.data.id);
         } catch (error) {
@@ -133,11 +152,11 @@ class Lobby extends React.Component {
     async leaveLobby() {
         try {
             const requestBody = JSON.stringify({
-                token: localStorage.getItem('token'),
-                id: localStorage.getItem('id')
+                // token: localStorage.getItem('token'),
+                playerId: localStorage.getItem('id')
             });
 
-            await api.delete('/games/'+this.state.gameSetUpId+'/players', requestBody);
+            await api.delete('/games/'+this.props.match.params.id+'/players', requestBody);
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
@@ -151,7 +170,7 @@ class Lobby extends React.Component {
                 token: localStorage.getItem('token')
             });
 
-            await api.delete('/gameSetPps/'+this.state.gameSetUpId, requestBody);
+            await api.delete('/gameSetUps/'+this.props.match.params.id, requestBody);
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
@@ -162,22 +181,19 @@ class Lobby extends React.Component {
     //needs to gather info about the lobby!!!
     async componentDidMount() {
         try {
-            const response = await api.get('games/lobbies/'+this.props.match.params.id+"/"+localStorage.getItem("token"));
+            console.log('id', localStorage.getItem('id'))
+            console.log('gameid',this.props.match.params.id)
+            console.log('token', localStorage.getItem('token'))
 
-            this.setState({
-                activeGameId: response.data.activeGameId,
-                gameSetUpId: response.data.gameSetUpId,
-                gameName: response.data.gameName,
-                hostName: response.data.hostName,
-                players: response.data.playerNames,
-                desiredPlayers: response.data.numOfDesiredPlayers,
-                actualPlayers: response.data.numOfActualPlayers,
-                angels: response.data.numOfAngels,
-                devils: response.data.numOfDevils
-            });
+            this.getInfos();
+
         } catch(error) {
             alert(`Something went wrong while fetching the lobby's data: \n${handleError(error)}`);
         }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     render() {
