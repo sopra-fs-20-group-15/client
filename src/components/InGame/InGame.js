@@ -377,6 +377,7 @@ class InGame extends React.Component {
             remainingCards: 13,
             guessedCards: 0,
             currentCard: ["Motherfucker", "Volvo", "Marmite", "Furry", "Camper"],
+            mysteryWordId: null,
             mysteryWord: null,
             phaseNumber: 1,
             phase: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
@@ -461,7 +462,7 @@ class InGame extends React.Component {
 
             const response = await api.put('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'), requestBody);
             this.setState({
-                mysteryWord: response.data
+                mysteryWordId: response.data.wordId
             });
 
             var i;
@@ -479,13 +480,16 @@ class InGame extends React.Component {
 
     async getMysteryWord() {
         try {
-
+            const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
+            this.setState({
+                mysteryWord: response.data.word
+            });
         } catch (error) {
             alert(`Something went wrong while getting the Mystery Word: \n${handleError(error)}`);
         }
     }
 
-    async setClue() {
+    async giveClue() {
         try {
             const requestBody = JSON.stringify({
                 clue: this.state.clues,
@@ -513,7 +517,12 @@ class InGame extends React.Component {
 
     async setGuess() {
         try {
+            const requestBody = JSON.stringify({
+                Guess: this.state.guess,
+                playerToken: localStorage.getItem('token')
+            });
 
+            await api.post('/games/'+this.state.gameId+"/guesses", requestBody);
         } catch (error) {
             alert(`Something went wrong while giving the Guess: \n${handleError(error)}`);
         }
