@@ -490,17 +490,65 @@ class InGame extends React.Component {
         try {
             const requestBody = JSON.stringify({
                 clue: this.state.clues,
-                playerToken: this.props.match.params.id
+                playerToken: localStorage.getItem('token')
             });
 
-            const response = await api.post('/games/'+this.state.gameId+"/cards", requestBody);
+            await api.post('/games/'+this.state.gameId+"/cards", requestBody);
 
-            this.setState({
-                currentCard: response.data,
-                remainingCards: this.state.remainingCards-1
-            });
+            // this.setState({
+            //     currentCard: response.data,
+            //     remainingCards: this.state.remainingCards-1
+            // });
         } catch (error) {
-            alert(`Something went wrong while trying to get a new Card: \n${handleError(error)}`)
+            alert(`Something went wrong while trying to give the Clue: \n${handleError(error)}`)
+        }
+    }
+
+    async getValidClues() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
+        }
+    }
+
+    async setGuess() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while giving the Guess: \n${handleError(error)}`);
+        }
+    }
+
+    async getGuess() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while getting the Guess: \n${handleError(error)}`);
+        }
+    }
+
+    async checkGameEnded() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while checking the Games State: \n${handleError(error)}`);
+        }
+    }
+
+    async getScores() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+        }
+    }
+
+    async deleteGame() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while deleting the Game: \n${handleError(error)}`);
         }
     }
 
@@ -657,17 +705,19 @@ class InGame extends React.Component {
                             <ReadyField></ReadyField>
                         </Player>
                         {/*Player 5*/}
-                        <Player style={{marginTop:"2%", marginRight:"0%", float:"right"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
-                            <ScoreField></ScoreField>
-                            <NameField>5. {this.state.players.length >= 5 ? this.state.players[4].username : null}</NameField>
-                            <InputField>
-                                <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('password', e.target.value);}}/>
-                            </InputField>
-                            <ReadyField></ReadyField>
-                        </Player>
+                        {this.state.players.length>=5 ? (
+                            <Player style={{marginTop:"2%", marginRight:"0%", float:"right"}}>
+                                <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
+                                <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                                <ScoreField></ScoreField>
+                                <NameField>5. {this.state.players.length >= 5 ? this.state.players[4].username : null}</NameField>
+                                <InputField>
+                                    <Input placeholder="Enter here.." onChange=
+                                        {e => {this.handleInputChange('password', e.target.value);}}/>
+                                </InputField>
+                                <ReadyField></ReadyField>
+                            </Player>
+                        ): (<Player/>)}
                     </PlayerContainer>
                     {/*The GameBoard and its Content*/}
                     <TableContainer>
