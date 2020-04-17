@@ -120,6 +120,7 @@ class Lobby extends React.Component {
 
     getInfos = async () => {
         const response = await api.get('/games/lobbies/'+this.props.match.params.id+"/"+localStorage.getItem("token"));
+        console.log('response', response);
         if (response.status === 200) {
             this.setState({
                 activeGameId: response.data.activeGameId,
@@ -131,7 +132,12 @@ class Lobby extends React.Component {
                 actualPlayers: response.data.numOfActualPlayers,
                 angels: response.data.numOfAngels,
                 devils: response.data.numOfDevils
-            })
+            });
+            /** Making sure all users are redirected to the active game, after its creation (not just host). */
+            if (this.state.activeGameId) {
+                localStorage.setItem('gameId');
+                this.props.history.push('/gameLobby/' + this.state.activeGameId);
+            }
         }
     };
 

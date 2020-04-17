@@ -310,6 +310,29 @@ const NameField = styled.div`
   text-overflow: ellipsis;
 `;
 
+const NameFieldActivePlayer = styled.div`
+  height: 45px;
+  width: 160px;
+  
+  position: absolute;
+  bottom: 34%;
+  left: 1%;
+  
+  background: #FF0000;
+  border: 3px solid #000000;
+  border-radius: 20px;
+
+  padding-top: 1.25%;
+  padding-left: 1.5%;
+  
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const ScoreField = styled.div`
   height: 35px;
   width: 60px;
@@ -383,11 +406,11 @@ class InGame extends React.Component {
             phases: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
             round: 1,
             // temporary list of strings and active player (for test purpose)
-            players: ["John", "Minh", "George", "Richard"],
-            activePlayer: "Minh",
-            passivePlayers: ["John","George","Richard"],
+            players: [],
+            activePlayer: null,
+            passivePlayers: [],
             clueNumber: null,
-            clues: null,
+            clues: [],
             guess: null,
             scores: null
         };
@@ -625,8 +648,12 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
 
+            console.log("response", response);
+            console.log('local gameid', localStorage.getItem('gameId'));
+
+
             this.setState({
-                gameId: response.data.id,
+                gameId: localStorage.getItem('gameId'),
                 players: response.data.playerNames,
                 activePlayer: response.data.activPlayerName,
                 passivePlayers: response.data.passivePlayerNames
@@ -672,7 +699,9 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>2</GuessedCardsField>
                             <ScoreField>969</ScoreField>
-                            <NameField>2. {this.state.players[1]}</NameField>
+                            {this.state.players[1] !== this.state.activePlayer ?
+                                <NameField>2. {this.state.players[1]}</NameField> :
+                                <NameFieldActivePlayer>2. {this.state.players[1]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('gameId', e.target.value);}}/>
@@ -689,7 +718,9 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>0</GuessedCardsField>
                             <ScoreField>9</ScoreField>
-                            <NameField>3. {this.state.players[2]}</NameField>
+                            {this.state.players[2] !== this.state.activePlayer ?
+                                <NameField>2. {this.state.players[2]}</NameField> :
+                                <NameFieldActivePlayer>2. {this.state.players[2]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -709,7 +740,9 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
-                            <NameField>4. {this.state.players[3]}</NameField>
+                            {this.state.players[3] !== this.state.activePlayer ?
+                                <NameField>2. {this.state.players[3]}</NameField> :
+                                <NameFieldActivePlayer>2. {this.state.players[3]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -723,7 +756,9 @@ class InGame extends React.Component {
                                 <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                                 <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                                 <ScoreField></ScoreField>
-                                <NameField>5. {this.state.players[4]}</NameField>
+                                {this.state.players[4] !== this.state.activePlayer ?
+                                    <NameField>2. {this.state.players[4]}</NameField> :
+                                    <NameFieldActivePlayer>2. {this.state.players[4]}</NameFieldActivePlayer>}
                                 <InputField>
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -766,7 +801,9 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
-                            <NameField>6. {this.state.players[5]}</NameField>
+                            {this.state.players[5] !== this.state.activePlayer ?
+                                <NameField>2. {this.state.players[5]}</NameField> :
+                                <NameFieldActivePlayer>2. {this.state.players[5]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -780,7 +817,9 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
-                            <NameField>7. {this.state.players[6]}</NameField>
+                            {this.state.players[6] !== this.state.activePlayer ?
+                                <NameField>2. {this.state.players[6]}</NameField> :
+                                <NameFieldActivePlayer>2. {this.state.players[6]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -796,7 +835,9 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
                             <ScoreField></ScoreField>
-                            <NameField>1. {this.state.players[0]}</NameField>
+                            {this.state.players[0] !== this.state.activePlayer ?
+                                <NameField>2. {this.state.players[0]}</NameField> :
+                                <NameFieldActivePlayer>2. {this.state.players[0]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
