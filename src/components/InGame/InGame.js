@@ -435,7 +435,14 @@ class InGame extends React.Component {
             guess: null,
             validGuess: false,
             scores: null,
-            timer: null
+            timer: null,
+            player1Input: null,
+            player2Input: null,
+            player3Input: null,
+            player4Input: null,
+            player5Input: null,
+            player6Input: null,
+            player7Input: null
         };
         // some error here...
         this.interval = setInterval(this.handlePolling, 500);
@@ -854,11 +861,11 @@ class InGame extends React.Component {
                                 <NameFieldActivePlayer>2. {this.state.players[1]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('gameId', e.target.value);}}/>
+                                    {e => {this.handleInputChange('player2Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField disabled={!this.state.gameId}
-                                        onClick={() => {this.handleInput(this.state.players[1],this.state.gameId);}}>
-                                <p hidden={!this.state.gameId}>...</p>
+                            <ReadyField disabled={!this.state.player2Input}
+                                        onClick={() => {this.handleInput(this.state.players[1],this.state.player2Input);}}>
+                                <p hidden={!this.state.player2Input}>...</p>
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -873,11 +880,11 @@ class InGame extends React.Component {
                                 <NameFieldActivePlayer>3. {this.state.players[2]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                                    {e => {this.handleInputChange('player3Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField disabled={!this.state.gameId}
-                                        onClick={() => {this.handleInput(this.state.players[2],this.state.gameId);}}>
-                                <p hidden={!this.state.gameId}>...</p>
+                            <ReadyField disabled={!this.state.player3Input}
+                                        onClick={() => {this.handleInput(this.state.players[2],this.state.player3Input);}}>
+                                <p hidden={!this.state.player3Input}>...</p>
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -895,9 +902,12 @@ class InGame extends React.Component {
                                 <NameFieldActivePlayer>4. {this.state.players[3]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                                    {e => {this.handleInputChange('player4Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField></ReadyField>
+                            <ReadyField disabled={!this.state.player4Input}
+                                        onClick={() => {this.handleInput(this.state.players[3],this.state.player4Input);}}>
+                                <p hidden={!this.state.player4Input}>...</p>
+                            </ReadyField>
                         </Player>
                         ): (<Player/>)}
                         {/*Player 5*/}
@@ -911,9 +921,12 @@ class InGame extends React.Component {
                                     <NameFieldActivePlayer>5. {this.state.players[4]}</NameFieldActivePlayer>}
                                 <InputField>
                                     <Input placeholder="Enter here.." onChange=
-                                        {e => {this.handleInputChange('password', e.target.value);}}/>
+                                        {e => {this.handleInputChange('player5Input', e.target.value);}}/>
                                 </InputField>
-                                <ReadyField></ReadyField>
+                                <ReadyField disabled={!this.state.player5Input}
+                                            onClick={() => {this.handleInput(this.state.players[4],this.state.player5Input);}}>
+                                    <p hidden={!this.state.player5Input}>...</p>
+                                </ReadyField>
                             </Player>
                         ): (<Player/>)}
                     </PlayerContainer>
@@ -959,9 +972,12 @@ class InGame extends React.Component {
                                 <NameFieldActivePlayer>6. {this.state.players[5]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                                    {e => {this.handleInputChange('player6Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField></ReadyField>
+                            <ReadyField disabled={!this.state.player6Input}
+                                        onClick={() => {this.handleInput(this.state.players[5],this.state.player6Input);}}>
+                                <p hidden={!this.state.player6Input}>...</p>
+                            </ReadyField>
                         </Player>
                         ): (<Player/>)}
                         {/*Player 7*/}
@@ -975,9 +991,12 @@ class InGame extends React.Component {
                                 <NameFieldActivePlayer>7. {this.state.players[6]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                                    {e => {this.handleInputChange('player7Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField></ReadyField>
+                            <ReadyField disabled={!this.state.player7Input}
+                                        onClick={() => {this.handleInput(this.state.players[6],this.state.player7Input);}}>
+                                <p hidden={!this.state.player7Input}>...</p>
+                            </ReadyField>
                         </Player>
                         ): (<Player/>)}
                     </PlayerContainer>
@@ -993,9 +1012,12 @@ class InGame extends React.Component {
                                 <NameFieldActivePlayer>1. {this.state.players[0]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('password', e.target.value);}}/>
+                                    {e => {this.handleInputChange('player1Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField></ReadyField>
+                            <ReadyField disabled={!this.state.player1Input}
+                                        onClick={() => {this.handleInput(this.state.players[0],this.state.player1Input);}}>
+                                <p hidden={!this.state.player1Input}>...</p>
+                            </ReadyField>
                         </Player>
                         ): (<Player/>)}
                     </PlayerContainer>
