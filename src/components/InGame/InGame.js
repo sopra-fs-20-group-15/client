@@ -420,7 +420,7 @@ class InGame extends React.Component {
             gameId: null,
             remainingCards: 13,
             guessedCards: 0,
-            currentCard: ["", "", "", "", ""],
+            currentCard: [],
             mysteryWordId: null,
             mysteryWord: null,
             phaseNumber: 1,
@@ -436,7 +436,8 @@ class InGame extends React.Component {
             scores: null,
             timer: null
         };
-        console.log('state constructor', this.state)
+        this.interval = setInterval(this.handlePolling, 100);
+        this.handlePolling = this.handlePolling(player).bind(this);
     }
 
     //clears previous phase and sets up the new one (like resetting input, timer and other stuff) NOT FINISHED YET
@@ -455,11 +456,18 @@ class InGame extends React.Component {
     //I try to use this method to fix the timer issue
     switchPhase() {
         this.switchPhaseHUD(this.state.phaseNumber);
+        let nextTimer = [15,25,30,10];
         if (this.state.phaseNumber === 4) {
-            this.setState({round: this.state.round + 1});
-            this.setState({phaseNumber: 1});
+            this.setState({
+                round: this.state.round + 1,
+                phaseNumber: this.state.phaseNumber = 1,
+                timer: nextTimer[1]
+            });
         } else {
-            this.setState({phaseNumber: this.state.phaseNumber + 1});
+            this.setState({
+                phaseNumber: this.state.phaseNumber + 1,
+                timer: nextTimer[this.state.phaseNumber + 1]
+            });
         }
     }
 
@@ -489,53 +497,56 @@ class InGame extends React.Component {
 
     async getCard() {
         try {
-            /** Button disappears after card is drawn. */
-            document.getElementById("drawCard").style.display = "none";
-
             /** The active card is fetch (already set by initializeTurn()), it's words are saved and displayed
              * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
-
-            console.log('response', response);
 
             this.setState({
                 currentCard: response.data.words,
                 remainingCards: this.state.remainingCards-1
             });
 
-            console.log('after drawing card', this.state);
-
-            /** Card is displayed after having been drawn. */
-            document.getElementById("activeCard").style.display = "block";
+            /** Button disappears and card is displayed after card is drawn. We use an if-statement to make sure
+             * that these actions are only executed if the currentCard variable has actually been given a list of
+             * five words. This is needed because the passive players will call this method on a regular interval
+             * (polling) and often the card has not been drawn yet. */
+            if (response.data.words.length === 5) {
+                document.getElementById("drawCard").style.display = "none";
+                document.getElementById("activeCard").style.display = "block";
+            }
 
         } catch (error) {
             alert(`Something went wrong while trying to get a new card: \n${handleError(error)}`);
         }
     }
 
-
-    //sets the mystery word and cross out all other words
     async determineMysteryWord(wordId) {
         try {
-            const requestBody = JSON.stringify({
-                wordId: wordId
-            });
+            /** Checking for valid input (not just in backend) */
+            if (1 <= wordId <= 5) {
+                const requestBody = JSON.stringify({
+                    wordId: wordId,
+                    playerToken: localStorage.getItem('token')
+                });
 
-            const response = await api.put('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'), requestBody);
-            this.setState({
-                mysteryWordId: response.data.wordId
-            });
+                const response = await api.put('/games/' + this.state.gameId + "/mysteryWord/", requestBody);
 
-            var i;
-            for (i=0 ; i<this.state.currentCard.length ; i++) {
-                if (wordId-1 !== i) {
-                    var lineThroughWord = document.getElementById("word"+(i+1));
-                    lineThroughWord.style.textDecoration = "line-through";
+                this.setState({
+                    mysteryWordId: response.data.wordId
+                });
+
+                /** All words except for the mystery word on the card are crossed out. */
+                for (let i = 0; i < this.state.currentCard.length; i++) {
+                    if (wordId - 1 !== i) {
+                        let lineThroughWord = document.getElementById("word" + (i + 1));
+                        lineThroughWord.style.textDecoration = "line-through";
+                    }
                 }
+            } else {
+                alert('You have to enter a number between one and five!')
             }
-        }
-        catch (error) {
-            alert(`Something went wrong while determine the Mystery Word: \n${handleError(error)}`)
+        } catch (error) {
+            alert(`Something went wrong while determining the Mystery Word: \n${handleError(error)}`)
         }
     }
 
@@ -544,7 +555,8 @@ class InGame extends React.Component {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
             this.setState({
                 mysteryWord: response.data.word
-            });
+            })
+
         } catch (error) {
             alert(`Something went wrong while getting the Mystery Word: \n${handleError(error)}`);
         }
@@ -570,6 +582,7 @@ class InGame extends React.Component {
 
     async getValidClues() {
         try {
+            const response = await api.get('/games/' + this.state.gameId + '/clues/' + localStorage.getItem('token'))
 
         } catch (error) {
             alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
@@ -621,12 +634,14 @@ class InGame extends React.Component {
         }
     }
 
-    //handles the input of every player for each phase
+    /** This method makes sure that the input given by the different players is triggers the corresponding effects
+     * based on the role of the player (active or passive player) and the phase number (between 1 and 3, in phase 4
+     * no input is taken). */
     handleInput(playerName, input) {
         //actions of active player
         if (playerName === this.state.activePlayer) {
             if (this.state.phaseNumber === 1) {
-                //choose mystery word
+                this.determineMysteryWord(input);
                 this.switchPhase();
             }
             if (this.state.phaseNumber === 3) {
@@ -664,6 +679,47 @@ class InGame extends React.Component {
         this.setState({ [key]: value });
     }
 
+    /** This method makes sure that a player's page is updated correctly based on the role of the player (active
+     * or passive player) and the phase number (between 1 and 4). */
+    async handlePolling(player) {
+        try {
+            if (this.state.phaseNumber === 1) {
+                if (player === this.state.activePlayer) {
+                    // does not need to do anything since getting the card and mystery word is coupled to button clicking for the active player
+                }
+                if (this.state.passivePlayers.includes(player)) {
+                    this.getCard();
+                    this.getMysteryWord()
+                }
+            } else if (this.state.phaseNumber === 2) {
+                if (player === this.state.activePlayer) {
+                    this.getValidClues()
+                }
+                if (this.state.passivePlayers.includes(player)) {
+                    this.getValidClues()
+                }
+            } else if (this.state.phaseNumber === 3) {
+                if (player === this.state.activePlayer) {
+                    // does not need to do anything since getting the guess is coupled to button clicking for the active player
+                }
+                if (this.state.passivePlayers.includes(player)) {
+                    this.getGuess()
+                }
+            } else if (this.state.phaseNumber === 4) {
+                if (player === this.state.activePlayer) {
+
+                }
+                if (this.state.passivePlayers.includes(player)) {
+
+                } else {
+                    alert("The phase number is not in the range from 1 to 4!")
+                }
+            }
+        } catch (error) {
+            alert(`Something went wrong during the polling process: \n${handleError(error)}`);
+        }
+    }
+
     /**
      * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
      * Initialization that requires DOM nodes should go here.
@@ -695,6 +751,7 @@ class InGame extends React.Component {
                 passivePlayers: response.data.passivePlayerNames
             });
 
+            //right place?
             this.initializeTurn();
 
         } catch (error) {
@@ -760,7 +817,7 @@ class InGame extends React.Component {
                             <ScoreField>9</ScoreField>
                             {this.state.players[2] !== this.state.activePlayer ?
                                 <NameField>3. {this.state.players[2]}</NameField> :
-                                <NameFieldActivePlayer>2. {this.state.players[2]}</NameFieldActivePlayer>}
+                                <NameFieldActivePlayer>3. {this.state.players[2]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -782,7 +839,7 @@ class InGame extends React.Component {
                             <ScoreField></ScoreField>
                             {this.state.players[3] !== this.state.activePlayer ?
                                 <NameField>4. {this.state.players[3]}</NameField> :
-                                <NameFieldActivePlayer>2. {this.state.players[3]}</NameFieldActivePlayer>}
+                                <NameFieldActivePlayer>4. {this.state.players[3]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -798,7 +855,7 @@ class InGame extends React.Component {
                                 <ScoreField></ScoreField>
                                 {this.state.players[4] !== this.state.activePlayer ?
                                     <NameField>5. {this.state.players[4]}</NameField> :
-                                    <NameFieldActivePlayer>2. {this.state.players[4]}</NameFieldActivePlayer>}
+                                    <NameFieldActivePlayer>5. {this.state.players[4]}</NameFieldActivePlayer>}
                                 <InputField>
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -846,7 +903,7 @@ class InGame extends React.Component {
                             <ScoreField></ScoreField>
                             {this.state.players[5] !== this.state.activePlayer ?
                                 <NameField>6. {this.state.players[5]}</NameField> :
-                                <NameFieldActivePlayer>2. {this.state.players[5]}</NameFieldActivePlayer>}
+                                <NameFieldActivePlayer>6. {this.state.players[5]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -862,7 +919,7 @@ class InGame extends React.Component {
                             <ScoreField></ScoreField>
                             {this.state.players[6] !== this.state.activePlayer ?
                                 <NameField>7. {this.state.players[6]}</NameField> :
-                                <NameFieldActivePlayer>2. {this.state.players[6]}</NameFieldActivePlayer>}
+                                <NameFieldActivePlayer>7. {this.state.players[6]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>
@@ -880,7 +937,7 @@ class InGame extends React.Component {
                             <ScoreField></ScoreField>
                             {this.state.players[0] !== this.state.activePlayer ?
                                 <NameField>1. {this.state.players[0]}</NameField> :
-                                <NameFieldActivePlayer>2. {this.state.players[0]}</NameFieldActivePlayer>}
+                                <NameFieldActivePlayer>1. {this.state.players[0]}</NameFieldActivePlayer>}
                             <InputField>
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('password', e.target.value);}}/>

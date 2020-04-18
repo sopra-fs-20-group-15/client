@@ -132,6 +132,7 @@ class Lobby extends React.Component {
                 angels: response.data.numOfAngels,
                 devils: response.data.numOfDevils
             });
+
             /** Making sure all users are redirected to the active game, after its creation (not just host).
              * The token gameId makes sure that only the players from the lobby can join the game. */
             if (this.state.activeGameId) {
