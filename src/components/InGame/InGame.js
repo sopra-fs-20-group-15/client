@@ -501,10 +501,14 @@ class InGame extends React.Component {
              * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
 
+            console.log('current card', response.data.words)
+
             this.setState({
                 currentCard: response.data.words,
                 remainingCards: this.state.remainingCards-1
             });
+
+            console.log('state after drawing card', this.state)
 
             /** Button disappears and card is displayed after card is drawn. We use an if-statement to make sure
              * that these actions are only executed if the currentCard variable has actually been given a list of
@@ -531,9 +535,7 @@ class InGame extends React.Component {
 
                 const response = await api.put('/games/' + this.state.gameId + "/mysteryWord/", requestBody);
 
-                this.setState({
-                    mysteryWordId: response.data.wordId
-                });
+                console.log('response from determining mystery word', response.data)
 
                 /** All words except for the mystery word on the card are crossed out. */
                 for (let i = 0; i < this.state.currentCard.length; i++) {
@@ -553,23 +555,32 @@ class InGame extends React.Component {
     async getMysteryWord() {
         try {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
+
+            console.log('mystery word', response.data.word)
+
             this.setState({
                 mysteryWord: response.data.word
             })
+
+            console.log('state after getting mystery word', this.state)
 
         } catch (error) {
             alert(`Something went wrong while getting the Mystery Word: \n${handleError(error)}`);
         }
     }
 
-    async giveClue() {
+    async giveClue(clue) {
         try {
             const requestBody = JSON.stringify({
-                clue: this.state.clues,
+                clue: clue,
                 playerToken: localStorage.getItem('token')
             });
 
-            await api.post('/games/'+this.state.gameId+"/cards", requestBody);
+            console.log('requestbody for giving clue', requestBody)
+
+            const response = await api.post('/games/'+this.state.gameId+"/clues", requestBody);
+
+            console.log('response from giving clue', response)
 
             // this.setState({
             //     currentCard: response.data,
@@ -584,6 +595,13 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/' + localStorage.getItem('token'))
 
+            console.log('valid clues', response.data.listOfClues)
+
+            this.setState({
+                clues: response.data.listOfClues
+            });
+
+            console.log('state after getting valid clues', this.state)
         } catch (error) {
             alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
         }
