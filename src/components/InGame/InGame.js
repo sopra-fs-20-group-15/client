@@ -525,7 +525,6 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while trying to get a new card: \n${handleError(error)}`);
         }
     }
 
@@ -572,7 +571,7 @@ class InGame extends React.Component {
             console.log('state after getting mystery word', this.state)
 
         } catch (error) {
-            alert(`Something went wrong while getting the Mystery Word: \n${handleError(error)}`);
+
         }
     }
 
