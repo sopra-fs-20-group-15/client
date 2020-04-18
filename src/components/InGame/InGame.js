@@ -437,8 +437,9 @@ class InGame extends React.Component {
             scores: null,
             timer: null
         };
-        this.interval = setInterval(this.handlePolling, 100);
-        this.handlePolling = this.handlePolling(localStorage.getItem('username')).bind(this);
+        // some error here...
+        this.interval = setInterval(this.handlePolling, 500);
+        this.handlePolling = this.handlePolling.bind(this);
     }
 
     //clears previous phase and sets up the new one (like resetting input, timer and other stuff) NOT FINISHED YET
@@ -505,10 +506,12 @@ class InGame extends React.Component {
 
             console.log('current card', response);
 
-            this.setState({
-                currentCard: response.data.words,
-                remainingCards: this.state.remainingCards-1
-            });
+            if (response.status === 200 && response.data.words !== this.state.currentCard) {
+                this.setState({
+                    currentCard: response.data.words,
+                    remainingCards: this.state.remainingCards - 1
+                })
+            }
 
             console.log('state after drawing card', this.state);
 
@@ -560,9 +563,11 @@ class InGame extends React.Component {
 
             console.log('mystery word', response);
 
-            this.setState({
-                mysteryWord: response.data.word
-            });
+            if (response.status === 200) {
+                this.setState({
+                    mysteryWord: response.data.word
+                });
+            }
 
             console.log('state after getting mystery word', this.state)
 
@@ -599,9 +604,11 @@ class InGame extends React.Component {
 
             console.log('valid clues', response);
 
-            this.setState({
-                clues: response.data.listOfClues
-            });
+            if (response.status === 200) {
+                this.setState({
+                    clues: response.data.listOfClues
+                });
+            }
 
             console.log('state after getting valid clues', this.state)
         } catch (error) {
@@ -632,10 +639,12 @@ class InGame extends React.Component {
 
             console.log('guess', response);
 
-            this.setState({
-                guess: response.data.guess,
-                validGuess: response.data.validGuess
-            });
+            if (response.status === 200) {
+                this.setState({
+                    guess: response.data.guess,
+                    validGuess: response.data.validGuess
+                });
+            }
 
             console.log('state after guess', this.state);
 
@@ -714,28 +723,33 @@ class InGame extends React.Component {
 
     /** This method makes sure that a player's page is updated correctly based on the role of the player (active
      * or passive player) and the phase number (between 1 and 4). */
-    async handlePolling(player) {
+    handlePolling = async () => {
         try {
+            console.log('polling is done');
+            console.log('by', localStorage.getItem('username'));
             if (this.state.phaseNumber === 1) {
-                if (player === this.state.activePlayer) {
+                console.log('gets in phase 1');
+                if (localStorage.getItem('username') === this.state.activePlayer) {
+                    console.log('gets in active player')
                     // does not need to do anything since getting the card and mystery word is coupled to button clicking for the active player
                 }
-                if (this.state.passivePlayers.includes(player)) {
+                if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
+                    console.log('gets in passive players');
                     this.getCard();
                     this.getMysteryWord()
                 }
             } else if (this.state.phaseNumber === 2) {
-                if (player === this.state.activePlayer) {
+                if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.getValidClues()
                 }
-                if (this.state.passivePlayers.includes(player)) {
+                if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getValidClues()
                 }
             } else if (this.state.phaseNumber === 3) {
-                if (player === this.state.activePlayer) {
+                if (localStorage.getItem('username') === this.state.activePlayer) {
                     // does not need to do anything since getting the guess is coupled to button clicking for the active player
                 }
-                if (this.state.passivePlayers.includes(player)) {
+                if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getGuess()
                 }
             } else if (this.state.phaseNumber === 4) {
@@ -747,7 +761,7 @@ class InGame extends React.Component {
         } catch (error) {
             alert(`Something went wrong during the polling process: \n${handleError(error)}`);
         }
-    }
+    };
 
     /**
      * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
@@ -773,6 +787,8 @@ class InGame extends React.Component {
 
             const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
 
+            console.log('response of getting players', response);
+
             this.setState({
                 gameId: localStorage.getItem('gameId'),
                 players: response.data.playerNames,
@@ -780,8 +796,13 @@ class InGame extends React.Component {
                 passivePlayers: response.data.passivePlayerNames
             });
 
+            console.log('game state before init', this.state);
+
             //right place?
-            this.initializeTurn();
+            //this.initializeTurn();
+
+            console.log('game state after init', this.state);
+
 
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);

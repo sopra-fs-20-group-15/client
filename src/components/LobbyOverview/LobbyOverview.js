@@ -387,7 +387,7 @@ class LobbyOverview extends Component {
                                 <Fragment>
                                     <GridNormalItem> {lobby.gameName} </GridNormalItem>
                                     <GridNormalItem> {lobby.gameType} </GridNormalItem>
-                                    <GridNormalItem> {lobby.numOfActualPlayers}/{lobby.numOfDesiredPlayers} </GridNormalItem>
+                                    <GridNormalItem> {lobby.numOfHumanPlayers+lobby.numOfAngels+lobby.numOfDevils}/{lobby.numOfDesiredPlayers} </GridNormalItem>
                                     <BotContainer>
                                         <BotCell> Angels: {lobby.numOfAngels} </BotCell>
                                         <BotCell> Devils: {lobby.numOfDevils}</BotCell>

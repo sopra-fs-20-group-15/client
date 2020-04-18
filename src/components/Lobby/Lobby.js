@@ -144,12 +144,14 @@ class Lobby extends React.Component {
 
     async startGame() {
         try {
+            console.log('lobby state upon starting game', this.state);
             const requestBody = JSON.stringify({
                 token: localStorage.getItem('token')
             });
 
             const response = await api.post('/games/'+this.props.match.params.id, requestBody);
             //temporary "gamelobby"
+            console.log('response of post active game', response);
             this.props.history.push('/gameLobby/'+response.data.id);
         } catch (error) {
             alert(`Something went wrong while starting the Game: \n${handleError(error)}`);
