@@ -59,7 +59,7 @@ const DrawCard = styled.div`
     top: 20px;
     left: 20px;
     background: #FFFFFF;
-    border: 2px solid #000000;
+    border: 1.5px solid #000000;
     border-radius: 20px;
     box-sizing: border-box;
     font-size: 22px;
@@ -426,7 +426,6 @@ class InGame extends React.Component {
             phaseNumber: 1,
             phases: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
             round: 1,
-            // temporary list of strings and active player (for test purpose)
             players: [],
             activePlayer: null,
             passivePlayers: [],
@@ -469,10 +468,10 @@ class InGame extends React.Component {
         if (this.state.phaseNumber === 4) {
             this.setState({
                 round: this.state.round + 1,
-                phaseNumber: this.state.phaseNumber = 1,
+                phaseNumber: 1,
                 timer: nextTimer[1]
             });
-            this.initializeTurn()
+            // this.initializeTurn()
         } else {
             this.setState({
                 phaseNumber: this.state.phaseNumber + 1,
@@ -499,7 +498,7 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            await api.put('/games/' + this.state.gameId + '/initializations', requestBody)
+            await api.put('/games/' + this.state.gameId + '/initializations', requestBody);
         } catch (error) {
             alert(`Something went wrong while initializing the Turn: \n${handleError(error)}`);
         }
@@ -507,6 +506,7 @@ class InGame extends React.Component {
 
     async getCard() {
         try {
+            this.initializeTurn();
             /** The active card is fetch (already set by initializeTurn()), it's words are saved and displayed
              * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
@@ -544,7 +544,7 @@ class InGame extends React.Component {
                     playerToken: localStorage.getItem('token')
                 });
 
-                const response = await api.put('/games/' + this.state.gameId + "/mysteryWord/", requestBody);
+                const response = await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
                 console.log('response from determining mystery word', response);
 
@@ -689,6 +689,7 @@ class InGame extends React.Component {
         //actions of active player
         if (playerName === this.state.activePlayer) {
             if (this.state.phaseNumber === 1) {
+                //determine mystery Word
                 this.determineMysteryWord(input);
                 this.switchPhase();
             }
@@ -943,19 +944,34 @@ class InGame extends React.Component {
                                     <DrawCard id={"drawCard"} onClick={() => this.getCard()}> Draw Card! </DrawCard>
                                     {this.state.remainingCards}
                                 </Deck>
+                                {this.state.activePlayer != localStorage.getItem('username') ? (
                                 <ActiveCard id={"activeCard"} style={{display:"none"}}>
-                                    {/* The words are only placeholders, as are the numbers */}
-                                    <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
-                                    <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
-                                    <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
-                                    <Word id={"word2"} style={{borderColor:"#42c202", top:"35px"}}> {this.state.currentCard[1]} </Word>
-                                    <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
-                                    <Word id={"word3"} style={{borderColor:"#db3d3d", top:"52.5px"}}> {this.state.currentCard[2]} </Word>
-                                    <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
-                                    <Word id={"word4"} style={{borderColor:"#fc9229", top:"70px"}}> {this.state.currentCard[3]} </Word>
-                                    <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
-                                    <Word id={"word5"} style={{borderColor:"#ffe203", top:"87.5px"}}> {this.state.currentCard[4]} </Word>
-                                </ActiveCard>
+                                        <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
+                                        <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
+                                        <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
+                                        <Word id={"word2"} style={{borderColor:"#42c202", top:"35px"}}> {this.state.currentCard[1]} </Word>
+                                        <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
+                                        <Word id={"word3"} style={{borderColor:"#db3d3d", top:"52.5px"}}> {this.state.currentCard[2]} </Word>
+                                        <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
+                                        <Word id={"word4"} style={{borderColor:"#fc9229", top:"70px"}}> {this.state.currentCard[3]} </Word>
+                                        <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
+                                        <Word id={"word5"} style={{borderColor:"#ffe203", top:"87.5px"}}> {this.state.currentCard[4]} </Word>
+                                    </ActiveCard>
+                                ): (
+                                    <ActiveCard id={"activeCard"} style={{display:"none"}}>
+                                        {/* The words are only placeholders, as are the numbers */}
+                                        <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
+                                        <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> ??? </Word>
+                                        <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
+                                        <Word id={"word2"} style={{borderColor:"#42c202", top:"35px"}}> ??? </Word>
+                                        <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
+                                        <Word id={"word3"} style={{borderColor:"#db3d3d", top:"52.5px"}}> ??? </Word>
+                                        <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
+                                        <Word id={"word4"} style={{borderColor:"#fc9229", top:"70px"}}> ??? </Word>
+                                        <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
+                                        <Word id={"word5"} style={{borderColor:"#ffe203", top:"87.5px"}}> ??? </Word>
+                                    </ActiveCard>
+                                )}
                             </BoardContainer>
                         </Table>
                     </TableContainer>
