@@ -433,11 +433,12 @@ class InGame extends React.Component {
             clueNumber: null,
             clues: [],
             guess: null,
+            validGuess: false,
             scores: null,
             timer: null
         };
         this.interval = setInterval(this.handlePolling, 100);
-        this.handlePolling = this.handlePolling(player).bind(this);
+        this.handlePolling = this.handlePolling(localStorage.getItem('username')).bind(this);
     }
 
     //clears previous phase and sets up the new one (like resetting input, timer and other stuff) NOT FINISHED YET
@@ -463,6 +464,7 @@ class InGame extends React.Component {
                 phaseNumber: this.state.phaseNumber = 1,
                 timer: nextTimer[1]
             });
+            this.initializeTurn()
         } else {
             this.setState({
                 phaseNumber: this.state.phaseNumber + 1,
@@ -501,14 +503,14 @@ class InGame extends React.Component {
              * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
 
-            console.log('current card', response.data.words)
+            console.log('current card', response);
 
             this.setState({
                 currentCard: response.data.words,
                 remainingCards: this.state.remainingCards-1
             });
 
-            console.log('state after drawing card', this.state)
+            console.log('state after drawing card', this.state);
 
             /** Button disappears and card is displayed after card is drawn. We use an if-statement to make sure
              * that these actions are only executed if the currentCard variable has actually been given a list of
@@ -535,7 +537,7 @@ class InGame extends React.Component {
 
                 const response = await api.put('/games/' + this.state.gameId + "/mysteryWord/", requestBody);
 
-                console.log('response from determining mystery word', response.data)
+                console.log('response from determining mystery word', response);
 
                 /** All words except for the mystery word on the card are crossed out. */
                 for (let i = 0; i < this.state.currentCard.length; i++) {
@@ -556,11 +558,11 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
 
-            console.log('mystery word', response.data.word)
+            console.log('mystery word', response);
 
             this.setState({
                 mysteryWord: response.data.word
-            })
+            });
 
             console.log('state after getting mystery word', this.state)
 
@@ -576,11 +578,11 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            console.log('requestbody for giving clue', requestBody)
+            console.log('requestbody for giving clue', requestBody);
 
-            const response = await api.post('/games/'+this.state.gameId+"/clues", requestBody);
+            const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
 
-            console.log('response from giving clue', response)
+            console.log('response from giving clue', response);
 
             // this.setState({
             //     currentCard: response.data,
@@ -593,9 +595,9 @@ class InGame extends React.Component {
 
     async getValidClues() {
         try {
-            const response = await api.get('/games/' + this.state.gameId + '/clues/' + localStorage.getItem('token'))
+            const response = await api.get('/games/' + this.state.gameId + '/clues/' + localStorage.getItem('token'));
 
-            console.log('valid clues', response.data.listOfClues)
+            console.log('valid clues', response);
 
             this.setState({
                 clues: response.data.listOfClues
@@ -607,14 +609,18 @@ class InGame extends React.Component {
         }
     }
 
-    async setGuess() {
+    async setGuess(guess) {
         try {
             const requestBody = JSON.stringify({
-                Guess: this.state.guess,
+                Guess: guess,
                 playerToken: localStorage.getItem('token')
             });
 
-            await api.post('/games/'+this.state.gameId+"/guesses", requestBody);
+            console.log('requestbody setguess', requestBody);
+
+            const response = await api.post('/games/'+this.state.gameId+"/guesses", requestBody);
+
+            console.log('response from giving guess', response)
         } catch (error) {
             alert(`Something went wrong while giving the Guess: \n${handleError(error)}`);
         }
@@ -622,6 +628,16 @@ class InGame extends React.Component {
 
     async getGuess() {
         try {
+            const response = await api.get('/games/' + this.state.gameId + '/guesses/' + localStorage.getItem('token'))
+
+            console.log('guess', response);
+
+            this.setState({
+                guess: response.data.guess,
+                validGuess: response.data.validGuess
+            });
+
+            console.log('state after guess', this.state);
 
         } catch (error) {
             alert(`Something went wrong while getting the Guess: \n${handleError(error)}`);
@@ -630,7 +646,6 @@ class InGame extends React.Component {
 
     async checkGameEnded() {
         try {
-
         } catch (error) {
             alert(`Something went wrong while checking the Games State: \n${handleError(error)}`);
         }
@@ -724,14 +739,10 @@ class InGame extends React.Component {
                     this.getGuess()
                 }
             } else if (this.state.phaseNumber === 4) {
-                if (player === this.state.activePlayer) {
-
-                }
-                if (this.state.passivePlayers.includes(player)) {
-
-                } else {
-                    alert("The phase number is not in the range from 1 to 4!")
-                }
+                 this.getScores();
+                 this.checkGameEnded();
+            } else {
+                alert("The phase number is not in the range from 1 to 4!")
             }
         } catch (error) {
             alert(`Something went wrong during the polling process: \n${handleError(error)}`);
@@ -775,6 +786,10 @@ class InGame extends React.Component {
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
         }
+    }
+
+    async componentWillUnmount() {
+        clearInterval(this.interval)
     }
 
     render() {
