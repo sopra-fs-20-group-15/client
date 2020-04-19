@@ -584,9 +584,9 @@ class InGame extends React.Component {
 
             console.log('requestBody for giving clue', requestBody);
 
-            await api.post('/games/' + this.state.gameId + "/clues", requestBody);
+            const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
 
-            // console.log('response from giving clue', response);
+            console.log('response from giving clue', response);
 
             // this.setState({
             //     currentCard: response.data,
@@ -626,7 +626,7 @@ class InGame extends React.Component {
 
             const response = await api.post('/games/'+this.state.gameId+"/guesses", requestBody);
 
-            console.log('response from giving guess', response)
+            console.log('response from giving guess', response);
         } catch (error) {
             alert(`Something went wrong while giving the Guess: \n${handleError(error)}`);
         }
@@ -638,7 +638,7 @@ class InGame extends React.Component {
 
             const response = await api.get('/games/' + this.state.gameId + '/guesses/' + localStorage.getItem('token'));
 
-            console.log('guess', response);
+            // console.log('guess', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -647,7 +647,7 @@ class InGame extends React.Component {
                 });
             }
 
-            console.log('state after guess', this.state);
+            // console.log('state after guess', this.state);
 
         } catch (error) {
             alert(`Something went wrong while getting the Guess: \n${handleError(error)}`);
@@ -762,7 +762,7 @@ class InGame extends React.Component {
             }
         }
         /** Not possible to test if it should be Phase 3 so here's a Placeholder */
-        else if (1 === this.state.passivePlayers.length) {
+        else if (0 === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 this.setState({
                     phaseNumber: 3,
@@ -812,7 +812,6 @@ class InGame extends React.Component {
         try {
             // console.log('polling is done');
             // console.log('by', localStorage.getItem('username'));
-            this.getCluePlayers();
             this.updatePhase();
             if (this.state.phaseNumber === 1) {
                 // console.log('gets in phase 1');
@@ -831,11 +830,13 @@ class InGame extends React.Component {
                     this.getCard();
                     this.getMysteryWord();
                     this.getValidClues();
+                    this.getCluePlayers();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getCard();
                     this.getMysteryWord();
                     this.getValidClues();
+                    this.getCluePlayers();
                 }
             } else if (this.state.phaseNumber === 3) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -843,19 +844,19 @@ class InGame extends React.Component {
                     this.getCard();
                     this.getMysteryWord();
                     this.getValidClues();
-                    this.getGuess();
+                    // this.getGuess();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getCard();
                     this.getMysteryWord();
                     this.getValidClues();
-                    this.getGuess();
+                    // this.getGuess();
                 }
             } else if (this.state.phaseNumber === 4) {
                 this.getCard();
                 this.getMysteryWord();
                 this.getValidClues();
-                this.getGuess();
+                // this.getGuess();
             } else {
                 alert("The phase number is not in the range from 1 to 4!")
             }
