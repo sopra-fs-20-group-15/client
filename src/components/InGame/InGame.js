@@ -831,7 +831,7 @@ class InGame extends React.Component {
 
             console.log('game state before init', this.state);
 
-            //right place?
+            // right place?
             //this.initializeTurn();
 
             console.log('game state after init', this.state);
