@@ -514,6 +514,8 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
+            console.log('turn initialized');
+
             await api.put('/games/' + this.state.gameId + '/initializations', requestBody);
         } catch (error) {
             alert(`Something went wrong while initializing the Turn: \n${handleError(error)}`);
@@ -522,7 +524,7 @@ class InGame extends React.Component {
 
     async getCard() {
         try {
-            this.initializeTurn();
+            // this.initializeTurn();
             /** The active card is fetch (already set by initializeTurn()), it's words are saved and displayed
              * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
@@ -531,8 +533,7 @@ class InGame extends React.Component {
 
             if (response.status === 200 && response.data.words !== this.state.currentCard) {
                 this.setState({
-                    currentCard: response.data.words,
-                    remainingCards: this.state.remainingCards - 1
+                    currentCard: response.data.words
                 })
             }
 
@@ -565,12 +566,12 @@ class InGame extends React.Component {
                 console.log('response from determining mystery word', response);
 
                 /** All words except for the mystery word on the card are crossed out. */
-                for (let i = 0; i < this.state.currentCard.length; i++) {
-                    if (wordId - 1 !== i) {
-                        let lineThroughWord = document.getElementById("word" + (i + 1));
-                        lineThroughWord.style.textDecoration = "line-through";
-                    }
-                }
+                // for (let i = 0; i < this.state.currentCard.length; i++) {
+                //     if (wordId - 1 !== i) {
+                //         let lineThroughWord = document.getElementById("word" + (i + 1));
+                //         lineThroughWord.style.textDecoration = "line-through";
+                //     }
+                // }
             } else {
                 alert('You have to enter a number between one and five!')
             }
@@ -583,7 +584,7 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
 
-            // console.log('mystery word', response);
+            console.log('mystery word', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -591,8 +592,14 @@ class InGame extends React.Component {
                 });
             }
 
-            // console.log('state after getting mystery word', this.state)
+            console.log('state after getting mystery word', this.state)
 
+            for (let i = 0; i < this.state.currentCard.length; i++) {
+                if (this.state.mysteryWord !== this.state.currentCard[i]) {
+                    let lineThroughWord = document.getElementById("word" + (i + 1));
+                    lineThroughWord.style.textDecoration = "line-through";
+                }
+            }
         } catch (error) {
 
         }
@@ -711,6 +718,7 @@ class InGame extends React.Component {
             }
             if (this.state.phaseNumber === 3) {
                 //guess mystery word
+                this.setGuess(input);
                 this.switchPhase();
             }
         }
@@ -729,12 +737,6 @@ class InGame extends React.Component {
                 }
             }
         }
-    }
-
-    test() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('id');
-        this.props.history.push('/login');
     }
 
     /**
@@ -759,15 +761,19 @@ class InGame extends React.Component {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     // console.log('gets in active player')
                     // does not need to do anything since getting the card and mystery word is coupled to button clicking for the active player
+                    this.getCard();
+                    this.getMysteryWord();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     // console.log('gets in passive players');
                     this.getCard();
-                    this.getMysteryWord()
+                    this.getMysteryWord();
                 }
             } else if (this.state.phaseNumber === 2) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
-                    this.getValidClues()
+                    this.getValidClues();
+                    //so that number we now which number is crossed out
+                    this.getMysteryWord();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getValidClues()
@@ -965,10 +971,10 @@ class InGame extends React.Component {
                                 <Deck style={{position:"absolute", bottom:"1%", left:"20%"}}></Deck>
                                 <Deck style={{position:"absolute", bottom:"2%", left:"19%"}}></Deck>
                                 <Deck style={{position: "absolute", bottom: "3%", left: "18%"}}>
-                                    <DrawCard id={"drawCard"} onClick={() => this.getCard()}> Draw Card! </DrawCard>
+                                    <DrawCard id={"drawCard"} onClick={() => this.initializeTurn()}> Draw Card! </DrawCard>
                                     {this.state.remainingCards}
                                 </Deck>
-                                {this.state.activePlayer != localStorage.getItem('username') ? (
+                                {this.state.activePlayer !== localStorage.getItem('username') ? (
                                 <ActiveCard id={"activeCard"} style={{display:"none"}}>
                                         <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
                                         <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
