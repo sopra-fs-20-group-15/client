@@ -433,23 +433,24 @@ class InGame extends React.Component {
         super(props);
         this.state = {
             gameId: null,
-            remainingCards: 13,
-            guessedCards: 0,
             currentCard: [],
             mysteryWordId: null,
             mysteryWord: null,
-            phaseNumber: 1,
-            phases: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
-            round: 1,
             players: [],
             activePlayer: null,
             passivePlayers: [],
-            clueNumber: null,
             clues: [],
             guess: null,
             validGuess: false,
             scores: null,
             timer: null,
+            //frontend variables
+            clueNumber: null,
+            round: 1,
+            phaseNumber: 1,
+            phases: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
+            remainingCards: 13,
+            guessedCards: 0,
             player1Input: null,
             player2Input: null,
             player3Input: null,
@@ -526,7 +527,7 @@ class InGame extends React.Component {
              * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
 
-            console.log('current card', response);
+            // console.log('current card', response);
 
             if (response.status === 200 && response.data.words !== this.state.currentCard) {
                 this.setState({
@@ -535,7 +536,7 @@ class InGame extends React.Component {
                 })
             }
 
-            console.log('state after drawing card', this.state);
+            // console.log('state after drawing card', this.state);
 
             /** Button disappears and card is displayed after card is drawn. We use an if-statement to make sure
              * that these actions are only executed if the currentCard variable has actually been given a list of
@@ -582,7 +583,7 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
 
-            console.log('mystery word', response);
+            // console.log('mystery word', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -590,7 +591,7 @@ class InGame extends React.Component {
                 });
             }
 
-            console.log('state after getting mystery word', this.state)
+            // console.log('state after getting mystery word', this.state)
 
         } catch (error) {
 
@@ -604,7 +605,7 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            console.log('requestbody for giving clue', requestBody);
+            console.log('requestBody for giving clue', requestBody);
 
             await api.post('/games/' + this.state.gameId + "/clues", requestBody);
 
@@ -623,7 +624,7 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/' + localStorage.getItem('token'));
 
-            console.log('valid clues', response);
+            // console.log('valid clues', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -631,7 +632,7 @@ class InGame extends React.Component {
                 });
             }
 
-            console.log('state after getting valid clues', this.state)
+            // console.log('state after getting valid clues', this.state)
         } catch (error) {
             alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
         }
@@ -644,7 +645,7 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            console.log('requestbody setguess', requestBody);
+            console.log('requestBody setguess', requestBody);
 
             const response = await api.post('/games/'+this.state.gameId+"/guesses", requestBody);
 
@@ -658,7 +659,7 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/guesses/' + localStorage.getItem('token'))
 
-            console.log('guess', response);
+            // console.log('guess', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -667,7 +668,7 @@ class InGame extends React.Component {
                 });
             }
 
-            console.log('state after guess', this.state);
+            // console.log('state after guess', this.state);
 
         } catch (error) {
             alert(`Something went wrong while getting the Guess: \n${handleError(error)}`);
@@ -751,16 +752,16 @@ class InGame extends React.Component {
      * or passive player) and the phase number (between 1 and 4). */
     handlePolling = async () => {
         try {
-            console.log('polling is done');
-            console.log('by', localStorage.getItem('username'));
+            // console.log('polling is done');
+            // console.log('by', localStorage.getItem('username'));
             if (this.state.phaseNumber === 1) {
-                console.log('gets in phase 1');
+                // console.log('gets in phase 1');
                 if (localStorage.getItem('username') === this.state.activePlayer) {
-                    console.log('gets in active player')
+                    // console.log('gets in active player')
                     // does not need to do anything since getting the card and mystery word is coupled to button clicking for the active player
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                    console.log('gets in passive players');
+                    // console.log('gets in passive players');
                     this.getCard();
                     this.getMysteryWord()
                 }
