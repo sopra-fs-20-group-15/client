@@ -591,9 +591,9 @@ class InGame extends React.Component {
 
             console.log('requestbody for giving clue', requestBody);
 
-            const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
+            await api.post('/games/' + this.state.gameId + "/clues", requestBody);
 
-            console.log('response from giving clue', response);
+            // console.log('response from giving clue', response);
 
             // this.setState({
             //     currentCard: response.data,
@@ -625,7 +625,7 @@ class InGame extends React.Component {
     async setGuess(guess) {
         try {
             const requestBody = JSON.stringify({
-                Guess: guess,
+                guess: guess,
                 playerToken: localStorage.getItem('token')
             });
 
@@ -698,14 +698,18 @@ class InGame extends React.Component {
                 this.switchPhase();
             }
         }
+        //actions of passive players
         if (this.state.passivePlayers.includes(playerName)) {
             if (this.state.phaseNumber === 2) {
-                //write clues
+                this.setState({clueNumber: this.state.clueNumber+1});
                 if (this.state.clueNumber === this.state.passivePlayers.length) {
                     this.setState({clueNumber: 0});
+                    //write clues
+                    this.giveClue(input);
                     this.switchPhase();
                 } else {
-                    this.setState({clueNumber: this.state.clueNumber+1});
+                    //write clues
+                    this.giveClue(input);
                 }
             }
         }
