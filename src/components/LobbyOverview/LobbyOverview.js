@@ -279,8 +279,6 @@ class LobbyOverview extends Component {
 
                 localStorage.setItem('gameId', response.data.gameId);
 
-                console.log('local gameid', localStorage.getItem('gameId'));
-
                 this.props.history.push('/lobby/' + (this.state.chosenLobbyIndex+1))
 
             } else if (this.state.chosenLobby.gameType === "PRIVATE") {

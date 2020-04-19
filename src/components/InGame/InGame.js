@@ -461,7 +461,7 @@ class InGame extends React.Component {
             player7Input: null
         };
         // some error here...
-        this.interval = setInterval(this.handlePolling, 500);
+        this.interval = setInterval(this.handlePolling, 1000);
         this.handlePolling = this.handlePolling.bind(this);
     }
 
@@ -494,20 +494,16 @@ class InGame extends React.Component {
 
     async getCard() {
         try {
-            // this.initializeTurn();
             /** The active card is fetch (already set by initializeTurn()), it's words are saved and displayed
              * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
 
-            // console.log('current card', response);
 
             if (response.status === 200 && response.data.words !== this.state.currentCard) {
                 this.setState({
                     currentCard: response.data.words
                 })
             }
-
-            // console.log('state after drawing card', this.state);
 
             /** Button disappears and card is displayed after card is drawn. We use an if-statement to make sure
              * that these actions are only executed if the currentCard variable has actually been given a list of
@@ -533,15 +529,17 @@ class InGame extends React.Component {
 
                 const response = await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
-                console.log('response from determining mystery word', response);
+                this.setState({
+                    mysteryWord: this.state.currentCard[wordId-1]
+                });
 
                 /** All words except for the mystery word on the card are crossed out. */
-                // for (let i = 0; i < this.state.currentCard.length; i++) {
-                //     if (wordId - 1 !== i) {
-                //         let lineThroughWord = document.getElementById("word" + (i + 1));
-                //         lineThroughWord.style.textDecoration = "line-through";
-                //     }
-                // }
+                for (let i = 0; i < this.state.currentCard.length; i++) {
+                    if (wordId - 1 !== i) {
+                        let lineThroughWord = document.getElementById("word" + (i + 1));
+                        lineThroughWord.style.textDecoration = "line-through";
+                    }
+                }
             } else {
                 alert('You have to enter a number between one and five!')
             }
@@ -554,7 +552,6 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
 
-            // console.log('mystery word', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -562,10 +559,9 @@ class InGame extends React.Component {
                 });
             }
 
-            // console.log('state after getting mystery word', this.state)
-
             for (let i = 0; i < this.state.currentCard.length; i++) {
                 if (this.state.mysteryWord !== this.state.currentCard[i]) {
+                    console.log('gets in');
                     let lineThroughWord = document.getElementById("word" + (i + 1));
                     lineThroughWord.style.textDecoration = "line-through";
                 }
@@ -582,16 +578,8 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            console.log('requestBody for giving clue', requestBody);
+            await api.post('/games/' + this.state.gameId + "/clues", requestBody);
 
-            const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
-
-            console.log('response from giving clue', response);
-
-            // this.setState({
-            //     currentCard: response.data,
-            //     remainingCards: this.state.remainingCards-1
-            // });
         } catch (error) {
             alert(`Something went wrong while trying to give the Clue: \n${handleError(error)}`)
         }
@@ -601,7 +589,7 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/' + localStorage.getItem('token'));
 
-            // console.log('valid clues', response);
+            console.log('valid clues', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -609,7 +597,7 @@ class InGame extends React.Component {
                 });
             }
 
-            // console.log('state after getting valid clues', this.state)
+            console.log('state after getting valid clues', this.state)
         } catch (error) {
             alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
         }
@@ -681,13 +669,23 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/players/' + localStorage.getItem('token'));
 
-            // console.log('pls hilf mir',response);
+            console.log('clue players',response);
 
             if (response.status === 200) {
                 this.setState({
                     passivePlayersCluesGiven: response.data.playerName
                 });
             }
+
+            // tried to mark ready boxes of players who gave clue black (emphasis on tried)
+            /*if (this.state.passivePlayersCluesGiven.length > 0) {
+                for (let i = 0; i < this.state.passivePlayersCluesGiven.length; i++) {
+                    let markBox = document.getElementById("field" + (i + 1));
+                    markBox.style.background = "black";
+                }
+            }*/
+
+            console.log('state after clue players', this.state)
 
         } catch (error) {
             alert(`Something went wrong while IM DEAD INSIDE: \n${handleError(error)}`);
@@ -713,7 +711,7 @@ class InGame extends React.Component {
         if (this.state.passivePlayers.includes(playerName)) {
             if (this.state.phaseNumber === 2) {
                 //gives clue
-                this.giveClue();
+                this.giveClue(input);
             }
         }
     }
@@ -810,18 +808,15 @@ class InGame extends React.Component {
      * or passive player) and the phase number (between 1 and 4). */
     handlePolling = async () => {
         try {
-            // console.log('polling is done');
-            // console.log('by', localStorage.getItem('username'));
             this.updatePhase();
             if (this.state.phaseNumber === 1) {
-                // console.log('gets in phase 1');
                 if (localStorage.getItem('username') === this.state.activePlayer) {
-                    // console.log('gets in active player')
+                    this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                    // console.log('gets in passive players');
+                    this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
                 }
@@ -884,19 +879,21 @@ class InGame extends React.Component {
     //     }
     // }
 
+    async getPlayers() {
+        const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
+
+        this.setState({
+            gameId: localStorage.getItem('gameId'),
+            players: response.data.playerNames,
+            activePlayer: response.data.activePlayerName,
+            passivePlayers: response.data.passivePlayerNames
+        });
+    }
+
     async componentDidMount() {
         try {
 
-            const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
-
-            console.log('response of getting players', response);
-
-            this.setState({
-                gameId: localStorage.getItem('gameId'),
-                players: response.data.playerNames,
-                activePlayer: response.data.activePlayerName,
-                passivePlayers: response.data.passivePlayerNames
-            });
+            this.getPlayers();
 
             console.log('game state before init', this.state);
 
@@ -963,7 +960,7 @@ class InGame extends React.Component {
                                         {e => {this.handleInputChange('player2Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField disabled={!this.state.player2Input}
+                            <ReadyField id={"field2"} disabled={!this.state.player2Input}
                                         onClick={() => {this.handleInput(this.state.players[1],this.state.player2Input);}}>
                                 <p hidden={!this.state.player2Input}>...</p>
                             </ReadyField>
@@ -982,7 +979,7 @@ class InGame extends React.Component {
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('player3Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField disabled={!this.state.player3Input}
+                            <ReadyField id={"field3"} disabled={!this.state.player3Input}
                                         onClick={() => {this.handleInput(this.state.players[2],this.state.player3Input);}}>
                                 <p hidden={!this.state.player3Input}>...</p>
                             </ReadyField>
@@ -1004,7 +1001,7 @@ class InGame extends React.Component {
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('player4Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField disabled={!this.state.player4Input}
+                            <ReadyField id={"field4"} disabled={!this.state.player4Input}
                                         onClick={() => {this.handleInput(this.state.players[3],this.state.player4Input);}}>
                                 <p hidden={!this.state.player4Input}>...</p>
                             </ReadyField>
@@ -1023,7 +1020,7 @@ class InGame extends React.Component {
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player5Input', e.target.value);}}/>
                                 </InputField>
-                                <ReadyField disabled={!this.state.player5Input}
+                                <ReadyField id={"field5"} disabled={!this.state.player5Input}
                                             onClick={() => {this.handleInput(this.state.players[4],this.state.player5Input);}}>
                                     <p hidden={!this.state.player5Input}>...</p>
                                 </ReadyField>
@@ -1040,7 +1037,8 @@ class InGame extends React.Component {
                                 <Deck style={{position:"absolute", bottom:"1%", left:"20%"}}></Deck>
                                 <Deck style={{position:"absolute", bottom:"2%", left:"19%"}}></Deck>
                                 <Deck style={{position: "absolute", bottom: "3%", left: "18%"}}>
-                                    <DrawCard id={"drawCard"} onClick={() => this.initializeTurn()}> Draw Card! </DrawCard>
+                                    {this.state.round === 1 ? <DrawCard id={"drawCard"} style={{fontsize:"14px"}} onClick={() => this.initializeTurn()}> Host: Draw Card and determine active player! </DrawCard>
+                                    : <DrawCard id={"drawCard"} onClick={() => this.initializeTurn()}> Draw Card! </DrawCard>}
                                     {this.state.remainingCards}
                                 </Deck>
                                 {this.state.activePlayer !== localStorage.getItem('username') ? (
@@ -1089,7 +1087,7 @@ class InGame extends React.Component {
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('player6Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField disabled={!this.state.player6Input}
+                            <ReadyField id={"field6"} disabled={!this.state.player6Input}
                                         onClick={() => {this.handleInput(this.state.players[5],this.state.player6Input);}}>
                                 <p hidden={!this.state.player6Input}>...</p>
                             </ReadyField>
@@ -1108,7 +1106,7 @@ class InGame extends React.Component {
                                 <Input placeholder="Enter here.." onChange=
                                     {e => {this.handleInputChange('player7Input', e.target.value);}}/>
                             </InputField>
-                            <ReadyField disabled={!this.state.player7Input}
+                            <ReadyField id={"field7"} disabled={!this.state.player7Input}
                                         onClick={() => {this.handleInput(this.state.players[6],this.state.player7Input);}}>
                                 <p hidden={!this.state.player7Input}>...</p>
                             </ReadyField>
@@ -1133,7 +1131,7 @@ class InGame extends React.Component {
                                         {e => {this.handleInputChange('player1Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField disabled={!this.state.player1Input}
+                            <ReadyField id={"field1"} disabled={!this.state.player1Input}
                                         onClick={() => {this.handleInput(this.state.players[0],this.state.player1Input);}}>
                                 <p hidden={!this.state.player1Input}>...</p>
                             </ReadyField>
