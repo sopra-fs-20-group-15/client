@@ -306,7 +306,22 @@ const Input = styled.input`
   text-overflow: ellipsis;
 `;
 
-
+const Output = styled.div`
+  height: 55px;
+  width: 240px;
+  
+  padding-bottom: 10%;
+  padding-left: 5%;
+  
+  background: #CBBD8C;
+  border:none;
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const NameField = styled.div`
   height: 45px;
@@ -865,8 +880,12 @@ class InGame extends React.Component {
                                 <NameField>2. {this.state.players[1]}</NameField> :
                                 <NameFieldActivePlayer>2. {this.state.players[1]}</NameFieldActivePlayer>}
                             <InputField>
-                                <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('player2Input', e.target.value);}}/>
+                                {this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[1]) ? (
+                                    <Output>{this.state.player2Input}</Output>
+                                ):(
+                                    <Input placeholder="Enter here.." onChange=
+                                        {e => {this.handleInputChange('player2Input', e.target.value);}}/>)
+                                }
                             </InputField>
                             <ReadyField disabled={!this.state.player2Input}
                                         onClick={() => {this.handleInput(this.state.players[1],this.state.player2Input);}}>
@@ -1031,8 +1050,12 @@ class InGame extends React.Component {
                                 <NameField>1. {this.state.players[0]}</NameField> :
                                 <NameFieldActivePlayer>1. {this.state.players[0]}</NameFieldActivePlayer>}
                             <InputField>
-                                <Input placeholder="Enter here.." onChange=
-                                    {e => {this.handleInputChange('player1Input', e.target.value);}}/>
+                                {this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[0]) ? (
+                                    <Output>{this.state.player1Input}</Output>
+                                ):(
+                                    <Input placeholder="Enter here.." onChange=
+                                        {e => {this.handleInputChange('player1Input', e.target.value);}}/>)
+                                }
                             </InputField>
                             <ReadyField disabled={!this.state.player1Input}
                                         onClick={() => {this.handleInput(this.state.players[0],this.state.player1Input);}}>
