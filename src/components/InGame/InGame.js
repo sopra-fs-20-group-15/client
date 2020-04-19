@@ -500,6 +500,7 @@ class InGame extends React.Component {
 
     async getCard() {
         try {
+            this.initializeTurn();
             /** The active card is fetch (already set by initializeTurn()), it's words are saved and displayed
              * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
@@ -509,7 +510,7 @@ class InGame extends React.Component {
             if (response.status === 200 && response.data.words !== this.state.currentCard) {
                 this.setState({
                     currentCard: response.data.words,
-                    remainingCards: this.state.remainingCards - 1
+                    remainingCards: this.state.remainingCards
                 })
             }
 
@@ -797,7 +798,7 @@ class InGame extends React.Component {
 
             console.log('game state before init', this.state);
 
-            //right place?
+            // right place?
             //this.initializeTurn();
 
             console.log('game state after init', this.state);
