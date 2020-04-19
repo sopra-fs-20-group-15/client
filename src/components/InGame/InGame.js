@@ -439,6 +439,7 @@ class InGame extends React.Component {
             players: [],
             activePlayer: null,
             passivePlayers: [],
+            passivePlayersCluesGiven: [],
             clues: [],
             guess: null,
             validGuess: false,
@@ -476,37 +477,6 @@ class InGame extends React.Component {
         });
 
     }*/
-
-    //I try to use this method to fix the timer issue
-    switchPhase() {
-        this.switchPhaseHUD(this.state.phaseNumber);
-        let nextTimer = [15,25,30,10];
-        if (this.state.phaseNumber === 4) {
-            this.setState({
-                round: this.state.round + 1,
-                phaseNumber: 1,
-                timer: nextTimer[1]
-            });
-            // this.initializeTurn()
-        } else {
-            this.setState({
-                phaseNumber: this.state.phaseNumber + 1,
-                timer: nextTimer[this.state.phaseNumber + 1]
-            });
-        }
-    }
-
-    switchPhaseHUD(id) {
-        let greyPhase = document.getElementById("phase"+id);
-        greyPhase.style.backgroundColor = "#817857";
-        if (id !== 4) {
-            let greenPhase = document.getElementById("phase"+(id+1));
-            greenPhase.style.backgroundColor = "#05FF00";
-        } else {
-            let greenPhase = document.getElementById("phase"+(1));
-            greenPhase.style.backgroundColor = "#05FF00";
-        }
-    }
 
     async initializeTurn() {
         try {
@@ -584,7 +554,7 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
 
-            console.log('mystery word', response);
+            // console.log('mystery word', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -592,7 +562,7 @@ class InGame extends React.Component {
                 });
             }
 
-            console.log('state after getting mystery word', this.state)
+            // console.log('state after getting mystery word', this.state)
 
             for (let i = 0; i < this.state.currentCard.length; i++) {
                 if (this.state.mysteryWord !== this.state.currentCard[i]) {
@@ -664,9 +634,11 @@ class InGame extends React.Component {
 
     async getGuess() {
         try {
-            const response = await api.get('/games/' + this.state.gameId + '/guesses/' + localStorage.getItem('token'))
+            console.log('resolveGuess');
 
-            // console.log('guess', response);
+            const response = await api.get('/games/' + this.state.gameId + '/guesses/' + localStorage.getItem('token'));
+
+            console.log('guess', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -675,7 +647,7 @@ class InGame extends React.Component {
                 });
             }
 
-            // console.log('state after guess', this.state);
+            console.log('state after guess', this.state);
 
         } catch (error) {
             alert(`Something went wrong while getting the Guess: \n${handleError(error)}`);
@@ -705,6 +677,23 @@ class InGame extends React.Component {
         }
     }
 
+    async getCluePlayers() {
+        try {
+            const response = await api.get('/games/' + this.state.gameId + '/clues/players/' + localStorage.getItem('token'));
+
+            // console.log('pls hilf mir',response);
+
+            if (response.status === 200) {
+                this.setState({
+                    passivePlayersCluesGiven: response.data.playerName
+                });
+            }
+
+        } catch (error) {
+            alert(`Something went wrong while IM DEAD INSIDE: \n${handleError(error)}`);
+        }
+    }
+
     /** This method makes sure that the input given by the different players is triggers the corresponding effects
      * based on the role of the player (active or passive player) and the phase number (between 1 and 3, in phase 4
      * no input is taken). */
@@ -714,27 +703,17 @@ class InGame extends React.Component {
             if (this.state.phaseNumber === 1) {
                 //determine mystery Word
                 this.determineMysteryWord(input);
-                this.switchPhase();
             }
             if (this.state.phaseNumber === 3) {
                 //guess mystery word
                 this.setGuess(input);
-                this.switchPhase();
             }
         }
         //actions of passive players
         if (this.state.passivePlayers.includes(playerName)) {
             if (this.state.phaseNumber === 2) {
-                this.setState({clueNumber: this.state.clueNumber+1});
-                if (this.state.clueNumber === this.state.passivePlayers.length) {
-                    this.setState({clueNumber: 0});
-                    //write clues
-                    this.giveClue(input);
-                    this.switchPhase();
-                } else {
-                    //write clues
-                    this.giveClue(input);
-                }
+                //gives clue
+                this.giveClue();
             }
         }
     }
@@ -750,17 +729,95 @@ class InGame extends React.Component {
         this.setState({ [key]: value });
     }
 
+    //I try to use this method to fix the timer issue
+    switchPhase() {
+        let nextTimer = [15,25,30,10];
+        if (this.state.phaseNumber === 4) {
+            this.setState({
+                round: this.state.round + 1,
+                phaseNumber: 1,
+                timer: nextTimer[1]
+            });
+            // this.initializeTurn()
+        } else {
+            this.setState({
+                phaseNumber: this.state.phaseNumber + 1,
+                timer: nextTimer[this.state.phaseNumber + 1]
+            });
+        }
+        this.updatePhaseHUD(this.state.phaseNumber);
+    }
+
+    updatePhase() {
+        let nextTimer = [15,25,30,10];
+        /** Only Phase 4 has always a guess that's not empty */
+        if (this.state.guess !== null) {
+            /** if it is not Phase 4, change to 4 and reset Timer */
+            if (this.state.phaseNumber !== 4) {
+                this.setState({
+                    phaseNumber: 4,
+                    timer: nextTimer[3]
+                });
+                this.updatePhaseHUD(4);
+            }
+        }
+        /** Not possible to test if it should be Phase 3 so here's a Placeholder */
+        else if (1 === this.state.passivePlayers.length) {
+            if (this.state.phaseNumber !== 3) {
+                this.setState({
+                    phaseNumber: 3,
+                    timer: nextTimer[2]
+                });
+                this.updatePhaseHUD(3);
+            }
+        }
+
+        /** Only Phase 2 has always a chosen Mystery Word */
+        else if (this.state.mysteryWord !== null) {
+            if (this.state.phaseNumber !== 2) {
+                this.setState({
+                    phaseNumber: 2,
+                    timer: nextTimer[1]
+                });
+                this.updatePhaseHUD(2);
+            }
+        }
+        /** Only Phase 1 has always none of these above*/
+        else if (this.state.currentCard !== []) {
+            if (this.state.phaseNumber !== 1) {
+                this.setState({
+                    phaseNumber: 1,
+                    timer: nextTimer[0]
+                });
+                this.updatePhaseHUD(1);
+            }
+        }
+    }
+
+    updatePhaseHUD(id) {
+        for (let i=1 ; i<=4 ; i++) {
+            if (i === id) {
+                let greenPhase = document.getElementById("phase"+i);
+                greenPhase.style.backgroundColor = "#05FF00";
+            } else {
+                let greyPhase = document.getElementById("phase"+i);
+                greyPhase.style.backgroundColor = "#817857";
+            }
+        }
+    }
+
     /** This method makes sure that a player's page is updated correctly based on the role of the player (active
      * or passive player) and the phase number (between 1 and 4). */
     handlePolling = async () => {
         try {
             // console.log('polling is done');
             // console.log('by', localStorage.getItem('username'));
+            this.getCluePlayers();
+            this.updatePhase();
             if (this.state.phaseNumber === 1) {
                 // console.log('gets in phase 1');
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     // console.log('gets in active player')
-                    // does not need to do anything since getting the card and mystery word is coupled to button clicking for the active player
                     this.getCard();
                     this.getMysteryWord();
                 }
@@ -771,23 +828,34 @@ class InGame extends React.Component {
                 }
             } else if (this.state.phaseNumber === 2) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
-                    this.getValidClues();
-                    //so that number we now which number is crossed out
+                    this.getCard();
                     this.getMysteryWord();
+                    this.getValidClues();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                    this.getValidClues()
+                    this.getCard();
+                    this.getMysteryWord();
+                    this.getValidClues();
                 }
             } else if (this.state.phaseNumber === 3) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     // does not need to do anything since getting the guess is coupled to button clicking for the active player
+                    this.getCard();
+                    this.getMysteryWord();
+                    this.getValidClues();
+                    this.getGuess();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                    this.getGuess()
+                    this.getCard();
+                    this.getMysteryWord();
+                    this.getValidClues();
+                    this.getGuess();
                 }
             } else if (this.state.phaseNumber === 4) {
-                 this.getScores();
-                 this.checkGameEnded();
+                this.getCard();
+                this.getMysteryWord();
+                this.getValidClues();
+                this.getGuess();
             } else {
                 alert("The phase number is not in the range from 1 to 4!")
             }
