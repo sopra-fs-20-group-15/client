@@ -533,7 +533,8 @@ class InGame extends React.Component {
                     mysteryWord: this.state.currentCard[wordId-1]
                 });
 
-                /** All words except for the mystery word on the card are crossed out. */
+                /** All question marks except for the ones in the place of the mystery word on the card are
+                 * crossed out. */
                 for (let i = 0; i < this.state.currentCard.length; i++) {
                     if (wordId - 1 !== i) {
                         let lineThroughWord = document.getElementById("word" + (i + 1));

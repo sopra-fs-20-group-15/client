@@ -144,14 +144,12 @@ class Lobby extends React.Component {
 
     async startGame() {
         try {
-            console.log('lobby state upon starting game', this.state);
             const requestBody = JSON.stringify({
                 token: localStorage.getItem('token')
             });
 
             const response = await api.post('/games/'+this.props.match.params.id, requestBody);
             //temporary "gamelobby"
-            console.log('response of post active game', response);
             this.props.history.push('/gameLobby/'+response.data.id);
         } catch (error) {
             alert(`Something went wrong while starting the Game: \n${handleError(error)}`);
@@ -164,7 +162,7 @@ class Lobby extends React.Component {
                 token: localStorage.getItem('token')
             });
 
-            await api.delete('/games/'+this.props.match.params.id+'/players', requestBody);
+            await api.put('/games/'+this.props.match.params.id+'/leave', requestBody);
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
@@ -172,13 +170,31 @@ class Lobby extends React.Component {
         }
     }
 
-    async terminateGame() {
+    async terminateGame(gameSetUpId) {
         try {
-            const requestBody = JSON.stringify({
-                token: localStorage.getItem('token')
+
+            const formData = new FormData();
+            formData.append('token', localStorage.getItem('token'));
+
+            const requestOptions = {
+                method: 'DELETE',
+                body: formData
+            };
+
+            // Note: I'm using arrow functions inside the `.fetch()` method.
+            // This makes it so you don't have to bind component functions like `setState`
+            // to the component.
+            fetch("http://localhost:8080/api/gameSetUps/" + gameSetUpId, requestOptions).then((response) => {
+                return response.json();
+            }).then((result) => {
+                // do what you want with the response here
             });
 
-            await api.delete('/gameSetUps/'+this.props.match.params.id, requestBody);
+            // const requestBody = JSON.stringify({
+            //     token: localStorage.getItem('token')
+            // });
+            //
+            // await api.delete('/gameSetUps/'+this.props.match.params.id, requestBody);
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
@@ -224,7 +240,7 @@ class Lobby extends React.Component {
                             <Button
                                 style={{width:"50%",marginRight:"10px"}}
                                 onClick={() => {
-                                    this.terminateGame();
+                                    this.terminateGame(this.state.gameSetUpId);
                                 }}>
                                 Terminate Game
                             </Button>
