@@ -484,9 +484,8 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            console.log('turn initialized');
-
             await api.put('/games/' + this.state.gameId + '/initializations', requestBody);
+
         } catch (error) {
             alert(`Something went wrong while initializing the Turn: \n${handleError(error)}`);
         }
@@ -562,7 +561,6 @@ class InGame extends React.Component {
 
             for (let i = 0; i < this.state.currentCard.length; i++) {
                 if (this.state.mysteryWord !== this.state.currentCard[i]) {
-                    console.log('gets in');
                     let lineThroughWord = document.getElementById("word" + (i + 1));
                     lineThroughWord.style.textDecoration = "line-through";
                 }
@@ -574,15 +572,20 @@ class InGame extends React.Component {
 
     async giveClue(clue) {
         try {
-            const requestBody = JSON.stringify({
-                clue: clue,
-                playerToken: localStorage.getItem('token')
-            });
+            if (clue.trim().split(" ").length === 1) {
+                const requestBody = JSON.stringify({
+                    clue: clue,
+                    playerToken: localStorage.getItem('token')
+                });
 
-            await api.post('/games/' + this.state.gameId + "/clues", requestBody);
 
+                const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
+
+            } else {
+                alert('Your clue has to consist of exactly one word!')
+            }
         } catch (error) {
-            alert(`Something went wrong while trying to give the Clue: \n${handleError(error)}`)
+            alert(`Something went wrong while trying to give a clue: \n${handleError(error)}`)
         }
     }
 
@@ -590,7 +593,6 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/' + localStorage.getItem('token'));
 
-            console.log('valid clues', response);
 
             if (response.status === 200) {
                 this.setState({
@@ -598,7 +600,6 @@ class InGame extends React.Component {
                 });
             }
 
-            console.log('state after getting valid clues', this.state)
         } catch (error) {
             alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
         }
@@ -673,9 +674,13 @@ class InGame extends React.Component {
             console.log('clue players',response);
 
             if (response.status === 200) {
-                this.setState({
-                    passivePlayersCluesGiven: response.data.playerName
-                });
+                for (let i=0; i < response.data.length; i++) {
+                    if (!this.state.passivePlayersCluesGiven.includes(response.data[i].playerName)) {
+                        this.setState({
+                            passivePlayersCluesGiven: this.state.passivePlayersCluesGiven.concat(response.data[i].playerName)
+                        });
+                    }
+                }
             }
 
             // tried to mark ready boxes of players who gave clue black (emphasis on tried)
@@ -697,23 +702,30 @@ class InGame extends React.Component {
      * based on the role of the player (active or passive player) and the phase number (between 1 and 3, in phase 4
      * no input is taken). */
     handleInput(playerName, input) {
-        //actions of active player
-        if (playerName === this.state.activePlayer) {
-            if (this.state.phaseNumber === 1) {
-                //determine mystery Word
-                this.determineMysteryWord(input);
+        console.log('phase number', this.state.phaseNumber);
+        if (playerName === localStorage.getItem('username')) {
+            //actions of active player
+            if (playerName === this.state.activePlayer) {
+                if (this.state.phaseNumber === 1) {
+                    //determine mystery Word
+                    this.determineMysteryWord(input);
+                }
+                if (this.state.phaseNumber === 3) {
+                    //guess mystery word
+                    this.setGuess(input);
+                }
             }
-            if (this.state.phaseNumber === 3) {
-                //guess mystery word
-                this.setGuess(input);
+            //actions of passive players
+            if (this.state.passivePlayers.includes(playerName)) {
+                if (this.state.phaseNumber === 2) {
+                    //gives clue
+                    console.log('gets in');
+                    this.giveClue(input);
+                }
             }
-        }
-        //actions of passive players
-        if (this.state.passivePlayers.includes(playerName)) {
-            if (this.state.phaseNumber === 2) {
-                //gives clue
-                this.giveClue(input);
-            }
+        } else {
+            alert('You are not allowed to press other peoples buttons!');
+            console.log('pressing button of different player');
         }
     }
 
@@ -761,7 +773,7 @@ class InGame extends React.Component {
             }
         }
         /** Not possible to test if it should be Phase 3 so here's a Placeholder */
-        else if (0 === this.state.passivePlayers.length) {
+        else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 this.setState({
                     phaseNumber: 3,
@@ -896,13 +908,7 @@ class InGame extends React.Component {
 
             this.getPlayers();
 
-            console.log('game state before init', this.state);
-
-            // right place?
-            //this.initializeTurn();
-
             console.log('game state after init', this.state);
-
 
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
