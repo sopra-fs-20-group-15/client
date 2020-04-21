@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
-import { Button } from '../../views/design/Button';
 import Timer from "../timer/Timer";
 
 //margin padding stuff:
@@ -189,8 +187,6 @@ const Table = styled.div`
   border: 3px solid #000000;
   box-sizing: border-box;
   box-shadow: 20px 30px 30px rgba(0, 0, 0, 0.25);
-  
-  // z-index: -1;
 `;
 
 
@@ -397,8 +393,6 @@ const GuessedCardsField = styled.div`
   width: 50px;
   
   position: absolute;
-  // top: 5%;
-  // left: 12%;
   
   padding-top: 0.5%;
   align-items: center;
@@ -465,19 +459,6 @@ class InGame extends React.Component {
         this.handlePolling = this.handlePolling.bind(this);
     }
 
-    //clears previous phase and sets up the new one (like resetting input, timer and other stuff) NOT FINISHED YET
-/*    switchPhase() {
-        if (this.state.phaseNumber == 4) { this.setState({round: this.state.round+1}); }
-        let nextPhase = [2,3,4,1];
-        let nextTimer = [45,45,15,15];
-        this.switchPhaseHUD(this.state.phaseNumber);
-        this.setState({
-            phaseNumber: nextPhase[this.state.phaseNumber-1],
-            secondsLeft: nextTimer[this.state.phaseNumber-1]
-        });
-
-    }*/
-
     async initializeTurn() {
         try {
             const requestBody = JSON.stringify({
@@ -499,15 +480,11 @@ class InGame extends React.Component {
              * (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
 
-            // console.log('current card', response);
-
             if (response.status === 200 && response.data.words !== this.state.currentCard) {
                 this.setState({
                     currentCard: response.data.words
                 })
             }
-
-            // console.log('state after drawing card', this.state);
 
             /** Button disappears and card is displayed after card is drawn. We use an if-statement to make sure
              * that these actions are only executed if the currentCard variable has actually been given a list of
@@ -534,8 +511,6 @@ class InGame extends React.Component {
                 this.setState({mysteryWordId: wordId});
 
                 const response = await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
-
-                console.log('response from determining mystery word', response);
 
                 /** All words except for the mystery word on the card are crossed out. */
                 for (let i = 0; i < this.state.currentCard.length; i++) {
@@ -586,9 +561,6 @@ class InGame extends React.Component {
                     playerToken: localStorage.getItem('token')
                 });
 
-                console.log('clue', clue);
-                console.log('token', localStorage.getItem('token'));
-
                 const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
 
             } else {
@@ -603,15 +575,11 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/' + localStorage.getItem('token'));
 
-            // console.log('valid clues', response);
-
             if (response.status === 200) {
                 this.setState({
                     clues: response.data.listOfClues
                 });
             }
-
-            console.log('is this the solution?', response.data.listOfClues);
 
         } catch (error) {
             alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
@@ -625,11 +593,8 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            console.log('requestBody setGuess', requestBody);
-
             const response = await api.post('/games/'+this.state.gameId+"/guesses", requestBody);
 
-            console.log('response from giving guess', response);
         } catch (error) {
             alert(`Something went wrong while giving the Guess: \n${handleError(error)}`);
         }
@@ -641,16 +606,12 @@ class InGame extends React.Component {
 
             const response = await api.get('/games/' + this.state.gameId + '/guesses/' + localStorage.getItem('token'));
 
-            // console.log('guess', response);
-
             if (response.status === 200) {
                 this.setState({
                     guess: response.data.guess,
                     validGuess: response.data.isValidGuess
                 });
             }
-
-            // console.log('state after guess', this.state);
 
         } catch (error) {
             alert(`Something went wrong while getting the Guess: \n${handleError(error)}`);
@@ -742,23 +703,23 @@ class InGame extends React.Component {
     }
 
     //I try to use this method to fix the timer issue
-    switchPhase() {
-        let nextTimer = [15,25,30,10];
-        if (this.state.phaseNumber === 4) {
-            this.setState({
-                round: this.state.round + 1,
-                phaseNumber: 1,
-                timer: nextTimer[1]
-            });
-            // this.initializeTurn()
-        } else {
-            this.setState({
-                phaseNumber: this.state.phaseNumber + 1,
-                timer: nextTimer[this.state.phaseNumber + 1]
-            });
-        }
-        this.updatePhaseHUD(this.state.phaseNumber);
-    }
+    // switchPhase() {
+    //     let nextTimer = [15,25,30,10];
+    //     if (this.state.phaseNumber === 4) {
+    //         this.setState({
+    //             round: this.state.round + 1,
+    //             phaseNumber: 1,
+    //             timer: nextTimer[1]
+    //         });
+    //         // this.initializeTurn()
+    //     } else {
+    //         this.setState({
+    //             phaseNumber: this.state.phaseNumber + 1,
+    //             timer: nextTimer[this.state.phaseNumber + 1]
+    //         });
+    //     }
+    //     this.updatePhaseHUD(this.state.phaseNumber);
+    // }
 
     updatePhase() {
         let nextTimer = [15,25,30,10];
@@ -867,16 +828,6 @@ class InGame extends React.Component {
                     this.getValidClues();
                     this.getCluePlayers();
                     this.getGuess();
-
-                    // console.log('cluePlayers',this.state.passivePlayersCluesGiven);
-                    // console.log('getGuess',this.state.guess);
-                    // console.log('GuessValidity',this.state.validGuess);
-                    // console.log('ValidClues', this.state.clues);
-
-                    console.log('passivePlayers',this.state.passivePlayers);
-                    console.log('passivePlayersCluesGiven',this.state.passivePlayersCluesGiven);
-                    console.log('Players',this.state.players);
-
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getCard();
@@ -886,10 +837,10 @@ class InGame extends React.Component {
                     this.getCluePlayers();
                     this.getGuess();
 
-                    // console.log('cluePlayers',this.state.passivePlayersCluesGiven);
-                    // console.log('getGuess',this.state.guess);
-                    // console.log('GuessValidity',this.state.validGuess);
-                    // console.log('ValidClues', this.state.clues);
+                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
+                    console.log('getGuess',this.state.guess);
+                    console.log('GuessValidity',this.state.validGuess);
+                    console.log('ValidClues', this.state.clues);
 
                     console.log('passivePlayers',this.state.passivePlayers);
                     console.log('passivePlayersCluesGiven',this.state.passivePlayersCluesGiven[0]['playerName']==="Moznura");
@@ -925,9 +876,6 @@ class InGame extends React.Component {
         try {
 
             this.getPlayers();
-
-            //right place?
-            //this.initializeTurn();
 
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
