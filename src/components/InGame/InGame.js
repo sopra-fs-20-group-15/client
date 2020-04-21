@@ -694,6 +694,17 @@ class InGame extends React.Component {
         }
     }
 
+    async getPlayers() {
+        const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
+
+        this.setState({
+            gameId: localStorage.getItem('gameId'),
+            players: response.data.playerNames,
+            activePlayer: response.data.activePlayerName,
+            passivePlayers: response.data.passivePlayerNames
+        });
+    }
+
     /** This method makes sure that the input given by the different players is triggers the corresponding effects
      * based on the role of the player (active or passive player) and the phase number (between 1 and 3, in phase 4
      * no input is taken). */
@@ -819,11 +830,13 @@ class InGame extends React.Component {
                     // console.log('gets in active player')
                     this.getCard();
                     this.getMysteryWord();
+                    this.getPlayers();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     // console.log('gets in passive players');
                     this.getCard();
                     this.getMysteryWord();
+                    this.getPlayers();
                 }
             } else if (this.state.phaseNumber === 2) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -872,39 +885,14 @@ class InGame extends React.Component {
      * You may call setState() immediately in componentDidMount().
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
-    // async componentDidMount() {
-    //     try {
-    //         // using a GET request we fetch a list of players
-    //         const response = await api.get('/games/' + localStorage.getItem('gameId') + '/players');
-    //
-    //         // Get the returned players and update the state using the data from the GET request
-    //         this.setState({ players: response.data });
-    //     } catch (error) {
-    //         alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
-    //     }
-    // }
 
     async componentDidMount() {
         try {
 
-            const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
-
-            console.log('response of getting players', response);
-
-            this.setState({
-                gameId: localStorage.getItem('gameId'),
-                players: response.data.playerNames,
-                activePlayer: response.data.activePlayerName,
-                passivePlayers: response.data.passivePlayerNames
-            });
-
-            console.log('game state before init', this.state);
+            this.getPlayers();
 
             //right place?
             //this.initializeTurn();
-
-            console.log('game state after init', this.state);
-
 
         } catch (error) {
             alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
