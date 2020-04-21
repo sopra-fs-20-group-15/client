@@ -536,12 +536,12 @@ class InGame extends React.Component {
                 console.log('response from determining mystery word', response);
 
                 /** All words except for the mystery word on the card are crossed out. */
-                // for (let i = 0; i < this.state.currentCard.length; i++) {
-                //     if (wordId - 1 !== i) {
-                //         let lineThroughWord = document.getElementById("word" + (i + 1));
-                //         lineThroughWord.style.textDecoration = "line-through";
-                //     }
-                // }
+                for (let i = 0; i < this.state.currentCard.length; i++) {
+                    if (wordId - 1 !== i) {
+                        let lineThroughWord = document.getElementById("word" + (i + 1));
+                        lineThroughWord.style.textDecoration = "line-through";
+                    }
+                }
             } else {
                 alert('You have to enter a number between one and five!')
             }
@@ -609,7 +609,8 @@ class InGame extends React.Component {
                 });
             }
 
-            // console.log('state after getting valid clues', this.state)
+            console.log('is this the solution?', response.data);
+
         } catch (error) {
             alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
         }
@@ -622,7 +623,7 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            console.log('requestBody setguess', requestBody);
+            console.log('requestBody setGuess', requestBody);
 
             const response = await api.post('/games/'+this.state.gameId+"/guesses", requestBody);
 
@@ -643,7 +644,7 @@ class InGame extends React.Component {
             if (response.status === 200) {
                 this.setState({
                     guess: response.data.guess,
-                    validGuess: response.data.validGuess
+                    validGuess: response.data.isValidGuess
                 });
             }
 
@@ -681,11 +682,9 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/players/' + localStorage.getItem('token'));
 
-            // console.log('pls hilf mir',response);
-
             if (response.status === 200) {
                 this.setState({
-                    passivePlayersCluesGiven: response.data.playerName
+                    passivePlayersCluesGiven: response.data
                 });
             }
 
@@ -773,7 +772,7 @@ class InGame extends React.Component {
             }
         }
         /** Not possible to test if it should be Phase 3 so here's a Placeholder */
-        else if (0 === this.state.passivePlayers.length) {
+        else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 this.setState({
                     phaseNumber: 3,
@@ -831,23 +830,29 @@ class InGame extends React.Component {
                     this.getCard();
                     this.getMysteryWord();
                     this.getPlayers();
+                    this.getValidClues();
+                    this.getCluePlayers();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     // console.log('gets in passive players');
                     this.getCard();
                     this.getMysteryWord();
                     this.getPlayers();
+                    this.getValidClues();
+                    this.getCluePlayers();
                 }
             } else if (this.state.phaseNumber === 2) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.getCard();
                     this.getMysteryWord();
+                    this.getPlayers();
                     this.getValidClues();
                     this.getCluePlayers();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getCard();
                     this.getMysteryWord();
+                    this.getPlayers();
                     this.getValidClues();
                     this.getCluePlayers();
                 }
@@ -856,14 +861,30 @@ class InGame extends React.Component {
                     // does not need to do anything since getting the guess is coupled to button clicking for the active player
                     this.getCard();
                     this.getMysteryWord();
+                    this.getPlayers();
                     this.getValidClues();
+                    this.getCluePlayers();
                     // this.getGuess();
+
+                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
+                    console.log('getGuess',this.state.guess);
+                    console.log('GuessValidity',this.state.validGuess);
+                    console.log('ValidClues', this.state.clues);
+
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getCard();
                     this.getMysteryWord();
+                    this.getPlayers();
                     this.getValidClues();
+                    this.getCluePlayers();
                     // this.getGuess();
+
+                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
+                    console.log('getGuess',this.state.guess);
+                    console.log('GuessValidity',this.state.validGuess);
+                    console.log('ValidClues', this.state.clues);
+
                 }
             } else if (this.state.phaseNumber === 4) {
                 this.getCard();
