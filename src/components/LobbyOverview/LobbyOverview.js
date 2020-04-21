@@ -229,8 +229,16 @@ class LobbyOverview extends Component {
 
     async logout() {
         try {
+
+            const requestBody = JSON.stringify({
+                token: localStorage.getItem('token'),
+                id: localStorage.getItem('id'),
+            });
+
+            await api.put('/logout', requestBody);
             // token shows that user is logged in -> removing it shows that he has logged out
             localStorage.removeItem('token');
+
 
             // Logout successfully worked --> navigate to the route /login
             this.props.history.push(`/login`);
