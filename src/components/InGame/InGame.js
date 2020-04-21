@@ -531,6 +531,8 @@ class InGame extends React.Component {
                     playerToken: localStorage.getItem('token')
                 });
 
+                this.setState({mysteryWordId: wordId});
+
                 const response = await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
                 console.log('response from determining mystery word', response);
@@ -587,11 +589,7 @@ class InGame extends React.Component {
             const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
 
             console.log('response from giving clue', response);
-
-            // this.setState({
-            //     currentCard: response.data,
-            //     remainingCards: this.state.remainingCards-1
-            // });
+            
         } catch (error) {
             alert(`Something went wrong while trying to give the Clue: \n${handleError(error)}`)
         }
@@ -783,7 +781,7 @@ class InGame extends React.Component {
         }
 
         /** Only Phase 2 has always a chosen Mystery Word */
-        else if (this.state.mysteryWord !== null) {
+        else if (this.state.mysteryWord !== null || this.state.mysteryWordId !== null) {
             if (this.state.phaseNumber !== 2) {
                 this.setState({
                     phaseNumber: 2,
