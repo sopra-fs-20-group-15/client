@@ -788,7 +788,7 @@ class InGame extends React.Component {
             }
         }
         /** Not possible to test if it should be Phase 3 so here's a Placeholder */
-        else if (this.state.passivePlayersCluesGiven.length-2 === this.state.passivePlayers.length) {
+        else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 this.setState({
                     phaseNumber: 3,
