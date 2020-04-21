@@ -577,24 +577,6 @@ class InGame extends React.Component {
         }
     }
 
-    // async giveClue(clue) {
-    //     try {
-    //         const requestBody = JSON.stringify({
-    //             clue: clue,
-    //             playerToken: localStorage.getItem('token')
-    //         });
-    //
-    //         console.log('requestBody for giving clue', requestBody);
-    //
-    //         const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
-    //
-    //         console.log('response from giving clue', response);
-    //
-    //     } catch (error) {
-    //         alert(`Something went wrong while trying to give the Clue: \n${handleError(error)}`)
-    //     }
-    // }
-
     async giveClue(clue) {
         try {
             if (clue.trim().split(" ").length === 1) {
@@ -628,7 +610,7 @@ class InGame extends React.Component {
                 });
             }
 
-            console.log('is this the solution?', response.data);
+            console.log('is this the solution?', response.data.listOfClues);
 
         } catch (error) {
             alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
@@ -791,7 +773,7 @@ class InGame extends React.Component {
             }
         }
         /** Not possible to test if it should be Phase 3 so here's a Placeholder */
-        else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
+        else if (this.state.passivePlayersCluesGiven.length-2 === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 this.setState({
                     phaseNumber: 3,
@@ -867,11 +849,6 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getValidClues();
                     this.getCluePlayers();
-
-                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
-                    console.log('getGuess',this.state.guess);
-                    console.log('GuessValidity',this.state.validGuess);
-                    console.log('ValidClues', this.state.clues);
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getCard();
@@ -879,11 +856,6 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getValidClues();
                     this.getCluePlayers();
-
-                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
-                    console.log('getGuess',this.state.guess);
-                    console.log('GuessValidity',this.state.validGuess);
-                    console.log('ValidClues', this.state.clues);
                 }
             } else if (this.state.phaseNumber === 3) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -893,12 +865,16 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getValidClues();
                     this.getCluePlayers();
-                    // this.getGuess();
+                    this.getGuess();
 
-                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
-                    console.log('getGuess',this.state.guess);
-                    console.log('GuessValidity',this.state.validGuess);
-                    console.log('ValidClues', this.state.clues);
+                    // console.log('cluePlayers',this.state.passivePlayersCluesGiven);
+                    // console.log('getGuess',this.state.guess);
+                    // console.log('GuessValidity',this.state.validGuess);
+                    // console.log('ValidClues', this.state.clues);
+
+                    console.log('passivePlayers',this.state.passivePlayers);
+                    console.log('passivePlayersCluesGiven',this.state.passivePlayersCluesGiven);
+                    console.log('Players',this.state.players);
 
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
@@ -907,19 +883,25 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getValidClues();
                     this.getCluePlayers();
-                    // this.getGuess();
+                    this.getGuess();
 
-                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
-                    console.log('getGuess',this.state.guess);
-                    console.log('GuessValidity',this.state.validGuess);
-                    console.log('ValidClues', this.state.clues);
+                    // console.log('cluePlayers',this.state.passivePlayersCluesGiven);
+                    // console.log('getGuess',this.state.guess);
+                    // console.log('GuessValidity',this.state.validGuess);
+                    // console.log('ValidClues', this.state.clues);
 
+                    console.log('passivePlayers',this.state.passivePlayers);
+                    console.log('passivePlayersCluesGiven',this.state.passivePlayersCluesGiven[0]['playerName']==="Moznura");
+                    console.log('username',localStorage.getItem('username'));
+                    console.log('Players',this.state.players);
                 }
             } else if (this.state.phaseNumber === 4) {
                 this.getCard();
                 this.getMysteryWord();
                 this.getValidClues();
-                // this.getGuess();
+                this.getGuess();
+
+                console.log('Players',this.state.players);
             } else {
                 alert("The phase number is not in the range from 1 to 4!")
             }
