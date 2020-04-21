@@ -441,7 +441,7 @@ class InGame extends React.Component {
             passivePlayers: [],
             passivePlayersCluesGiven: [],
             clues: [],
-            guess: null,
+            guess: "",
             validGuess: false,
             scores: null,
             timer: null,
@@ -762,7 +762,7 @@ class InGame extends React.Component {
     updatePhase() {
         let nextTimer = [15,25,30,10];
         /** Only Phase 4 has always a guess that's not empty */
-        if (this.state.guess !== null) {
+        if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
             if (this.state.phaseNumber !== 4) {
                 this.setState({
@@ -824,6 +824,8 @@ class InGame extends React.Component {
             // console.log('polling is done');
             // console.log('by', localStorage.getItem('username'));
             this.updatePhase();
+            console.log('guess',this.state.guess);
+            console.log('phase',this.state.phaseNumber);
             if (this.state.phaseNumber === 1) {
                 // console.log('gets in phase 1');
                 if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -894,6 +896,7 @@ class InGame extends React.Component {
                     console.log('passivePlayersCluesGiven',this.state.passivePlayersCluesGiven[0]['playerName']==="Moznura");
                     console.log('username',localStorage.getItem('username'));
                     console.log('Players',this.state.players);
+                    console.log('guess',this.state.guess)
                 }
             } else if (this.state.phaseNumber === 4) {
                 this.getCard();
