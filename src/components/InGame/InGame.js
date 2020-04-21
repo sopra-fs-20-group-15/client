@@ -556,19 +556,20 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
 
-            // console.log('mystery word', response);
-
             if (response.status === 200) {
                 this.setState({
                     mysteryWord: response.data.word
                 });
             }
 
-            // console.log('state after getting mystery word', this.state)
-
             for (let i = 0; i < this.state.currentCard.length; i++) {
-                if (this.state.mysteryWord !== this.state.currentCard[i]) {
-                    let lineThroughWord = document.getElementById("word" + (i + 1));
+                if (this.state.mysteryWord === this.state.currentCard[i]) {
+                    this.setState({mysteryWordId: i+1});
+                }
+            }
+            for (let k = 0; k < this.state.currentCard.length; k++) {
+                if (this.state.currentCard[this.state.mysteryWordId-1] !== this.state.currentCard[k]) {
+                    let lineThroughWord = document.getElementById("word" + (k + 1));
                     lineThroughWord.style.textDecoration = "line-through";
                 }
             }
@@ -824,8 +825,6 @@ class InGame extends React.Component {
             // console.log('polling is done');
             // console.log('by', localStorage.getItem('username'));
             this.updatePhase();
-            console.log('guess',this.state.guess);
-            console.log('phase',this.state.phaseNumber);
             if (this.state.phaseNumber === 1) {
                 // console.log('gets in phase 1');
                 if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -905,6 +904,7 @@ class InGame extends React.Component {
                 this.getGuess();
 
                 console.log('Players',this.state.players);
+                console.log('id', this.state.mysteryWordId);
             } else {
                 alert("The phase number is not in the range from 1 to 4!")
             }
