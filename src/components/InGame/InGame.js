@@ -602,22 +602,22 @@ class InGame extends React.Component {
             // }
 
             /** display clues if valid EEEEERRRRROOOOOOR FIIIIIX PLS*/
-            // for (let i=0; i < this.state.players.length; i++) {
-            //     for (let j=0; j < this.state.clues.length; j++) {
-            //         if (this.state.players[i] !== this.state.activePlayer) {
-            //             if (this.state.clues[j].playerName === this.state.players[i]) {
-            //                 let output = document.getElementById("clue" + (i + 1));
-            //                 output.textContent = this.state.clues[j].clue;
-            //             } else {
-            //                 let output = document.getElementById("clue" + (i + 1));
-            //                 output.textContent = "invalid";
-            //             }
-            //         }
-            //     }
-            // }
+            for (let i=0; i < this.state.players.length; i++) {
+                if (this.state.players[i] !== this.state.activePlayer) {
+                    for (let j=0; j < this.state.clues.length; j++) {
+                        if (this.state.clues[j].playerName === this.state.players[i]) {
+                            let output = document.getElementById("clue" + (i + 1));
+                            output.textContent = this.state.clues[j].clue;
+                            break;
+                        }
+                        let output = document.getElementById("clue" + (i + 1));
+                        output.textContent = "invalid";
+                    }
+                }
+            }
 
         } catch (error) {
-            alert(`Something went wrong while getting the valid Clues: \n${handleError(error)}`);
+            alert(`Something went wrong while getting the valid clues: \n${handleError(error)}`);
         }
     }
 
@@ -857,7 +857,6 @@ class InGame extends React.Component {
                     this.getCard();
                     this.getMysteryWord();
                     this.getPlayers();
-                    this.getValidClues();
                     this.getCluePlayers();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
@@ -865,7 +864,6 @@ class InGame extends React.Component {
                     this.getCard();
                     this.getMysteryWord();
                     this.getPlayers();
-                    this.getValidClues();
                     this.getCluePlayers();
                 }
             } else if (this.state.phaseNumber === 2) {
@@ -874,7 +872,6 @@ class InGame extends React.Component {
                     this.getCard();
                     this.getMysteryWord();
                     this.getPlayers();
-                    this.getValidClues();
                     this.getCluePlayers();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
@@ -882,7 +879,6 @@ class InGame extends React.Component {
                     this.getCard();
                     this.getMysteryWord();
                     this.getPlayers();
-                    this.getValidClues();
                     this.getCluePlayers();
                 }
             } else if (this.state.phaseNumber === 3) {
