@@ -577,21 +577,42 @@ class InGame extends React.Component {
         }
     }
 
+    // async giveClue(clue) {
+    //     try {
+    //         const requestBody = JSON.stringify({
+    //             clue: clue,
+    //             playerToken: localStorage.getItem('token')
+    //         });
+    //
+    //         console.log('requestBody for giving clue', requestBody);
+    //
+    //         const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
+    //
+    //         console.log('response from giving clue', response);
+    //
+    //     } catch (error) {
+    //         alert(`Something went wrong while trying to give the Clue: \n${handleError(error)}`)
+    //     }
+    // }
+
     async giveClue(clue) {
         try {
-            const requestBody = JSON.stringify({
-                clue: clue,
-                playerToken: localStorage.getItem('token')
-            });
+            if (clue.trim().split(" ").length === 1) {
+                const requestBody = JSON.stringify({
+                    clue: clue,
+                    playerToken: localStorage.getItem('token')
+                });
 
-            console.log('requestBody for giving clue', requestBody);
+                console.log('clue', clue);
+                console.log('token', localStorage.getItem('token'));
 
-            const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
+                const response = await api.post('/games/' + this.state.gameId + "/clues", requestBody);
 
-            console.log('response from giving clue', response);
-            
+            } else {
+                alert('Your clue has to consist of exactly one word!')
+            }
         } catch (error) {
-            alert(`Something went wrong while trying to give the Clue: \n${handleError(error)}`)
+            alert(`Something went wrong while trying to give a clue: \n${handleError(error)}`)
         }
     }
 
@@ -721,7 +742,7 @@ class InGame extends React.Component {
         if (this.state.passivePlayers.includes(playerName)) {
             if (this.state.phaseNumber === 2) {
                 //gives clue
-                this.giveClue();
+                this.giveClue(input);
             }
         }
     }
@@ -846,6 +867,11 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getValidClues();
                     this.getCluePlayers();
+
+                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
+                    console.log('getGuess',this.state.guess);
+                    console.log('GuessValidity',this.state.validGuess);
+                    console.log('ValidClues', this.state.clues);
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getCard();
@@ -853,6 +879,11 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getValidClues();
                     this.getCluePlayers();
+
+                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
+                    console.log('getGuess',this.state.guess);
+                    console.log('GuessValidity',this.state.validGuess);
+                    console.log('ValidClues', this.state.clues);
                 }
             } else if (this.state.phaseNumber === 3) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
