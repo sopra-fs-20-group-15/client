@@ -736,11 +736,7 @@ class InGame extends React.Component {
             if (this.state.passivePlayers.includes(playerName)) {
                 if (this.state.phaseNumber === 2) {
                     //gives clue
-                    for (let i = 0; i < this.state.players; i++) {
-                        if (this.state.players[i] === localStorage.getItem('username')) {
-                            this.giveClue(input);
-                        }
-                    }
+                    this.giveClue(input);
                 }
             }
         } else {
