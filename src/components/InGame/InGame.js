@@ -695,10 +695,10 @@ class InGame extends React.Component {
     }
 
     async getPlayers() {
-        const response = await api.get('/activeGames/' + localStorage.getItem('gameId'));
+        const response = await api.get('/activeGames/' + this.props.match.params.id);
 
         this.setState({
-            gameId: localStorage.getItem('gameId'),
+            gameId: this.props.match.params.id,
             players: response.data.playerNames,
             activePlayer: response.data.activePlayerName,
             passivePlayers: response.data.passivePlayerNames
