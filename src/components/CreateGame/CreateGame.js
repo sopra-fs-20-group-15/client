@@ -248,6 +248,28 @@ class CreateGame extends Component{
         }
     };
 
+    async logout() {
+        try {
+
+            const requestBody = JSON.stringify({
+                token: localStorage.getItem('token'),
+                id: localStorage.getItem('id'),
+            });
+
+            await api.put('/logout', requestBody);
+            // token shows that user is logged in -> removing it shows that he has logged out
+            localStorage.removeItem('token');
+            localStorage.removeItem('id');
+            localStorage.removeItem('username');
+
+
+            // Logout successfully worked --> navigate to the route /login
+            this.props.history.push(`/login`);
+        } catch (error) {
+            alert(`Something went wrong during the logout: \n${handleError(error)}`)
+        }
+
+    }
 
     render() {
         return (
@@ -257,7 +279,7 @@ class CreateGame extends Component{
                     <LogoutButton
                         width="255px"
                         onClick={() => {
-                            this.props.history.push('/login');
+                            this.logout();
                         }}
                     >
                         Logout

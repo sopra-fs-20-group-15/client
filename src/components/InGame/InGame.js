@@ -20,6 +20,8 @@ const GuessedCards = styled.div`
   text-align: center;
   line-height: 110px;
   color: #52ff02;
+  
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
 `;
 
 const Deck = styled.div`
@@ -33,6 +35,8 @@ const Deck = styled.div`
   font-size: 100px;
   text-align: center;
   line-height: 230px;
+  
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
 `;
 
 const ActiveCard = styled.div`
@@ -280,6 +284,7 @@ const InputField = styled.div`
   font-size: 25px;
   overflow: hidden;
   text-overflow: ellipsis;
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
 `;
 
 const Input = styled.input`
@@ -518,8 +523,6 @@ class InGame extends React.Component {
                     mysteryWordId: wordId
                 });
 
-                /** All question marks except for the ones in the place of the mystery word on the card are
-                 * crossed out. */
                 const response = await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
                 /** All words except for the mystery word on the card are crossed out. */
@@ -601,7 +604,7 @@ class InGame extends React.Component {
             //     }
             // }
 
-            /** display clues if valid EEEEERRRRROOOOOOR FIIIIIX PLS*/
+            /** display clues if valid*/
             for (let i=0; i < this.state.players.length; i++) {
                 if (this.state.players[i] !== this.state.activePlayer) {
                     for (let j=0; j < this.state.clues.length; j++) {
@@ -611,7 +614,7 @@ class InGame extends React.Component {
                             break;
                         }
                         let output = document.getElementById("clue" + (i + 1));
-                        output.textContent = "invalid";
+                        output.textContent = "Invalid Clue";
                     }
                 }
             }
@@ -648,6 +651,8 @@ class InGame extends React.Component {
                 });
             }
 
+            this.displayGuess();
+
         } catch (error) {
             alert(`Something went wrong while getting the Guess: \n${handleError(error)}`);
         }
@@ -665,6 +670,14 @@ class InGame extends React.Component {
 
         } catch (error) {
             alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+        }
+    }
+
+    async getCardAmount() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while getting the current Deck Size: \n${handleError(error)}`);
         }
     }
 
@@ -699,7 +712,6 @@ class InGame extends React.Component {
                 }
             }*/
 
-
         } catch (error) {
             alert(`Something went wrong while IM DEAD INSIDE: \n${handleError(error)}`);
         }
@@ -714,6 +726,25 @@ class InGame extends React.Component {
             activePlayer: response.data.activePlayerName,
             passivePlayers: response.data.passivePlayerNames
         });
+    }
+
+    displayGuess() {
+        /**displays guess in phase 4*/
+        if (this.state.phaseNumber === 4 && (this.state.guess !== null || this.state.guess !== "")) {
+            for (let i=0; i < this.state.players.length; i++) {
+                if (this.state.players[i] === this.state.activePlayer) {
+                    let output = document.getElementById("clue" + (i + 1));
+                    output.textContent = this.state.guess;
+                    if (this.state.validGuess === true) {
+                        let field = document.getElementById("field"+(1+i));
+                        field.style.backgroundColor = "#0900ff";
+                    } else {
+                        let field = document.getElementById("field"+(1+i));
+                        field.style.backgroundColor = "#ED0101";
+                    }
+                }
+            }
+        }
     }
 
     /** This method makes sure that the input given by the different players is triggers the corresponding effects
@@ -754,25 +785,6 @@ class InGame extends React.Component {
         // this.setState({'username': value});
         this.setState({ [key]: value });
     }
-
-    //I try to use this method to fix the timer issue
-    // switchPhase() {
-    //     let nextTimer = [15,25,30,10];
-    //     if (this.state.phaseNumber === 4) {
-    //         this.setState({
-    //             round: this.state.round + 1,
-    //             phaseNumber: 1,
-    //             timer: nextTimer[1]
-    //         });
-    //         // this.initializeTurn()
-    //     } else {
-    //         this.setState({
-    //             phaseNumber: this.state.phaseNumber + 1,
-    //             timer: nextTimer[this.state.phaseNumber + 1]
-    //         });
-    //     }
-    //     this.updatePhaseHUD(this.state.phaseNumber);
-    // }
 
     updatePhase() {
         let nextTimer = [15,25,30,10];
@@ -817,6 +829,7 @@ class InGame extends React.Component {
                     timer: nextTimer[0]
                 });
                 this.updatePhaseHUD(1);
+                this.unsignalSubmission();
             }
         }
     }
@@ -856,14 +869,12 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
-                    this.getPlayers();
                     this.getCluePlayers();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
-                    this.getPlayers();
                     this.getCluePlayers();
                 }
             } else if (this.state.phaseNumber === 2) {
@@ -871,14 +882,12 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
-                    this.getPlayers();
                     this.getCluePlayers();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
-                    this.getPlayers();
                     this.getCluePlayers();
                 }
             } else if (this.state.phaseNumber === 3) {
@@ -898,26 +907,11 @@ class InGame extends React.Component {
                     this.getValidClues();
                     this.getCluePlayers();
                     this.getGuess();
-
-                    console.log('cluePlayers',this.state.passivePlayersCluesGiven);
-                    console.log('getGuess',this.state.guess);
-                    console.log('GuessValidity',this.state.validGuess);
-                    console.log('ValidClues', this.state.clues);
-
-                    console.log('passivePlayers',this.state.passivePlayers);
-                    console.log('passivePlayersCluesGiven',this.state.passivePlayersCluesGiven[0]['playerName']==="Moznura");
-                    console.log('username',localStorage.getItem('username'));
-                    console.log('Players',this.state.players);
-                    console.log('guess',this.state.guess)
                 }
             } else if (this.state.phaseNumber === 4) {
                 this.getCard();
                 this.getMysteryWord();
-                this.getValidClues();
                 this.getGuess();
-
-                console.log('Players',this.state.players);
-                console.log('id', this.state.mysteryWordId);
             } else {
                 alert("The phase number is not in the range from 1 to 4!")
             }
@@ -983,14 +977,14 @@ class InGame extends React.Component {
                         {this.state.players.length>=2 ? (
                         <Player style={{marginTop:"-8%", marginLeft:"20%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>2</GuessedCardsField>
-                            <ScoreField>969</ScoreField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                            <ScoreField></ScoreField>
                             {this.state.players[1] !== this.state.activePlayer ?
                                 <NameField>2. {this.state.players[1]}</NameField> :
                                 <NameFieldActivePlayer>2. {this.state.players[1]}</NameFieldActivePlayer>}
                             <InputField>
-                                {this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[1]) ? (
-                                    <Output id={"clue2"}>{this.state.player2Input}</Output>
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[1])) || this.state.phaseNumber === 4 ? (
+                                    <Output id={"clue2"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player2Input', e.target.value);}}/>)
@@ -1006,14 +1000,14 @@ class InGame extends React.Component {
                         {this.state.players.length>=3 ? (
                         <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>0</GuessedCardsField>
-                            <ScoreField>9</ScoreField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                            <ScoreField></ScoreField>
                             {this.state.players[2] !== this.state.activePlayer ?
                                 <NameField>3. {this.state.players[2]}</NameField> :
                                 <NameFieldActivePlayer>3. {this.state.players[2]}</NameFieldActivePlayer>}
                             <InputField>
-                                {this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[2]) ? (
-                                    <Output id={"clue3"}>{this.state.player3Input}</Output>
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[2])) || this.state.phaseNumber === 4 ? (
+                                    <Output id={"clue3"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player3Input', e.target.value);}}/>)
@@ -1038,8 +1032,8 @@ class InGame extends React.Component {
                                 <NameField>4. {this.state.players[3]}</NameField> :
                                 <NameFieldActivePlayer>4. {this.state.players[3]}</NameFieldActivePlayer>}
                             <InputField>
-                                {this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[3]) ? (
-                                    <Output id={"clue4"}>{this.state.player4Input}</Output>
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[3])) || this.state.phaseNumber === 4 ? (
+                                    <Output id={"clue4"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player4Input', e.target.value);}}/>)
@@ -1061,8 +1055,8 @@ class InGame extends React.Component {
                                     <NameField>5. {this.state.players[4]}</NameField> :
                                     <NameFieldActivePlayer>5. {this.state.players[4]}</NameFieldActivePlayer>}
                                 <InputField>
-                                    {this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[4]) ? (
-                                        <Output id={"clue5"}>{this.state.player5Input}</Output>
+                                    {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[4])) || this.state.phaseNumber === 4 ? (
+                                        <Output id={"clue5"}></Output>
                                     ):(
                                         <Input placeholder="Enter here.." onChange=
                                             {e => {this.handleInputChange('player5Input', e.target.value);}}/>)
@@ -1081,15 +1075,15 @@ class InGame extends React.Component {
                             <BoardContainer>
                                 <GuessedCards style={{position:"absolute",left:"1.5%" ,bottom:"1%"}}></GuessedCards>
                                 <GuessedCards style={{position:"absolute",left:"0.75%" ,bottom:"2%"}}></GuessedCards>
-                                <GuessedCards style={{position:"absolute", bottom:"3%"}}> 3 </GuessedCards>
+                                <GuessedCards style={{position:"absolute", bottom:"3.5%"}}> 3 </GuessedCards>
                                 <Deck style={{position:"absolute", bottom:"1%", left:"20%"}}></Deck>
                                 <Deck style={{position:"absolute", bottom:"2%", left:"19%"}}></Deck>
-                                <Deck style={{position: "absolute", bottom: "3%", left: "18%"}}>
+                                <Deck style={{position: "absolute", bottom: "3.5%", left: "18%"}}>
                                     {this.state.round === 1 ? <DrawCard id={"drawCard"} style={{fontsize:"14px"}} onClick={() => this.initializeTurn()}> Host: Draw Card and determine active player! </DrawCard>
                                     : <DrawCard id={"drawCard"} onClick={() => this.initializeTurn()}> Draw Card! </DrawCard>}
                                     {this.state.remainingCards}
                                 </Deck>
-                                {this.state.activePlayer !== localStorage.getItem('username') ? (
+                                {this.state.activePlayer !== localStorage.getItem('username') || this.state.phaseNumber === 4 ? (
                                 <ActiveCard id={"activeCard"} style={{display:"none"}}>
                                         <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
                                         <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
@@ -1132,8 +1126,8 @@ class InGame extends React.Component {
                                 <NameField>6. {this.state.players[5]}</NameField> :
                                 <NameFieldActivePlayer>6. {this.state.players[5]}</NameFieldActivePlayer>}
                             <InputField>
-                                {this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[5]) ? (
-                                    <Output id={"clue6"}>{this.state.player6Input}</Output>
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[5])) || this.state.phaseNumber === 4 ? (
+                                    <Output id={"clue6"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player6Input', e.target.value);}}/>)
@@ -1155,8 +1149,8 @@ class InGame extends React.Component {
                                 <NameField>7. {this.state.players[6]}</NameField> :
                                 <NameFieldActivePlayer>7. {this.state.players[6]}</NameFieldActivePlayer>}
                             <InputField>
-                                {this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[6]) ? (
-                                    <Output id={"clue7"}>{this.state.player7Input}</Output>
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[6])) || this.state.phaseNumber === 4 ? (
+                                    <Output id={"clue7"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player7Input', e.target.value);}}/>)
@@ -1180,8 +1174,8 @@ class InGame extends React.Component {
                                 <NameField>1. {this.state.players[0]}</NameField> :
                                 <NameFieldActivePlayer>1. {this.state.players[0]}</NameFieldActivePlayer>}
                             <InputField>
-                                {this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[0]) ? (
-                                    <Output id={"clue1"}>{this.state.player1Input}</Output>
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[0])) || this.state.phaseNumber === 4 ? (
+                                    <Output id={"clue1"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player1Input', e.target.value);}}/>)
