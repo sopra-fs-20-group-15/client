@@ -614,7 +614,7 @@ class InGame extends React.Component {
                             break;
                         }
                         let output = document.getElementById("clue" + (i + 1));
-                        output.textContent = "Invalid Clue";
+                        output.textContent = "'invalid clue'";
                     }
                 }
             }
