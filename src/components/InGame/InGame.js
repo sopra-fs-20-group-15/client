@@ -851,15 +851,13 @@ class InGame extends React.Component {
     handlePolling = async () => {
         try {
             this.updatePhase();
+            console.log('Phase', this.state.phaseNumber);
             if (this.state.phaseNumber === 1) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
                     this.getCluePlayers();
-
-                    console.log('mysteryWord',this.state.mysteryWord);
-                    console.log('mysteryWordId',this.state.mysteryWordId);
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getPlayers();
@@ -1088,7 +1086,7 @@ class InGame extends React.Component {
                                     : <DrawCard id={"drawCard"} onClick={() => this.initializeTurn()}> Draw Card! </DrawCard>}
                                     {this.state.remainingCards}
                                 </Deck>
-                                {this.state.activePlayer !== localStorage.getItem('username') ? (
+                                {this.state.activePlayer !== localStorage.getItem('username') || this.state.phaseNumber === 4 ? (
                                 <ActiveCard id={"activeCard"} style={{display:"none"}}>
                                         <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
                                         <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
