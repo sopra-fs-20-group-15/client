@@ -238,6 +238,8 @@ class LobbyOverview extends Component {
             await api.put('/logout', requestBody);
             // token shows that user is logged in -> removing it shows that he has logged out
             localStorage.removeItem('token');
+            localStorage.removeItem('id');
+            localStorage.removeItem('username');
 
 
             // Logout successfully worked --> navigate to the route /login
