@@ -673,6 +673,14 @@ class InGame extends React.Component {
         }
     }
 
+    async getCardAmount() {
+        try {
+
+        } catch (error) {
+            alert(`Something went wrong while getting the current Deck Size: \n${handleError(error)}`);
+        }
+    }
+
     async deleteGame() {
         try {
 
@@ -969,8 +977,8 @@ class InGame extends React.Component {
                         {this.state.players.length>=2 ? (
                         <Player style={{marginTop:"-8%", marginLeft:"20%"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>2</GuessedCardsField>
-                            <ScoreField>969</ScoreField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                            <ScoreField></ScoreField>
                             {this.state.players[1] !== this.state.activePlayer ?
                                 <NameField>2. {this.state.players[1]}</NameField> :
                                 <NameFieldActivePlayer>2. {this.state.players[1]}</NameFieldActivePlayer>}
@@ -992,8 +1000,8 @@ class InGame extends React.Component {
                         {this.state.players.length>=3 ? (
                         <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}>
                             <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>0</GuessedCardsField>
-                            <ScoreField>9</ScoreField>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
+                            <ScoreField></ScoreField>
                             {this.state.players[2] !== this.state.activePlayer ?
                                 <NameField>3. {this.state.players[2]}</NameField> :
                                 <NameFieldActivePlayer>3. {this.state.players[2]}</NameFieldActivePlayer>}
