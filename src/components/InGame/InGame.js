@@ -523,8 +523,6 @@ class InGame extends React.Component {
                     mysteryWordId: wordId
                 });
 
-                /** All question marks except for the ones in the place of the mystery word on the card are
-                 * crossed out. */
                 const response = await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
                 /** All words except for the mystery word on the card are crossed out. */
