@@ -856,14 +856,15 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
-                    this.getPlayers();
                     this.getCluePlayers();
+
+                    console.log('mysteryWord',this.state.mysteryWord);
+                    console.log('mysteryWordId',this.state.mysteryWordId);
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
-                    this.getPlayers();
                     this.getCluePlayers();
                 }
             } else if (this.state.phaseNumber === 2) {
@@ -871,14 +872,12 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
-                    this.getPlayers();
                     this.getCluePlayers();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
-                    this.getPlayers();
                     this.getCluePlayers();
                 }
             } else if (this.state.phaseNumber === 3) {
@@ -913,7 +912,7 @@ class InGame extends React.Component {
             } else if (this.state.phaseNumber === 4) {
                 this.getCard();
                 this.getMysteryWord();
-                this.getValidClues();
+                // this.getValidClues();
                 this.getGuess();
 
                 console.log('Players',this.state.players);
