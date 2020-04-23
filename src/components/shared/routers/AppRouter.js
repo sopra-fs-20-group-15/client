@@ -12,6 +12,8 @@ import InGame from "../../InGame/InGame";
 import {LobbyGuard} from "../routeProtectors/LobbyGuard.js";
 import Lobby from "../../Lobby/Lobby";
 import {CreateGameGuard} from "../routeProtectors/CreateGameGuard.js";
+import Leaderboard from "../../Leaderboard/Leaderboard";
+import {LeaderboardGuard} from "../routeProtectors/LeaderboardGuard.js";
 
 /**
  * Main router of your application.
@@ -67,6 +69,14 @@ class AppRouter extends React.Component {
                                 <LobbyGuard>
                                     <Lobby/>
                                 </LobbyGuard>
+                            )}
+                        />
+                        <Route
+                            path="/leaderboard"
+                            render={() => (
+                                <LeaderboardGuard>
+                                    <Leaderboard/>
+                                </LeaderboardGuard>
                             )}
                         />
                         <Route
