@@ -34,8 +34,23 @@ class Timer extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            seconds: this.props.seconds
+            seconds: this.props.seconds,
         };
+    }
+
+    async updatePhase(phaseNumber) {
+        if (phaseNumber === 1) {
+            this.props.determineMysteryWord(Math.floor(Math.random() * 5) + 1);
+        } else if (phaseNumber === 2) {
+            console.log('gets in 2');
+            this.props.giveClue("'invalid_clue'");
+        } else if (phaseNumber === 3) {
+            this.props.setGuess("'too_slow'");
+        } else if (phaseNumber === 4) {
+
+        } else {
+            alert('Somehow you have managed to not be in any phase at all...')
+        }
     }
 
     /** Is it any problem that I removed the clearInterval()?
@@ -50,9 +65,9 @@ class Timer extends Component{
                 }))
             }
 
-            /*if (seconds === 0) {
-                clearInterval(this.myInterval)
-            }*/
+            if (seconds === 0) {
+                setTimeout(() => this.updatePhase(this.props.phaseNumber), 3000)
+            }
         }, 1000)
     }
 
@@ -63,6 +78,12 @@ class Timer extends Component{
         // conditional statement prevents infinite loop
         if (this.props.seconds !== prevProps.seconds) {
             this.setState({ seconds: this.props.seconds });
+        }
+        if (this.props.currentCard !== prevProps.currentCard) {
+            this.setState({currentCard: this.props.currentCard});
+        }
+        if (this.props.activePlayer !== prevProps.activePlayer) {
+            this.setState({activePlayer: this.props.activePlayer});
         }
     }
 

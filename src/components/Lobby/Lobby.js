@@ -173,32 +173,32 @@ class Lobby extends React.Component {
     async terminateGame(gameSetUpId) {
         try {
 
-            const formData = new FormData();
-            formData.append('token', localStorage.getItem('token'));
+            // const formData = new FormData();
+            // formData.append('token', localStorage.getItem('token'));
+            //
+            // const requestOptions = {
+            //     method: 'DELETE',
+            //     body: formData
+            // };
+            //
+            // // Note: I'm using arrow functions inside the `.fetch()` method.
+            // // This makes it so you don't have to bind component functions like `setState`
+            // // to the component.
+            // fetch("http://localhost:8080/api/gameSetUps/" + gameSetUpId, requestOptions).then((response) => {
+            //     return response.json();
+            // }).then((result) => {
+            //     // do what you want with the response here
+            // });
 
-            const requestOptions = {
-                method: 'DELETE',
-                body: formData
-            };
-
-            // Note: I'm using arrow functions inside the `.fetch()` method.
-            // This makes it so you don't have to bind component functions like `setState`
-            // to the component.
-            fetch("http://localhost:8080/api/gameSetUps/" + gameSetUpId, requestOptions).then((response) => {
-                return response.json();
-            }).then((result) => {
-                // do what you want with the response here
+            const requestBody = JSON.stringify({
+                token: localStorage.getItem('token')
             });
 
-            // const requestBody = JSON.stringify({
-            //     token: localStorage.getItem('token')
-            // });
-            //
-            // await api.delete('/gameSetUps/'+this.props.match.params.id, requestBody);
+            await api.delete('/gameSetUps/'+this.props.match.params.id, requestBody);
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
-            alert(`Something went wrong while killing the Lobby qwq: \n${handleError(error)}`);
+            alert(`Something went wrong while terminating the game: \n${handleError(error)}`);
         }
     }
 
