@@ -39,22 +39,21 @@ class Timer extends Component{
     }
 
     async updatePhase(phaseNumber) {
+        console.log('phase number (timer)', this.props.phaseNumber);
         if (phaseNumber === 1) {
             this.props.determineMysteryWord(Math.floor(Math.random() * 5) + 1);
         } else if (phaseNumber === 2) {
-            console.log('gets in 2');
+            console.log('gets in');
             this.props.giveClue("'invalid_clue'");
         } else if (phaseNumber === 3) {
             this.props.setGuess("'too_slow'");
         } else if (phaseNumber === 4) {
-
+            this.props.gameHasEnded();
         } else {
             alert('Somehow you have managed to not be in any phase at all...')
         }
     }
 
-    /** Is it any problem that I removed the clearInterval()?
-     * -> How else fix the problem of timer getting stuck? */
     async componentDidMount() {
         this.myInterval = setInterval(() => {
             const{seconds} = this.state;
@@ -66,21 +65,18 @@ class Timer extends Component{
             }
 
             if (seconds === 0) {
-                setTimeout(() => this.updatePhase(this.props.phaseNumber), 3000)
+                setTimeout(() => this.updatePhase(this.props.phaseNumber), 100);
             }
         }, 1000)
     }
 
-    /** This method makes sure that if this.props.seconds changes, the state of the timer is changed accordingly.
+    /** This method makes sure that if the props of the timer change, the state of the timer is changed accordingly.
      * Since all phases have a different duration, the state always changes, and therefore (since every state change
      * triggers a re-rendering) the Timer component is re-rendered every time. */
     componentDidUpdate(prevProps) {
         // conditional statement prevents infinite loop
         if (this.props.seconds !== prevProps.seconds) {
             this.setState({ seconds: this.props.seconds });
-        }
-        if (this.props.currentCard !== prevProps.currentCard) {
-            this.setState({currentCard: this.props.currentCard});
         }
         if (this.props.activePlayer !== prevProps.activePlayer) {
             this.setState({activePlayer: this.props.activePlayer});
@@ -108,6 +104,7 @@ class Timer extends Component{
                     ? <Message> Times up! </Message>
                     : <Seconds> {seconds < 10 ? `0${seconds}` : `${seconds}`} </Seconds>
                 }
+                {console.log('seconds', this.state.seconds)}
             </div>
         );
     }
