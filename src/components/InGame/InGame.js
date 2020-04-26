@@ -707,10 +707,24 @@ class InGame extends React.Component {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/statistics');
 
-            console.log('lolol',response.data[0].playerName);
-            console.log('lol',response.data.length);
-            console.log('lolo',this.state.players);
+            if (response.status === 200) {
 
+                let scoreList = [0,0,0,0,0,0,0];
+                let guessedCardsList = [0,0,0,0,0,0,0];
+
+                for (let i=0 ; i<this.state.players.length ; i++) {
+                    for (let k=0 ; k<response.data.length ; k++) {
+                        if (this.state.players[i] === response.data[k].playerName) {
+                        scoreList[i] = response.data[k].score;
+                        guessedCardsList[i] = response.data[k].numberOfCorrectlyGuessedMysteryWords;
+                        }
+                    }
+                }
+                this.setState({
+                   scores: scoreList,
+                   guessedCards: guessedCardsList
+                });
+            }
         } catch (error) {
             alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
         }
@@ -1046,9 +1060,9 @@ class InGame extends React.Component {
                         {/*Player 2*/}
                         {this.state.players.length>=2 ? (
                         <Player style={{marginTop:"-8%", marginLeft:"20%"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
-                            <ScoreField></ScoreField>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[1]}</GuessedCardsField>
+                            <ScoreField>{this.state.scores[1]}</ScoreField>
                             {this.state.players[1] !== this.state.activePlayer ?
                                 <NameField>2. {this.state.players[1]}</NameField> :
                                 <NameFieldActivePlayer>2. {this.state.players[1]}</NameFieldActivePlayer>}
@@ -1069,9 +1083,9 @@ class InGame extends React.Component {
                         {/*Player 3*/}
                         {this.state.players.length>=3 ? (
                         <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
-                            <ScoreField></ScoreField>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[2]}</GuessedCardsField>
+                            <ScoreField>{this.state.scores[2]}</ScoreField>
                             {this.state.players[2] !== this.state.activePlayer ?
                                 <NameField>3. {this.state.players[2]}</NameField> :
                                 <NameFieldActivePlayer>3. {this.state.players[2]}</NameFieldActivePlayer>}
@@ -1095,9 +1109,9 @@ class InGame extends React.Component {
                         {/*Player 4*/}
                         {this.state.players.length>=4 ? (
                         <Player style={{marginTop:"2%", marginLeft:"0%"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
-                            <ScoreField></ScoreField>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[3]}</GuessedCardsField>
+                            <ScoreField>{this.state.scores[3]}</ScoreField>
                             {this.state.players[3] !== this.state.activePlayer ?
                                 <NameField>4. {this.state.players[3]}</NameField> :
                                 <NameFieldActivePlayer>4. {this.state.players[3]}</NameFieldActivePlayer>}
@@ -1118,9 +1132,9 @@ class InGame extends React.Component {
                         {/*Player 5*/}
                         {this.state.players.length>=5 ? (
                             <Player style={{marginTop:"2%", marginRight:"0%", float:"right"}}>
-                                <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                                <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
-                                <ScoreField></ScoreField>
+                                <GuessedCardsField style={{top:"10%", left:"8%"}}/>
+                                <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[4]}</GuessedCardsField>
+                                <ScoreField>{this.state.scores[4]}</ScoreField>
                                 {this.state.players[4] !== this.state.activePlayer ?
                                     <NameField>5. {this.state.players[4]}</NameField> :
                                     <NameFieldActivePlayer>5. {this.state.players[4]}</NameFieldActivePlayer>}
@@ -1143,11 +1157,14 @@ class InGame extends React.Component {
                     <TableContainer>
                         <Table>
                             <BoardContainer>
-                                <GuessedCards style={{position:"absolute",left:"1.5%" ,bottom:"1%"}}></GuessedCards>
-                                <GuessedCards style={{position:"absolute",left:"0.75%" ,bottom:"2%"}}></GuessedCards>
-                                <GuessedCards style={{position:"absolute", bottom:"3.5%"}}> 3 </GuessedCards>
-                                <Deck style={{position:"absolute", bottom:"1%", left:"20%"}}></Deck>
-                                <Deck style={{position:"absolute", bottom:"2%", left:"19%"}}></Deck>
+                                <GuessedCards style={{position:"absolute",left:"1.5%" ,bottom:"1%"}}/>
+                                <GuessedCards style={{position:"absolute",left:"0.75%" ,bottom:"2%"}}/>
+                                <GuessedCards style={{position:"absolute", bottom:"3.5%"}}>
+                                    {this.state.guessedCards[0]+this.state.guessedCards[1]+this.state.guessedCards[2]+
+                                    this.state.guessedCards[3]+this.state.guessedCards[4]+this.state.guessedCards[5]+this.state.guessedCards[6]}
+                                </GuessedCards>
+                                <Deck style={{position:"absolute", bottom:"1%", left:"20%"}}/>
+                                <Deck style={{position:"absolute", bottom:"2%", left:"19%"}}/>
                                 <Deck style={{position: "absolute", bottom: "3.5%", left: "18%"}}>
                                     {this.state.remainingCards}
                                 </Deck>
@@ -1187,9 +1204,9 @@ class InGame extends React.Component {
                         {/*Player 6*/}
                         {this.state.players.length>=6 ? (
                         <Player style={{marginTop:"2%", marginLeft:"2%"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
-                            <ScoreField></ScoreField>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[5]}</GuessedCardsField>
+                            <ScoreField>{this.state.scores[5]}</ScoreField>
                             {this.state.players[5] !== this.state.activePlayer ?
                                 <NameField>6. {this.state.players[5]}</NameField> :
                                 <NameFieldActivePlayer>6. {this.state.players[5]}</NameFieldActivePlayer>}
@@ -1210,9 +1227,9 @@ class InGame extends React.Component {
                         {/*Player 7*/}
                         {this.state.players.length>=7 ? (
                         <Player style={{marginTop:"2%", marginRight:"2%", float:"right"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
-                            <ScoreField></ScoreField>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[6]}</GuessedCardsField>
+                            <ScoreField>{this.state.scores[6]}</ScoreField>
                             {this.state.players[6] !== this.state.activePlayer ?
                                 <NameField>7. {this.state.players[6]}</NameField> :
                                 <NameFieldActivePlayer>7. {this.state.players[6]}</NameFieldActivePlayer>}
@@ -1235,9 +1252,9 @@ class InGame extends React.Component {
                         {/*Player 1*/}
                         {this.state.players.length>=1 ? (
                         <Player style={{marginTop:"1%", marginLeft:"38%"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}></GuessedCardsField>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}></GuessedCardsField>
-                            <ScoreField></ScoreField>
+                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
+                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[0]}</GuessedCardsField>
+                            <ScoreField>{this.state.scores[0]}</ScoreField>
                             {this.state.players[0] !== this.state.activePlayer ?
                                 <NameField>1. {this.state.players[0]}</NameField> :
                                 <NameFieldActivePlayer>1. {this.state.players[0]}</NameFieldActivePlayer>}
