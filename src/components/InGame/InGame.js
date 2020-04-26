@@ -444,13 +444,13 @@ class InGame extends React.Component {
             validGuess: false,
             scores: null,
             timer: 15,
+            remainingCards: 13,
+            guessedCards: 0,
             //frontend variables
             clueNumber: null,
             round: 1,
             phaseNumber: 1,
             phases: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
-            remainingCards: 13,
-            guessedCards: 0,
             player1Input: null,
             player2Input: null,
             player3Input: null,
@@ -720,7 +720,14 @@ class InGame extends React.Component {
 
     async getCardAmount() {
         try {
+            const response = await api.get('/games/' + this.state.gameId + '/cards/remainder/' + localStorage.getItem('token'));
 
+            if (response.status === 200) {
+                this.setState({
+                    remainingCards: response.data.cardsOnStack
+                });
+            }
+            
         } catch (error) {
             alert(`Something went wrong while getting the current Deck Size: \n${handleError(error)}`);
         }
@@ -916,12 +923,14 @@ class InGame extends React.Component {
                     this.getCard();
                     this.getMysteryWord();
                     this.getCluePlayers();
+                    this.getCardAmount();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
                     this.getCluePlayers();
+                    this.getCardAmount();
                 }
             } else if (this.state.phaseNumber === 2) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -929,12 +938,14 @@ class InGame extends React.Component {
                     this.getCard();
                     this.getMysteryWord();
                     this.getCluePlayers();
+                    this.getCardAmount();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getPlayers();
                     this.getCard();
                     this.getMysteryWord();
                     this.getCluePlayers();
+                    this.getCardAmount();
                 }
             } else if (this.state.phaseNumber === 3) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -945,6 +956,7 @@ class InGame extends React.Component {
                     this.getValidClues();
                     this.getCluePlayers();
                     this.getGuess();
+                    this.getCardAmount();
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getCard();
@@ -953,12 +965,16 @@ class InGame extends React.Component {
                     this.getValidClues();
                     this.getCluePlayers();
                     this.getGuess();
+                    this.getCardAmount();
                 }
             } else if (this.state.phaseNumber === 4) {
                 this.getCard();
                 this.getMysteryWord();
                 this.getGuess();
                 this.getPlayers();
+                this.getCardAmount();
+
+                console.log('remaining Crads',this.state.remainingCards);
             } else {
                 alert("The phase number is not in the range from 1 to 4!")
             }
