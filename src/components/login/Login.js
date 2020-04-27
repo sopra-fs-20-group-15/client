@@ -27,10 +27,10 @@ const Form = styled.div`
   border: 1px solid rgba(203, 189, 140, 0.95);
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   padding-left: 125px;
-  padding-right: 150px;
+  padding-right: 125px;
   border-radius: 20px;
   background: #E4DAA5;
 `;
@@ -39,7 +39,7 @@ const background = {
   backgroundImage: "url(" + TriangleBackground + ")"
 };
 
-const InputField = styled.input`
+const UsernameInputField = styled.input`
   mix-blend-mode: normal;
   border: 1px solid rgba(203, 189, 140, 0.95);
   box-sizing: border-box;
@@ -47,10 +47,14 @@ const InputField = styled.input`
   &::placeholder {
     color: rgba(256, 256, 200, 0.3);
   }
+  position: relative;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 30px; 
   height: 60px;
   padding-left: 45px;
   margin-left: -4px;
-  border: none;
   border-radius: 20px;
   margin-bottom: 20px;
   background: rgba(203, 189, 140, 0.95);
@@ -68,9 +72,31 @@ const ButtonGroup = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  border-radius: 20px;
   margin-top: 20px;
 `;
 
+const PasswordInputField = styled.input`
+  mix-blend-mode: normal;
+  border: 1px solid rgba(203, 189, 140, 0.95);
+  box-sizing: border-box;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  &::placeholder {
+    color: rgba(256, 256, 200, 0.3);
+  }
+  position: relative;
+  left: 0px;
+  right: 0px;
+  top: 30px;
+  bottom: 30px;
+  height: 60px;
+  padding-left: 45px;
+  margin-left: -4px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  background: rgba(203, 189, 140, 0.95);
+  color: brown;
+`;
 
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
@@ -154,13 +180,13 @@ class Login extends React.Component {
           <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
         <FormContainer>
           <Form>
-            <InputField
+            <UsernameInputField
               placeholder="Username"
               onChange={e => {
                 this.handleInputChange('username', e.target.value);
               }}
             />
-            <InputField
+            <PasswordInputField
                 placeholder="Password"
                 onChange={e => {
                   this.handleInputChange('password', e.target.value);
