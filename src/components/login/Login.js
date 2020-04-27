@@ -3,15 +3,21 @@ import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
-import { Button } from '../../views/design/Button';
+import {Button, LogoutButton} from '../../views/design/Button';
+import TriangleBackground from "../../views/pictures/TriangleBackground.png";
+import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 
 
-const FormContainer = styled.div`
-  margin-top: 2em;
+const FormContainer = styled.div` 
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 300px;
+ 
+  position: absolute;
+  left: 380px;
+  right: 380px;
+  top: 260px;
+  bottom: 200px;
   justify-content: center;
 `;
 
@@ -19,41 +25,88 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 60%;
-  height: 420px;
-  font-size: 16px;
-  font-weight: 300;
-  padding-left: 37px;
-  padding-right: 37px;
-  border-radius: 5px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  width: 100%;
+  height: 316px;
+  mix-blend-mode: normal;
+  border: 1px solid rgba(203, 189, 140, 0.95);
+  box-sizing: border-box;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 20px;
+  font-weight: 700;
+  padding-left: 125px;
+  padding-right: 125px;
+  border-radius: 20px;
+  background: #E4DAA5;
 `;
 
-const InputField = styled.input`
+const background = {
+  backgroundImage: "url(" + TriangleBackground + ")"
+};
+
+const UsernameInputField = styled.input`
+  mix-blend-mode: normal;
+  border: 1px solid rgba(203, 189, 140, 0.95);
+  box-sizing: border-box;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   &::placeholder {
-    color: rgba(255, 255, 255, 1.0);
+    color: rgba(256, 256, 200, 0.3);
   }
-  height: 35px;
-  padding-left: 15px;
+  position: relative;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 30px; 
+  height: 60px;
+  padding-left: 45px;
   margin-left: -4px;
-  border: none;
   border-radius: 20px;
   margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(203, 189, 140, 0.95);
+  color: brown;
 `;
 
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
-  text-transform: uppercase;
+
+const ButtonGroup = styled.div`
+  position: absolute;
+  bottom: 10%;
+  left: 30%;
+  right: 30%;
+`;
+
+const RulesButtonContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  justify-content: center;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  border-radius: 20px;
   margin-top: 20px;
+`;
+
+const PasswordInputField = styled.input`
+  mix-blend-mode: normal;
+  border: 1px solid rgba(203, 189, 140, 0.95);
+  box-sizing: border-box;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  &::placeholder {
+    color: rgba(256, 256, 200, 0.3);
+  }
+  position: relative;
+  left: 0px;
+  right: 0px;
+  top: 30px;
+  bottom: 30px;
+  height: 60px;
+  padding-left: 45px;
+  margin-left: -4px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  background: rgba(203, 189, 140, 0.95);
+  color: brown;
 `;
 
 /**
@@ -112,6 +165,14 @@ class Login extends React.Component {
     }
   }
 
+  async showRules() {
+      try {
+          this.props.history.push("/rules")
+      } catch (error) {
+          alert("Something went wrong while trying to access the rules")
+      }
+  }
+
   /**
    *  Every time the user enters something in the input field, the state gets updated.
    * @param key (the key of the state for identifying the field that needs to be updated)
@@ -134,46 +195,57 @@ class Login extends React.Component {
 
   render() {
     return (
-      <BaseContainer>
-        <FormContainer>
+      <BaseContainer  style={background}>
+          <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
+          <RulesButtonContainer>
+              <LogoutButton
+                  width="255px"
+                  onClick={() => {
+                      this.showRules();
+                  }}
+              >
+                  Rules
+              </LogoutButton>
+          </RulesButtonContainer>
+          <FormContainer>
           <Form>
-            <Label>Username</Label>
-            <InputField
-              placeholder="Enter here.."
+            <UsernameInputField
+              placeholder="Username"
               onChange={e => {
                 this.handleInputChange('username', e.target.value);
               }}
             />
-            <Label>Password</Label>
-            <InputField
-                placeholder="Enter here.."
+            <PasswordInputField
+                placeholder="Password"
                 onChange={e => {
                   this.handleInputChange('password', e.target.value);
                 }}
             />
-            <ButtonContainer>
-              <Button
-                  disabled={!this.state.username || !this.state.password}
-                  width="50%"
-                  onClick={() => {
-                    this.login();
-                  }}
-              >
-                Login
-              </Button>
-            </ButtonContainer>
-            <ButtonContainer>
-              <Button
-                width="50%"
-                onClick={() => {
-                  this.register();
-                }}
-              >
-                Back to Registration
-              </Button>
-            </ButtonContainer>
           </Form>
         </FormContainer>
+          <ButtonGroup>
+              <ButtonContainer>
+                  <Button
+                      disabled={!this.state.username || !this.state.password}
+                      width="50%"
+                      onClick={() => {
+                          this.login();
+                      }}
+                  >
+                      Login
+                  </Button>
+              </ButtonContainer>
+              <ButtonContainer>
+                  <Button
+                      width="50%"
+                      onClick={() => {
+                          this.register();
+                      }}
+                  >
+                      Back to Registration
+                  </Button>
+              </ButtonContainer>
+          </ButtonGroup>
       </BaseContainer>
     );
   }
