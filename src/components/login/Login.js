@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
-import { Button } from '../../views/design/Button';
+import {Button, LogoutButton} from '../../views/design/Button';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 
@@ -67,6 +67,13 @@ const ButtonGroup = styled.div`
   bottom: 15%;
   left: 30%;
   right: 30%;
+`;
+
+const RulesButtonContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  justify-content: center;
 `;
 
 const ButtonContainer = styled.div`
@@ -154,6 +161,14 @@ class Login extends React.Component {
     }
   }
 
+  async showRules() {
+      try {
+          this.props.history.push("/rules")
+      } catch (error) {
+          alert("Something went wrong while trying to access the rules")
+      }
+  }
+
   /**
    *  Every time the user enters something in the input field, the state gets updated.
    * @param key (the key of the state for identifying the field that needs to be updated)
@@ -178,7 +193,17 @@ class Login extends React.Component {
     return (
       <BaseContainer  style={background}>
           <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
-        <FormContainer>
+          <RulesButtonContainer>
+              <LogoutButton
+                  width="255px"
+                  onClick={() => {
+                      this.showRules();
+                  }}
+              >
+                  Rules
+              </LogoutButton>
+          </RulesButtonContainer>
+          <FormContainer>
           <Form>
             <UsernameInputField
               placeholder="Username"
