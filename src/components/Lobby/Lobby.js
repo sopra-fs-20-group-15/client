@@ -235,7 +235,7 @@ class Lobby extends React.Component {
 
                 <ButtonGroup>
                     {/*Checks if the Player's token is equal to the Host's (but not yet tho)*/}
-                    {localStorage.getItem('username') == this.state.hostName ? (
+                    {localStorage.getItem('username') === this.state.hostName ? (
                         <ButtonContainer>
                             <Button
                                 style={{width:"50%",marginRight:"10px"}}

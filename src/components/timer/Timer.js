@@ -39,11 +39,9 @@ class Timer extends Component{
     }
 
     async updatePhase(phaseNumber) {
-        console.log('phase number (timer)', this.props.phaseNumber);
         if (phaseNumber === 1) {
             this.props.determineMysteryWord(Math.floor(Math.random() * 5) + 1);
         } else if (phaseNumber === 2) {
-            console.log('gets in');
             this.props.giveClue("'invalid_clue'");
         } else if (phaseNumber === 3) {
             this.props.setGuess("'too_slow'");
@@ -78,9 +76,6 @@ class Timer extends Component{
         if (this.props.seconds !== prevProps.seconds) {
             this.setState({ seconds: this.props.seconds });
         }
-        if (this.props.activePlayer !== prevProps.activePlayer) {
-            this.setState({activePlayer: this.props.activePlayer});
-        }
     }
 
     /** necessary? */
@@ -104,7 +99,6 @@ class Timer extends Component{
                     ? <Message> Times up! </Message>
                     : <Seconds> {seconds < 10 ? `0${seconds}` : `${seconds}`} </Seconds>
                 }
-                {console.log('seconds', this.state.seconds)}
             </div>
         );
     }
