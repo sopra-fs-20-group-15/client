@@ -8,12 +8,16 @@ import TriangleBackground from "../../views/pictures/TriangleBackground.png";
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 
 
-const FormContainer = styled.div`
-  margin-top: 2em;
+const FormContainer = styled.div` 
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 780px;
+ 
+  position: absolute;
+  left: 380px;
+  right: 380px;
+  top: 260px;
+  bottom: 200px;
   justify-content: center;
 `;
 
@@ -21,7 +25,7 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 52%;
+  width: 100%;
   height: 316px;
   mix-blend-mode: normal;
   border: 1px solid rgba(203, 189, 140, 0.95);
@@ -64,7 +68,7 @@ const UsernameInputField = styled.input`
 
 const ButtonGroup = styled.div`
   position: absolute;
-  bottom: 15%;
+  bottom: 10%;
   left: 30%;
   right: 30%;
 `;
