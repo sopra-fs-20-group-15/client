@@ -175,6 +175,8 @@ class CreateGame extends Component{
 
             const response = await api.post('/games', requestBody);
 
+            console.log('response from post', response)
+
             // player creates a game -> gameId is saved in his local storage
             // response.data gives us a dictionary with the different return values documented in our REST specifications
             localStorage.setItem('gameId', response.data.gameId);

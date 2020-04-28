@@ -222,7 +222,7 @@ class LobbyOverview extends Component {
             password: null
         };
 
-        this.interval = setInterval(this.getLobbies, 5000);
+        this.interval = setInterval(this.getLobbies, 1000);
         this.getLobbies = this.getLobbies.bind(this);
     }
 
