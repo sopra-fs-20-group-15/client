@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import styled from 'styled-components';
 import { api, handleError } from '../../helpers/api';
-import { withRouter } from 'react-router-dom';
+import {StaticRouter, withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
 
 //margin padding stuff:
@@ -143,6 +143,20 @@ const TimerContainer = styled.div`
   background: #BDAF7E;
   border: 3px solid #000000;
   box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
+`;
+
+const GridContainerScores = styled.div`
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 3px 3px;
+  background-color: #817857;
+  border-radius: 25px;
+  border-style: solid;
+  position: absolute;
+  grid-auto-rows: 74px;
+  
+  top: 100px;
+  overflow-y: scroll;
 `;
 
 const Phase = styled.div`
@@ -307,6 +321,34 @@ const Input = styled.input`
   text-overflow: ellipsis;
 `;
 
+const EndGameContainer = styled.div`  
+  border-radius: 20px;
+  border: 3px solid black;
+
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  
+  width: 70%;
+  height: 70%;
+  
+  position: absolute;
+  
+  background: #CBBD8C;
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  z-index: 2;
+`;
+
+
+
 const Output = styled.div`
   height: 55px;
   width: 240px;
@@ -345,6 +387,29 @@ const NameField = styled.div`
   font-size: 18px;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const GameOver = styled.div`
+  height: 100px;
+  width: 400px;
+  margin: auto;
+  
+  position: relative;
+  top: 30px;
+  
+  background: #FCC812;
+  border: 3px solid #000000;
+  border-radius: 20px;
+  line-height: 100px;
+  
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  text-transform: uppercase;
 `;
 
 const NameFieldActivePlayer = styled.div`
@@ -412,6 +477,25 @@ const GuessedCardsField = styled.div`
   font-size: 23px;
 `;
 
+const Statistics = styled.div`
+  font-family: Happy Monkey;
+  font-size: 32px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin: 5px;
+`;
+
+const StatisticsContainer = styled.div`
+  height: 100px;
+  width: 100%;
+  margin: auto;
+  
+  position: relative;
+  top: 100px;
+`;
+
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
  * You should have a class (instead of a functional component) when:
@@ -465,7 +549,11 @@ class InGame extends React.Component {
             clue5: null,
             clue6: null,
             clue7: null,
-            gameHasEnded: false
+            gameHasEnded: false,
+            highestScore: [],
+            mostGuesses: [],
+            leastGuesses: [],
+            totalGuesses: null
         };
         // some error here...
         this.interval = setInterval(this.handlePolling, 1000);
@@ -739,6 +827,97 @@ class InGame extends React.Component {
                    guessedCards: guessedCardsList
                 });
             }
+        } catch (error) {
+            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+        }
+    }
+
+    async getHighestScore() {
+        try {
+            const response = await api.get('/games/' + this.state.gameId + '/statistics');
+
+            if (response.status === 200) {
+
+                let highestScore = response.data[0];
+
+                for (let i=1 ; i<response.data.length ; i++) {
+                        if (response.data[i].score >= highestScore) {
+                            highestScore = response.data[i];
+                        }
+                    }
+                this.setState({
+                    highestScore: highestScore
+                });
+            }
+
+        } catch (error) {
+            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+        }
+    }
+
+    async getHighestNumberOfGuesses() {
+        try {
+            const response = await api.get('/games/' + this.state.gameId + '/statistics');
+
+            if (response.status === 200) {
+
+                let mostGuesses = response.data[0];
+
+                for (let i=1 ; i<response.data.length ; i++) {
+                    if (response.data[i].numberOfCorrectlyGuessedMysteryWords >= mostGuesses.numberOfCorrectlyGuessedMysteryWords) {
+                        mostGuesses = response.data[i];
+                    }
+                }
+                this.setState({
+                    mostGuesses: mostGuesses
+                })
+            }
+        } catch (error) {
+            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+        }
+    }
+
+    async getLowestNumberOfGuesses() {
+        try {
+            const response = await api.get('/games/' + this.state.gameId + '/statistics');
+
+            if (response.status === 200) {
+
+                let leastGuesses = response.data[0];
+
+                for (let i=1 ; i<response.data.length ; i++) {
+                    if (response.data[i].numberOfCorrectlyGuessedMysteryWords <= leastGuesses.numberOfCorrectlyGuessedMysteryWords) {
+                        leastGuesses = response.data[i];
+                    }
+                }
+
+                this.setState({
+                    leastGuesses: leastGuesses
+                });
+            }
+
+        } catch (error) {
+            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+        }
+    }
+
+    async getTotalNumberOfGuesses() {
+        try {
+            const response = await api.get('/games/' + this.state.gameId + '/statistics');
+
+            if (response.status === 200) {
+
+                let totalGuesses = 0;
+
+                for (let i=0 ; i<response.data.length ; i++) {
+                    totalGuesses += response.data[i].numberOfCorrectlyGuessedMysteryWords;
+                }
+
+                this.setState({
+                    totalGuesses: totalGuesses
+                });
+            }
+
         } catch (error) {
             alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
         }
@@ -1082,6 +1261,15 @@ class InGame extends React.Component {
         // -> maybe needed later
         return (
                 <Game>
+                    <EndGameContainer>
+                        <GameOver> Well played! </GameOver>
+                    <StatisticsContainer>
+                        <Statistics> Total Words guessed: {this.state.totalGuesses} </Statistics>
+                        <Statistics> Most Words guessed: {this.state.mostGuesses.playerName} ({this.state.mostGuesses.correctlyGuessedMysteryWords}) </Statistics>
+                        <Statistics> Least Words guessed: {this.state.leastGuesses.playerName} ({this.state.leastGuesses.correctlyGuessedMysteryWords}) </Statistics>
+                        <Statistics> Highest Score: {this.state.highestScore.playerName} ({this.state.highestScore.score})</Statistics>
+                    </StatisticsContainer>
+                    </EndGameContainer>
                     {/*Timer and Phase*/}
                     <HUDContainer>
                         <TimerContainer>
