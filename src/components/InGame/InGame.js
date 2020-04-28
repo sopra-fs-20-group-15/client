@@ -954,6 +954,15 @@ class InGame extends React.Component {
         }
     }
 
+    async deleteGame() {
+
+        const requestBody = JSON.stringify({
+            playerToken: localStorage.getItem('token')
+        });
+
+        await api.delete('games/' + this.state.gameId, requestBody)
+    }
+
     /** This method makes sure that a player's page is updated correctly based on the role of the player (active
      * or passive player) and the phase number (between 1 and 4). */
     handlePolling = async () => {
