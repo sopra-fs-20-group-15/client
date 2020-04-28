@@ -6,6 +6,7 @@ import { Button, LogoutButton } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 import TriangleBackground from '../../views/pictures/TriangleBackground.png'
+import axios from 'axios';
 
 
 const GridItemTitle = styled.div`
@@ -191,10 +192,22 @@ class Lobby extends React.Component {
             // });
 
             const requestBody = JSON.stringify({
-                token: localStorage.getItem('token')
+                playerToken: localStorage.getItem('token')
             });
 
-            await api.delete('/gameSetUps/'+this.props.match.params.id, requestBody);
+            //const axios = require('axios').default;
+
+            /*const request = await axios.delete('/gameSetUps/'+this.props.match.params.id, {
+                data: {
+                    token: localStorage.getItem('token')
+                }
+            });
+
+            console.log('delete request', request);*/
+
+            const request = await api.delete('/gameSetUps/'+this.props.match.params.id, {data: requestBody});
+
+            console.log('delete request', request);
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
