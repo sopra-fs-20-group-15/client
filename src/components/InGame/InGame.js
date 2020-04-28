@@ -442,7 +442,7 @@ class InGame extends React.Component {
             clues: [],
             guess: "",
             validGuess: false,
-            timer: 15,
+            timer: 120,
             remainingCards: 13,
             guessedCards: [0,0,0,0,0,0,0],
             scores: [0,0,0,0,0,0,0],
@@ -870,12 +870,12 @@ class InGame extends React.Component {
     }
 
     updatePhase() {
-        let nextTimer = [15,25,30,10];
+        let nextTimer = [180,540,600,60];
         /** Only Phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
             if (this.state.phaseNumber !== 4) {
-                console.log('gets in phase 4', this.state);
+                // console.log('gets in phase 4', this.state);
                 this.setState({
                     timer: nextTimer[3],
                     phaseNumber: 4
@@ -885,7 +885,7 @@ class InGame extends React.Component {
         }
         else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
-                console.log('gets in phase 3', this.state);
+                // console.log('gets in phase 3', this.state);
                 this.setState({
                     timer: nextTimer[2],
                     phaseNumber: 3
@@ -898,7 +898,7 @@ class InGame extends React.Component {
         /** Only Phase 2 has always a chosen Mystery Word */
         else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
             if (this.state.phaseNumber !== 2) {
-                console.log('gets in phase 2', this.state);
+                // console.log('gets in phase 2', this.state);
                 this.setState({
                     timer: nextTimer[1],
                     phaseNumber: 2
@@ -909,7 +909,7 @@ class InGame extends React.Component {
         /** Only Phase 1 has always none of these above*/
         else if (this.state.currentCard !== []) {
             if (this.state.phaseNumber !== 1) {
-                console.log('gets in phase 1', this.state);
+                // console.log('gets in phase 1', this.state);
                 this.setState({
                     timer: nextTimer[0],
                     phaseNumber: 1
@@ -1099,7 +1099,6 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field2"} disabled={!this.state.player2Input}
                                         onClick={() => {this.handleInput(this.state.players[1],this.state.player2Input);}}>
-                                <p hidden={!this.state.player2Input}>...</p>
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1122,7 +1121,6 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field3"} disabled={!this.state.player3Input}
                                         onClick={() => {this.handleInput(this.state.players[2],this.state.player3Input);}}>
-                                <p hidden={!this.state.player3Input}>...</p>
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1148,7 +1146,6 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field4"} disabled={!this.state.player4Input}
                                         onClick={() => {this.handleInput(this.state.players[3],this.state.player4Input);}}>
-                                <p hidden={!this.state.player4Input}>...</p>
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1171,7 +1168,6 @@ class InGame extends React.Component {
                                 </InputField>
                                 <ReadyField id={"field5"} disabled={!this.state.player5Input}
                                             onClick={() => {this.handleInput(this.state.players[4],this.state.player5Input);}}>
-                                    <p hidden={!this.state.player5Input}>...</p>
                                 </ReadyField>
                             </Player>
                         ): (<Player/>)}
@@ -1243,7 +1239,6 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field6"} disabled={!this.state.player6Input}
                                         onClick={() => {this.handleInput(this.state.players[5],this.state.player6Input);}}>
-                                <p hidden={!this.state.player6Input}>...</p>
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1266,7 +1261,6 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field7"} disabled={!this.state.player7Input}
                                         onClick={() => {this.handleInput(this.state.players[6],this.state.player7Input);}}>
-                                <p hidden={!this.state.player7Input}>...</p>
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1291,7 +1285,6 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field1"} disabled={!this.state.player1Input}
                                         onClick={() => {this.handleInput(this.state.players[0],this.state.player1Input);}}>
-                                <p hidden={!this.state.player1Input}>...</p>
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
