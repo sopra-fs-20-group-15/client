@@ -925,12 +925,6 @@ class InGame extends React.Component {
                 this.updatePhaseHUD(1);
                 this.unsignalSubmission();
                 this.unsignalMysteryWord();
-                // for (let k = 0; k < this.state.currentCard.length; k++) {
-                //     if (this.state.mysteryWordId && this.state.currentCard[this.state.mysteryWordId-1] !== this.state.currentCard[k]) {
-                //         let lineThroughWord = document.getElementById("word" + (k + 1));
-                //         lineThroughWord.style.textDecoration = "none";
-                //     }
-                // }
             }
         }
     }
@@ -974,13 +968,13 @@ class InGame extends React.Component {
                     this.getCardAmount();
                     this.getScores();
 
-                    console.log("PhaseNumber", this.state.phaseNumber);
-                    console.log("CurrentCard", this.state.currentCard);
-                    console.log("MysteryWord", this.state.mysteryWord);
-                    console.log("MysteryWordId", this.state.mysteryWordId);
-                    console.log("Clues", this.state.clues);
-                    console.log("Guess", this.state.guess);
-                    console.log("GameHasEnded", this.state.gameHasEnded);
+                    // console.log("PhaseNumber", this.state.phaseNumber);
+                    // console.log("CurrentCard", this.state.currentCard);
+                    // console.log("MysteryWord", this.state.mysteryWord);
+                    // console.log("MysteryWordId", this.state.mysteryWordId);
+                    // console.log("Clues", this.state.clues);
+                    // console.log("Guess", this.state.guess);
+                    // console.log("GameHasEnded", this.state.gameHasEnded);
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getPlayers();
@@ -989,14 +983,6 @@ class InGame extends React.Component {
                     this.getCluePlayers();
                     this.getCardAmount();
                     this.getScores();
-
-                    console.log("PhaseNumber", this.state.phaseNumber);
-                    console.log("CurrentCard", this.state.currentCard);
-                    console.log("MysteryWord", this.state.mysteryWord);
-                    console.log("MysteryWordId", this.state.mysteryWordId);
-                    console.log("Clues", this.state.clues);
-                    console.log("Guess", this.state.guess);
-                    console.log("GameHasEnded", this.state.gameHasEnded);
                 }
             } else if (this.state.phaseNumber === 2) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -1006,14 +992,6 @@ class InGame extends React.Component {
                     this.getCluePlayers();
                     this.getCardAmount();
                     this.getScores();
-
-                    console.log("PhaseNumber", this.state.phaseNumber);
-                    console.log("CurrentCard", this.state.currentCard);
-                    console.log("MysteryWord", this.state.mysteryWord);
-                    console.log("MysteryWordId", this.state.mysteryWordId);
-                    console.log("Clues", this.state.clues);
-                    console.log("Guess", this.state.guess);
-                    console.log("GameHasEnded", this.state.gameHasEnded);
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getPlayers();
@@ -1022,14 +1000,6 @@ class InGame extends React.Component {
                     this.getCluePlayers();
                     this.getCardAmount();
                     this.getScores();
-
-                    console.log("PhaseNumber", this.state.phaseNumber);
-                    console.log("CurrentCard", this.state.currentCard);
-                    console.log("MysteryWord", this.state.mysteryWord);
-                    console.log("MysteryWordId", this.state.mysteryWordId);
-                    console.log("Clues", this.state.clues);
-                    console.log("Guess", this.state.guess);
-                    console.log("GameHasEnded", this.state.gameHasEnded);
                 }
             } else if (this.state.phaseNumber === 3) {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -1041,14 +1011,6 @@ class InGame extends React.Component {
                     this.getGuess();
                     this.getCardAmount();
                     this.getScores();
-
-                    console.log("PhaseNumber", this.state.phaseNumber);
-                    console.log("CurrentCard", this.state.currentCard);
-                    console.log("MysteryWord", this.state.mysteryWord);
-                    console.log("MysteryWordId", this.state.mysteryWordId);
-                    console.log("Clues", this.state.clues);
-                    console.log("Guess", this.state.guess);
-                    console.log("GameHasEnded", this.state.gameHasEnded);
                 }
                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                     this.getMysteryWord();
@@ -1058,14 +1020,6 @@ class InGame extends React.Component {
                     this.getGuess();
                     this.getCardAmount();
                     this.getScores();
-
-                    console.log("PhaseNumber", this.state.phaseNumber);
-                    console.log("CurrentCard", this.state.currentCard);
-                    console.log("MysteryWord", this.state.mysteryWord);
-                    console.log("MysteryWordId", this.state.mysteryWordId);
-                    console.log("Clues", this.state.clues);
-                    console.log("Guess", this.state.guess);
-                    console.log("GameHasEnded", this.state.gameHasEnded);
                 }
             } else if (this.state.phaseNumber === 4) {
                 this.getMysteryWord();
@@ -1075,14 +1029,6 @@ class InGame extends React.Component {
                 this.getValidClues();
                 this.getCardAmount();
                 this.getScores();
-
-                console.log("PhaseNumber", this.state.phaseNumber);
-                console.log("CurrentCard", this.state.currentCard);
-                console.log("MysteryWord", this.state.mysteryWord);
-                console.log("MysteryWordId", this.state.mysteryWordId);
-                console.log("Clues", this.state.clues);
-                console.log("Guess", this.state.guess);
-                console.log("GameHasEnded", this.state.gameHasEnded);
             } else {
                 alert("The phase number is not in the range from 1 to 4!")
             }
