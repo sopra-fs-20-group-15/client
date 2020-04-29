@@ -611,13 +611,18 @@ class InGame extends React.Component {
                 gameHasEnded: response.data.hasEnded
             });
 
+            console.log('state', this.state);
+            console.log('response', response);
+
             if (this.state.gameHasEnded) {
+                console.log('has ended', this.state.round);
                 this.getHighestNumberOfGuesses();
                 this.getLowestNumberOfGuesses();
                 this.getTotalNumberOfGuesses();
                 this.getHighestScore();
                 this.overlayOn();
             } else {
+                console.log('has not ended', this.state.round);
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.initializeTurn();
                 }
