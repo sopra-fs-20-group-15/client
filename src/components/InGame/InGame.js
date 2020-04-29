@@ -498,6 +498,18 @@ const Statistics = styled.div`
   margin: 5px;
 `;
 
+const Waiting = styled.div`
+  font-family: Happy Monkey;
+  font-size: 32px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin: 5px;
+  top: 250px;
+  position: relative;
+`;
+
 const StatisticsContainer = styled.div`
   height: 100px;
   width: 100%;
@@ -1303,16 +1315,19 @@ class InGame extends React.Component {
                             <Statistics> Least Words guessed: {this.state.leastGuesses.playerName} ({this.state.leastGuesses.correctlyGuessedMysteryWords}) </Statistics>
                             <Statistics> Highest Score: {this.state.highestScore.playerName} ({this.state.highestScore.score})</Statistics>
                         </StatisticsContainer>
-                        <ButtonContainer>
-                            <Button
-                                width="100%"
-                                onClick={() => {
-                                    this.props.history.push('/lobbyOverview');
-                                }}
-                            >
-                                Go Back to Lobby Overview
-                            </Button>
-                        </ButtonContainer>
+                        {this.state.activePlayer !== localStorage.getItem('username')
+                            ? <ButtonContainer>
+                                <Button
+                                    width="100%"
+                                    onClick={() => {
+                                        this.props.history.push('/lobbyOverview');
+                                    }}
+                                >
+                                    Go Back to Lobby Overview
+                                </Button>
+                            </ButtonContainer>
+                            : <Waiting> Waiting for the active player to terminate the game... </Waiting>
+                        }
                     </EndGameContainer>
                     {/*Timer and Phase*/}
                     <HUDContainer>
