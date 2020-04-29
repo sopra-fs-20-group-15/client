@@ -608,7 +608,7 @@ class InGame extends React.Component {
             const response = await api.get('/games/' + this.state.gameId + '/ends/' + localStorage.getItem('token'));
 
             this.setState({
-                gameHasEnded: response.data.hasEnded
+                gameHasEnded: response.data.hasGameEnded
             });
 
             console.log('state', this.state);
