@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { api, handleError } from '../../helpers/api';
 import {StaticRouter, withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
+import {Button} from "../../views/design/Button";
 
 //margin padding stuff:
 //percentage for values relative to the browser
@@ -278,6 +279,15 @@ const ReadyField = styled.button`
   box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin: auto;
+  width: 500px;
+  top: 250px;
+`;
+
 const InputField = styled.div`
   height: 55px;
   width: 240px;
@@ -345,6 +355,7 @@ const EndGameContainer = styled.div`
   text-overflow: ellipsis;
   
   z-index: 2;
+  display: none;
 `;
 
 
@@ -1263,12 +1274,22 @@ class InGame extends React.Component {
                 <Game>
                     <EndGameContainer>
                         <GameOver> Well played! </GameOver>
-                    <StatisticsContainer>
-                        <Statistics> Total Words guessed: {this.state.totalGuesses} </Statistics>
-                        <Statistics> Most Words guessed: {this.state.mostGuesses.playerName} ({this.state.mostGuesses.correctlyGuessedMysteryWords}) </Statistics>
-                        <Statistics> Least Words guessed: {this.state.leastGuesses.playerName} ({this.state.leastGuesses.correctlyGuessedMysteryWords}) </Statistics>
-                        <Statistics> Highest Score: {this.state.highestScore.playerName} ({this.state.highestScore.score})</Statistics>
-                    </StatisticsContainer>
+                        <StatisticsContainer>
+                            <Statistics> Total Words guessed: {this.state.totalGuesses} </Statistics>
+                            <Statistics> Most Words guessed: {this.state.mostGuesses.playerName} ({this.state.mostGuesses.correctlyGuessedMysteryWords}) </Statistics>
+                            <Statistics> Least Words guessed: {this.state.leastGuesses.playerName} ({this.state.leastGuesses.correctlyGuessedMysteryWords}) </Statistics>
+                            <Statistics> Highest Score: {this.state.highestScore.playerName} ({this.state.highestScore.score})</Statistics>
+                        </StatisticsContainer>
+                        <ButtonContainer>
+                            <Button
+                                width="100%"
+                                onClick={() => {
+                                    this.props.history.push('/lobbyOverview');
+                                }}
+                            >
+                                Go Back to Lobby Overview
+                            </Button>
+                        </ButtonContainer>
                     </EndGameContainer>
                     {/*Timer and Phase*/}
                     <HUDContainer>
