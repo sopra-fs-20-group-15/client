@@ -638,11 +638,13 @@ class InGame extends React.Component {
             playerToken: localStorage.getItem('token')
         });
 
-        await api.delete('/activeGames/'+this.state.gameId, {data: requestBody});
-
         this.setState({
             deleted: true
         })
+
+        await api.delete('/activeGames/'+this.state.gameId, {data: requestBody});
+
+        this.props.history.push('/lobbyOverview');
     }
 
     async getCard() {
@@ -1320,7 +1322,7 @@ class InGame extends React.Component {
                                 <Button
                                     width="100%"
                                     onClick={() => {
-                                        this.props.history.push('/lobbyOverview');
+                                        this.deleteActiveGame();
                                     }}
                                 >
                                     Go Back to Lobby Overview
