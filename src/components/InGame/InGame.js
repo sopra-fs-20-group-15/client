@@ -1021,12 +1021,6 @@ class InGame extends React.Component {
     async getPlayers() {
         const response = await api.get('/activeGames/' + this.props.match.params.id);
 
-        if (response.data.activePlayerName !== this.state.activePlayer && !(this.state.round === 1 && this.state.phaseNumber === 1)) {
-            this.setState({
-                round: this.state.round + 1
-            })
-        }
-
         this.setState({
             gameId: this.props.match.params.id,
             players: response.data.playerNames,
@@ -1137,7 +1131,8 @@ class InGame extends React.Component {
                 // console.log('gets in phase 1', this.state);
                 this.setState({
                     timer: nextTimer[0],
-                    phaseNumber: 1
+                    phaseNumber: 1,
+                    round: this.state.round + 1
                 });
                 this.updatePhaseHUD(1);
                 this.unsignalSubmission();
