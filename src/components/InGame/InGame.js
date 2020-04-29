@@ -564,7 +564,8 @@ class InGame extends React.Component {
             highestScore: [],
             mostGuesses: [],
             leastGuesses: [],
-            totalGuesses: null
+            totalGuesses: null,
+            deleted: false
         };
         // some error here...
         this.interval = setInterval(this.handlePolling, 1000);
@@ -599,7 +600,11 @@ class InGame extends React.Component {
             });
 
             if (this.state.gameHasEnded) {
-                // show statistics
+                this.getHighestNumberOfGuesses();
+                this.getLowestNumberOfGuesses();
+                this.getTotalNumberOfGuesses();
+                this.getHighestScore();
+                this.overlayOn();
             } else {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.initializeTurn();
@@ -609,6 +614,18 @@ class InGame extends React.Component {
         } catch (error) {
             alert(`Something went wrong while checking end: \n${handleError(error)}`);
         }
+    }
+
+    async deleteActiveGame() {
+        const requestBody = JSON.stringify({
+            playerToken: localStorage.getItem('token')
+        });
+
+        await api.delete('/activeGames/'+this.state.gameId, {data: requestBody});
+
+        this.setState({
+            deleted: true
+        })
     }
 
     async getCard() {
@@ -689,8 +706,6 @@ class InGame extends React.Component {
                     });
                 }
             }
-
-            console.log("getMysWordResponse",response.data);
 
             for (let k = 0; k < this.state.currentCard.length; k++) {
                 if (this.state.mysteryWordId && this.state.currentCard[this.state.mysteryWordId-1] !== this.state.currentCard[k]) {
@@ -1119,6 +1134,10 @@ class InGame extends React.Component {
         }
     }
 
+    async overlayOn() {
+        document.getElementById("end").style.display = "block";
+    }
+
     updatePhaseHUD(id) {
         for (let i=1 ; i<=4 ; i++) {
             if (i === id) {
@@ -1232,7 +1251,11 @@ class InGame extends React.Component {
                 alert("The phase number is not in the range from 1 to 4!")
             }
         } catch (error) {
-            alert(`Something went wrong during the polling process: \n${handleError(error)}`);
+            if (this.state.deleted) {
+                this.props.history.push('/lobbyOverview/')
+            } else {
+                alert(`Something went wrong during the polling process: \n${handleError(error)}`);
+            }
         }
     };
 
@@ -1272,7 +1295,7 @@ class InGame extends React.Component {
         // -> maybe needed later
         return (
                 <Game>
-                    <EndGameContainer>
+                    <EndGameContainer id={"end"}>
                         <GameOver> Well played! </GameOver>
                         <StatisticsContainer>
                             <Statistics> Total Words guessed: {this.state.totalGuesses} </Statistics>

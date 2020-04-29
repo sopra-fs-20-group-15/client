@@ -144,7 +144,9 @@ class Lobby extends React.Component {
                 }
             }
         } catch (error) {
-            this.props.history.push('/lobbyOverview/')
+            if (this.state.deleted) {
+                this.props.history.push('/lobbyOverview/')
+            }
         }
     };
 
