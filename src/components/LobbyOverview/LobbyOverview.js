@@ -218,7 +218,6 @@ class LobbyOverview extends Component {
         this.state = {
             lobbies: null,
             chosenLobby: null,
-            chosenLobbyIndex: null,
             password: null
         };
 
@@ -257,11 +256,9 @@ class LobbyOverview extends Component {
                 password: this.state.password
             });
 
-            const response = await api.put('/games/' + (this.state.chosenLobbyIndex+1) + '/players', requestBody);
+            await api.put('/games/' + this.state.chosenLobby.id + '/players', requestBody);
 
-            localStorage.setItem('gameId', response.data.gameId);
-
-            this.props.history.push('/lobby/' + (this.state.chosenLobbyIndex+1))
+            this.props.history.push('/lobby/' + this.state.chosenLobby.id)
         } catch (error) {
             alert(`Something went wrong while trying to join the lobby: \n${handleError(error)}`);
             this.props.history.push("/lobbyOverview")
@@ -285,11 +282,9 @@ class LobbyOverview extends Component {
                     password: ""
                 });
 
-                const response = await api.put('/games/' + (this.state.chosenLobbyIndex+1) + '/players', requestBody);
+                const response = await api.put('/games/' + this.state.chosenLobby.id + '/players', requestBody);
 
-                localStorage.setItem('gameId', response.data.gameId);
-
-                this.props.history.push('/lobby/' + (this.state.chosenLobbyIndex+1))
+                this.props.history.push('/lobby/' + this.state.chosenLobby.id)
 
             } else if (this.state.chosenLobby.gameType === "PRIVATE") {
                 this.overlayOn();
@@ -403,7 +398,6 @@ class LobbyOverview extends Component {
                                         {/** this.state.games.indexOf(game) identifies each game using its (unique) index in this.state.games */}
                                         <input type="radio" name="game" value={this.state.chosenLobby} onClick={() => {
                                             this.setState({chosenLobby: lobby});
-                                            this.setState({chosenLobbyIndex: this.state.lobbies.indexOf(lobby)});
                                         }}/>
                                     </ChooseGameContainer>
                                 </Fragment>

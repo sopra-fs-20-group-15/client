@@ -121,27 +121,29 @@ class Lobby extends React.Component {
     }
 
     getInfos = async () => {
-        const response = await api.get('/games/lobbies/'+this.props.match.params.id+"/"+localStorage.getItem("token"));
-        if (response.status === 200) {
-            this.setState({
-                activeGameId: response.data.activeGameId,
-                gameSetUpId: response.data.gameSetUpId,
-                gameName: response.data.gameName,
-                hostName: response.data.hostName,
-                players: response.data.playerNames,
-                desiredPlayers: response.data.numOfDesiredPlayers,
-                actualPlayers: response.data.numOfActualPlayers,
-                angels: response.data.numOfAngels,
-                devils: response.data.numOfDevils
-            });
+        try {
+            const response = await api.get('/games/lobbies/' + this.props.match.params.id + "/" + localStorage.getItem("token"));
+            if (response.status === 200) {
+                this.setState({
+                    activeGameId: response.data.activeGameId,
+                    gameSetUpId: response.data.gameSetUpId,
+                    gameName: response.data.gameName,
+                    hostName: response.data.hostName,
+                    players: response.data.playerNames,
+                    desiredPlayers: response.data.numOfDesiredPlayers,
+                    actualPlayers: response.data.numOfActualPlayers,
+                    angels: response.data.numOfAngels,
+                    devils: response.data.numOfDevils
+                });
 
-            /** Making sure all users are redirected to the active game, after its creation (not just host).
-             * The token gameId makes sure that only the players from the lobby can join the game. */
-            if (this.state.activeGameId) {
-                localStorage.setItem('gameId', this.state.activeGameId);
-                this.props.history.push('/gameLobby/' + this.state.activeGameId);
+                /** Making sure all users are redirected to the active game, after its creation (not just host).
+                 * The token gameId makes sure that only the players from the lobby can join the game. */
+                if (this.state.activeGameId) {
+                    localStorage.setItem('gameId', this.state.activeGameId);
+                    this.props.history.push('/gameLobby/' + this.state.activeGameId);
+                }
             }
-        } else if (response.status === 404) {
+        } catch (error) {
             this.props.history.push('/lobbyOverview/')
         }
     };
@@ -163,10 +165,12 @@ class Lobby extends React.Component {
     async leaveLobby() {
         try {
             const requestBody = JSON.stringify({
-                token: localStorage.getItem('token')
+                playerToken: localStorage.getItem('token')
             });
 
-            await api.put('/games/'+this.props.match.params.id+'/leave', requestBody);
+            const response = await api.put('/games/'+this.props.match.params.id+'/lobbies/players', requestBody);
+
+            console.log('response', response);
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
@@ -174,7 +178,7 @@ class Lobby extends React.Component {
         }
     }
 
-    async terminateGame(gameSetUpId) {
+    async terminateGame() {
         try {
             const requestBody = JSON.stringify({
                 playerToken: localStorage.getItem('token')
