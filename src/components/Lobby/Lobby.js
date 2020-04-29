@@ -112,10 +112,11 @@ class Lobby extends React.Component {
             desiredPlayers: null,
             actualPlayers: null,
             angels: null,
-            devils: null
+            devils: null,
+            deleted: false
         };
 
-        this.interval = setInterval(this.getInfos, 5000);
+        this.interval = setInterval(this.getInfos, 500);
         this.getInfos = this.getInfos.bind(this);
     }
 
@@ -140,6 +141,8 @@ class Lobby extends React.Component {
                 localStorage.setItem('gameId', this.state.activeGameId);
                 this.props.history.push('/gameLobby/' + this.state.activeGameId);
             }
+        } else if (response.status === 404) {
+            this.props.history.push('/lobbyOverview/')
         }
     };
 
@@ -173,41 +176,11 @@ class Lobby extends React.Component {
 
     async terminateGame(gameSetUpId) {
         try {
-
-            // const formData = new FormData();
-            // formData.append('token', localStorage.getItem('token'));
-            //
-            // const requestOptions = {
-            //     method: 'DELETE',
-            //     body: formData
-            // };
-            //
-            // // Note: I'm using arrow functions inside the `.fetch()` method.
-            // // This makes it so you don't have to bind component functions like `setState`
-            // // to the component.
-            // fetch("http://localhost:8080/api/gameSetUps/" + gameSetUpId, requestOptions).then((response) => {
-            //     return response.json();
-            // }).then((result) => {
-            //     // do what you want with the response here
-            // });
-
             const requestBody = JSON.stringify({
                 playerToken: localStorage.getItem('token')
             });
 
-            //const axios = require('axios').default;
-
-            /*const request = await axios.delete('/gameSetUps/'+this.props.match.params.id, {
-                data: {
-                    token: localStorage.getItem('token')
-                }
-            });
-
-            console.log('delete request', request);*/
-
-            const request = await api.delete('/gameSetUps/'+this.props.match.params.id, {data: requestBody});
-
-            console.log('delete request', request);
+            await api.delete('/gameSetUps/'+this.props.match.params.id, {data: requestBody});
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
