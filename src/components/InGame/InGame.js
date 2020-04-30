@@ -671,7 +671,8 @@ class InGame extends React.Component {
         try {
             if (localStorage.getItem('username') === this.state.activePlayer) {
                 /** Checking for valid input (not just in backend) */
-                if (1 <= wordId <= 5) {
+                if (1 <= wordId && wordId <= 5) {
+                    console.log('gets in where it is not supposed to');
                     const requestBody = JSON.stringify({
                         wordId: wordId,
                         playerToken: localStorage.getItem('token')
@@ -712,6 +713,7 @@ class InGame extends React.Component {
     async getMysteryWord() {
         try {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
+            console.log('response from getting mystery word', response)
             if (response.status === 200) {
                 this.setState({
                     mysteryWord: response.data.word,
