@@ -549,7 +549,7 @@ class InGame extends React.Component {
             clues: [],
             guess: "",
             validGuess: false,
-            timer: 15,
+            timer: 30,
             remainingCards: 13,
             guessedCards: [0,0,0,0,0,0,0],
             scores: [0,0,0,0,0,0,0],
@@ -580,7 +580,7 @@ class InGame extends React.Component {
             deleted: false
         };
         // some error here...
-        this.interval = setInterval(this.handlePolling, 1000);
+        this.interval = setInterval(this.handlePolling, 500);
         this.handlePolling = this.handlePolling.bind(this);
         this.determineMysteryWord = this.determineMysteryWord.bind(this);
         this.giveClue = this.giveClue.bind(this);
@@ -640,7 +640,7 @@ class InGame extends React.Component {
 
         this.setState({
             deleted: true
-        })
+        });
 
         await api.delete('/activeGames/'+this.state.gameId, {data: requestBody});
 
@@ -983,14 +983,6 @@ class InGame extends React.Component {
         }
     }
 
-    async deleteGame() {
-        try {
-
-        } catch (error) {
-            alert(`Something went wrong while deleting the Game: \n${handleError(error)}`);
-        }
-    }
-
     async getCluePlayers() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/players/' + localStorage.getItem('token'));
@@ -1096,7 +1088,7 @@ class InGame extends React.Component {
     }
 
     updatePhase() {
-        let nextTimer = [15,25,30,10];
+        let nextTimer = [30, 50, 60, 10];
         /** Only Phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
@@ -1155,8 +1147,16 @@ class InGame extends React.Component {
     updatePhaseHUD(id) {
         for (let i=1 ; i<=4 ; i++) {
             if (i === id) {
-                let greenPhase = document.getElementById("phase"+i);
-                greenPhase.style.backgroundColor = "#05FF00";
+                if (id === 1 || id === 3) {
+                    let greenPhase = document.getElementById("phase" + i);
+                    greenPhase.style.backgroundColor = "#FF0000";
+                } else if (id === 2) {
+                    let greenPhase = document.getElementById("phase" + i);
+                    greenPhase.style.backgroundColor = "#FCC812";
+                } else if (id === 4) {
+                    let greenPhase = document.getElementById("phase" + i);
+                    greenPhase.style.backgroundColor = "#05FF00";
+                }
             } else {
                 let greyPhase = document.getElementById("phase"+i);
                 greyPhase.style.backgroundColor = "#817857";
@@ -1175,15 +1175,6 @@ class InGame extends React.Component {
             let field = document.getElementById("field"+(1+i));
             field.style.backgroundColor = "#CBBD8C";
         }
-    }
-
-    async deleteGame() {
-
-        const requestBody = JSON.stringify({
-            playerToken: localStorage.getItem('token')
-        });
-
-        await api.delete('games/' + this.state.gameId, requestBody)
     }
 
     /** This method makes sure that a player's page is updated correctly based on the role of the player (active
