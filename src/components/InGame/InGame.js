@@ -577,7 +577,6 @@ class InGame extends React.Component {
             mostGuesses: [],
             leastGuesses: [],
             totalGuesses: null,
-            deleted: false
         };
         // some error here...
         this.interval = setInterval(this.handlePolling, 500);
@@ -587,6 +586,7 @@ class InGame extends React.Component {
         this.setGuess = this.setGuess.bind(this);
         this.gameHasEnded = this.gameHasEnded.bind(this);
         this.initializeTurn = this.initializeTurn.bind(this);
+        this.deleteGame = this.deleteGame.bind(this);
     }
 
     async initializeTurn() {
@@ -605,48 +605,47 @@ class InGame extends React.Component {
     async gameHasEnded() {
         try {
 
-            const response = await api.get('/games/' + this.state.gameId + '/ends/' + localStorage.getItem('token'));
+            /** Necessary because otherwise the GET method will also be executed after the games deletion
+             * which will cause an error. */
+             const response = await api.get('/games/' + this.state.gameId + '/ends/' + localStorage.getItem('token'));
 
-            this.setState({
-                gameHasEnded: response.data.hasGameEnded
-            });
+             this.setState({
+                 gameHasEnded: response.data.hasGameEnded
+             });
 
-            console.log('state', this.state);
-            console.log('response', response);
+             console.log('response', response);
+
 
             if (this.state.gameHasEnded) {
-                console.log('has ended', this.state.round);
                 this.getHighestNumberOfGuesses();
                 this.getLowestNumberOfGuesses();
                 this.getTotalNumberOfGuesses();
                 this.getHighestScore();
                 this.overlayOn();
+                setTimeout(() => this.deleteGame(), 15000)
             } else {
-                console.log('has not ended', this.state.round);
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.initializeTurn();
                 }
             }
-
         } catch (error) {
+            this.props.history.push('/lobbyOverview');
             alert(`Something went wrong while checking end: \n${handleError(error)}`);
         }
     }
 
     async deleteGame() {
-        const requestBody = JSON.stringify({
-            playerToken: localStorage.getItem('token')
-        });
 
-        this.setState({
-            deleted: true
-        });
-        
-        this.deleteGameSetUp();
-
-        await api.delete('/activeGames/'+this.state.gameId, {data: requestBody});
+        if (localStorage.getItem('username') === this.state.activePlayer) {
+            this.deleteGameSetUp();
+            const requestBody = JSON.stringify({
+                playerToken: localStorage.getItem('token')
+            });
+            await api.delete('/activeGames/' + this.state.gameId, {data: requestBody});
+        }
 
         this.props.history.push('/lobbyOverview');
+
     }
 
     async deleteGameSetUp() {
@@ -682,7 +681,6 @@ class InGame extends React.Component {
             if (localStorage.getItem('username') === this.state.activePlayer) {
                 /** Checking for valid input (not just in backend) */
                 if (1 <= wordId && wordId <= 5) {
-                    console.log('gets in where it is not supposed to');
                     const requestBody = JSON.stringify({
                         wordId: wordId,
                         playerToken: localStorage.getItem('token')
@@ -723,7 +721,6 @@ class InGame extends React.Component {
     async getMysteryWord() {
         try {
             const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
-            console.log('response from getting mystery word', response)
             if (response.status === 200) {
                 this.setState({
                     mysteryWord: response.data.word,
@@ -1193,86 +1190,89 @@ class InGame extends React.Component {
      * or passive player) and the phase number (between 1 and 4). */
     handlePolling = async () => {
         try {
-            this.updatePhase();
-            if (this.state.phaseNumber === 1) {
-                if (localStorage.getItem('username') === this.state.activePlayer) {
-                    this.getPlayers();
-                    this.getCard();
-                    this.getMysteryWord();
-                    this.getCluePlayers();
-                    this.getCardAmount();
-                    this.getScores();
+            if (!this.state.gameHasEnded) {
+                this.updatePhase();
+                if (this.state.phaseNumber === 1) {
+                    if (localStorage.getItem('username') === this.state.activePlayer) {
+                        this.getPlayers();
+                        this.getCard();
+                        this.getMysteryWord();
+                        this.getCluePlayers();
+                        this.getCardAmount();
+                        this.getScores();
 
-                    // console.log("PhaseNumber", this.state.phaseNumber);
-                    // console.log("CurrentCard", this.state.currentCard);
-                    // console.log("MysteryWord", this.state.mysteryWord);
-                    // console.log("MysteryWordId", this.state.mysteryWordId);
-                    // console.log("Clues", this.state.clues);
-                    // console.log("Guess", this.state.guess);
-                    // console.log("GameHasEnded", this.state.gameHasEnded);
-                }
-                if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                    this.getPlayers();
-                    this.getCard();
+                        // console.log("PhaseNumber", this.state.phaseNumber);
+                        // console.log("CurrentCard", this.state.currentCard);
+                        // console.log("MysteryWord", this.state.mysteryWord);
+                        // console.log("MysteryWordId", this.state.mysteryWordId);
+                        // console.log("Clues", this.state.clues);
+                        // console.log("Guess", this.state.guess);
+                        // console.log("GameHasEnded", this.state.gameHasEnded);
+                    }
+                    if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
+                        this.getPlayers();
+                        this.getCard();
+                        this.getMysteryWord();
+                        this.getCluePlayers();
+                        this.getCardAmount();
+                        this.getScores();
+                    }
+                } else if (this.state.phaseNumber === 2) {
+                    if (localStorage.getItem('username') === this.state.activePlayer) {
+                        this.getPlayers();
+                        this.getCard();
+                        this.getMysteryWord();
+                        this.getCluePlayers();
+                        this.getCardAmount();
+                        this.getScores();
+                    }
+                    if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
+                        this.getPlayers();
+                        this.getCard();
+                        this.getMysteryWord();
+                        this.getCluePlayers();
+                        this.getCardAmount();
+                        this.getScores();
+                    }
+                } else if (this.state.phaseNumber === 3) {
+                    if (localStorage.getItem('username') === this.state.activePlayer) {
+                        // does not need to do anything since getting the guess is coupled to button clicking for the active player
+                        this.getMysteryWord();
+                        this.getPlayers();
+                        this.getValidClues();
+                        this.getCluePlayers();
+                        this.getGuess();
+                        this.getCardAmount();
+                        this.getScores();
+                    }
+                    if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
+                        this.getMysteryWord();
+                        this.getPlayers();
+                        this.getValidClues();
+                        this.getCluePlayers();
+                        this.getGuess();
+                        this.getCardAmount();
+                        this.getScores();
+                    }
+                } else if (this.state.phaseNumber === 4) {
                     this.getMysteryWord();
-                    this.getCluePlayers();
-                    this.getCardAmount();
-                    this.getScores();
-                }
-            } else if (this.state.phaseNumber === 2) {
-                if (localStorage.getItem('username') === this.state.activePlayer) {
-                    this.getPlayers();
-                    this.getCard();
-                    this.getMysteryWord();
-                    this.getCluePlayers();
-                    this.getCardAmount();
-                    this.getScores();
-                }
-                if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                    this.getPlayers();
-                    this.getCard();
-                    this.getMysteryWord();
-                    this.getCluePlayers();
-                    this.getCardAmount();
-                    this.getScores();
-                }
-            } else if (this.state.phaseNumber === 3) {
-                if (localStorage.getItem('username') === this.state.activePlayer) {
-                    // does not need to do anything since getting the guess is coupled to button clicking for the active player
-                    this.getMysteryWord();
-                    this.getPlayers();
-                    this.getValidClues();
-                    this.getCluePlayers();
                     this.getGuess();
-                    this.getCardAmount();
-                    this.getScores();
-                }
-                if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                    this.getMysteryWord();
                     this.getPlayers();
-                    this.getValidClues();
                     this.getCluePlayers();
-                    this.getGuess();
+                    this.getValidClues();
                     this.getCardAmount();
                     this.getScores();
+                } else {
+                    alert("The phase number is not in the range from 1 to 4!")
                 }
-            } else if (this.state.phaseNumber === 4) {
-                this.getMysteryWord();
-                this.getGuess();
-                this.getPlayers();
-                this.getCluePlayers();
-                this.getValidClues();
-                this.getCardAmount();
-                this.getScores();
-            } else {
-                alert("The phase number is not in the range from 1 to 4!")
             }
         } catch (error) {
-            if (this.state.deleted) {
+            /*if (this.state.deleted) {
+                console.log('gets at that weird place');
                 this.props.history.push('/lobbyOverview/')
             } else {
-                alert(`Something went wrong during the polling process: \n${handleError(error)}`);
-            }
+                */
+            alert(`Something went wrong during the polling process: \n${handleError(error)}`);
         }
     };
 
@@ -1316,11 +1316,15 @@ class InGame extends React.Component {
                         <GameOver> Well played! </GameOver>
                         <StatisticsContainer>
                             <Statistics> Total Words guessed: {this.state.totalGuesses} </Statistics>
-                            <Statistics> Most Words guessed: {this.state.mostGuesses.playerName} ({this.state.mostGuesses.correctlyGuessedMysteryWords}) </Statistics>
-                            <Statistics> Least Words guessed: {this.state.leastGuesses.playerName} ({this.state.leastGuesses.correctlyGuessedMysteryWords}) </Statistics>
+                            <Statistics> Most Words guessed: {this.state.mostGuesses.playerName} ({this.state.mostGuesses.numberOfCorrectlyGuessedMysteryWords}) </Statistics>
+                            <Statistics> Least Words guessed: {this.state.leastGuesses.playerName} ({this.state.leastGuesses.numberOfCorrectlyGuessedMysteryWords}) </Statistics>
                             <Statistics> Highest Score: {this.state.highestScore.playerName} ({this.state.highestScore.score})</Statistics>
                         </StatisticsContainer>
-                        {this.state.activePlayer !== localStorage.getItem('username')
+                        <Waiting> Redirected in 15 seconds... </Waiting>
+{/*
+                        <Timer seconds={15} phaseNumber={5} deleteGame={this.deleteGame}/>
+*/}
+                        {/*{this.state.activePlayer !== localStorage.getItem('username')
                             ? <ButtonContainer>
                                 <Button
                                     width="100%"
@@ -1332,7 +1336,7 @@ class InGame extends React.Component {
                                 </Button>
                             </ButtonContainer>
                             : <Waiting> Waiting for the active player to terminate the game... </Waiting>
-                        }
+                        }*/}
                     </EndGameContainer>
                     {/*Timer and Phase*/}
                     <HUDContainer>

@@ -113,7 +113,6 @@ class Lobby extends React.Component {
             actualPlayers: null,
             angels: null,
             devils: null,
-            deleted: false
         };
 
         this.interval = setInterval(this.getInfos, 500);
@@ -144,9 +143,7 @@ class Lobby extends React.Component {
                 }
             }
         } catch (error) {
-            if (this.state.deleted) {
-                this.props.history.push('/lobbyOverview/')
-            }
+            this.props.history.push('/lobbyOverview/')
         }
     };
 
@@ -171,8 +168,6 @@ class Lobby extends React.Component {
             });
 
             const response = await api.put('/games/'+this.props.match.params.id+'/lobbies/players', requestBody);
-
-            console.log('response', response);
 
             this.props.history.push('/lobbyOverview');
         } catch (error) {
