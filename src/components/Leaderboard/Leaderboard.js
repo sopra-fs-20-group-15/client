@@ -176,7 +176,7 @@ const ButtonGroup = styled.div`
 const LogoutButtonContainer = styled.div`
   position: absolute;
   top: 20px;
-  left: 15px;
+  // left: 15px;
   justify-content: center;
 `;
 
@@ -278,7 +278,7 @@ class Leaderboard extends Component {
     render() {
         return (
             <BaseContainer style={background}>
-                <LogoutButtonContainer>
+                <LogoutButtonContainer style={{left:"15px"}}>
                     <LogoutButton
                         width="255px"
                         onClick={() => {
@@ -286,6 +286,16 @@ class Leaderboard extends Component {
                         }}
                     >
                         Logout
+                    </LogoutButton>
+                </LogoutButtonContainer>
+                <LogoutButtonContainer style={{right:"15px"}}>
+                    <LogoutButton
+                        width="255px"
+                        onClick={() => {
+                            this.props.history.push('/tutorial');
+                        }}
+                    >
+                        Rules & Tutorial
                     </LogoutButton>
                 </LogoutButtonContainer>
                 <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>

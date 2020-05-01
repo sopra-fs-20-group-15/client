@@ -165,14 +165,6 @@ class Login extends React.Component {
     }
   }
 
-  async showRules() {
-      try {
-          this.props.history.push("/rules")
-      } catch (error) {
-          alert("Something went wrong while trying to access the rules")
-      }
-  }
-
   /**
    *  Every time the user enters something in the input field, the state gets updated.
    * @param key (the key of the state for identifying the field that needs to be updated)
@@ -201,7 +193,7 @@ class Login extends React.Component {
               <LogoutButton
                   width="255px"
                   onClick={() => {
-                      this.showRules();
+                    this.props.history.push("/tutorial");
                   }}
               >
                   Rules
