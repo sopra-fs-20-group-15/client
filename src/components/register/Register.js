@@ -179,7 +179,7 @@ class Register extends React.Component {
                 if (this.state.password.trim().length === 0) {
                     alert('Your password cannot be an empty string!')
                 } else {
-                    alert('Whitespaces are not allowed in your password!')
+                    alert('Whitespaces are not allowed in the beginning and end of your password!')
                 }
             }
         } catch (error) {
