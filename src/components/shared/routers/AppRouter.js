@@ -14,6 +14,11 @@ import Lobby from "../../Lobby/Lobby";
 import {CreateGameGuard} from "../routeProtectors/CreateGameGuard.js";
 import Leaderboard from "../../Leaderboard/Leaderboard";
 import {LeaderboardGuard} from "../routeProtectors/LeaderboardGuard.js";
+import Tutorial from "../../Tutorial/Tutorial.js";
+import {TutorialGuard} from "../routeProtectors/TutorialGuard";
+import Rules from "../../Rules/Rules.js"
+import {RulesGuard} from "../routeProtectors/RulesGuard";
+
 
 /**
  * Main router of your application.
@@ -53,6 +58,24 @@ class AppRouter extends React.Component {
                                 <LoginGuard>
                                     <Login/>
                                 </LoginGuard>
+                            )}
+                        />
+                        <Route
+                            path="/rules"
+                            exact
+                            render={() => (
+                                <RulesGuard>
+                                    <Rules/>
+                                </RulesGuard>
+                            )}
+                        />
+                        <Route
+                            path="/tutorial"
+                            exact
+                            render={() => (
+                                <TutorialGuard>
+                                    <Tutorial/>
+                                </TutorialGuard>
                             )}
                         />
                         <Route

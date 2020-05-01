@@ -5,7 +5,7 @@ import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
-import TriangleBackground from '../../views/pictures/TriangleBackground.png'
+import TriangleBackground from '../../views/pictures/TriangleBackground.png';
 
 
 const GridItemTitle = styled.div`
@@ -235,6 +235,8 @@ class Leaderboard extends Component {
             await api.put('/logout', requestBody);
             // token shows that user is logged in -> removing it shows that he has logged out
             localStorage.removeItem('token');
+            localStorage.removeItem('id');
+            localStorage.removeItem('username');
 
 
             // Logout successfully worked --> navigate to the route /login
