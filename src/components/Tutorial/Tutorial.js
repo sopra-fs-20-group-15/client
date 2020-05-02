@@ -4,7 +4,6 @@ import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
-import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
 
 const FormContainer = styled.div` 
@@ -207,45 +206,6 @@ class Tutorial extends React.Component {
                         Rules
                     </LogoutButton>
                 </TopButtonContainer>
-                <FormContainer>
-                    <Form>
-                        <UsernameInputField
-                            placeholder="Username"
-                            onChange={e => {
-                                this.handleInputChange('username', e.target.value);
-                            }}
-                        />
-                        <PasswordInputField
-                            placeholder="Password"
-                            onChange={e => {
-                                this.handleInputChange('password', e.target.value);
-                            }}
-                        />
-                    </Form>
-                </FormContainer>
-                <ButtonGroup>
-                    <ButtonContainer>
-                        <Button
-                            disabled={!this.state.username || !this.state.password}
-                            width="50%"
-                            onClick={() => {
-                                this.login();
-                            }}
-                        >
-                            Login
-                        </Button>
-                    </ButtonContainer>
-                    <ButtonContainer>
-                        <Button
-                            width="50%"
-                            onClick={() => {
-                                this.register();
-                            }}
-                        >
-                            Back to Registration
-                        </Button>
-                    </ButtonContainer>
-                </ButtonGroup>
             </BaseContainer>
         );
     }

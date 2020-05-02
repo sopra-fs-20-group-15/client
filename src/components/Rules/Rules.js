@@ -72,10 +72,10 @@ const ButtonGroup = styled.div`
   right: 30%;
 `;
 
-const RulesButtonContainer = styled.div`
+const TopButtonContainer = styled.div`
   position: absolute;
   top: 20px;
-  right: 15px;
+  // right: 15px;
   justify-content: center;
 `;
 
@@ -187,55 +187,26 @@ class Rules extends React.Component {
     render() {
         return (
             <BaseContainer  style={background}>
-                <RulesButtonContainer>
+                <TopButtonContainer style={{left:"15px"}}>
+                    <LogoutButton
+                        width="255px"
+                        onClick={() => {
+                            this.props.history.push("/"+localStorage.getItem('QA'));
+                        }}
+                    >
+                        Go Back
+                    </LogoutButton>
+                </TopButtonContainer>
+                <TopButtonContainer style={{right:"15px"}}>
                     <LogoutButton
                         width="255px"
                         onClick={() => {
                             this.props.history.push("/tutorial");
                         }}
                     >
-                        Rules
+                        Tutorial
                     </LogoutButton>
-                </RulesButtonContainer>
-                <FormContainer>
-                    <Form>
-                        <UsernameInputField
-                            placeholder="Username"
-                            onChange={e => {
-                                this.handleInputChange('username', e.target.value);
-                            }}
-                        />
-                        <PasswordInputField
-                            placeholder="Password"
-                            onChange={e => {
-                                this.handleInputChange('password', e.target.value);
-                            }}
-                        />
-                    </Form>
-                </FormContainer>
-                <ButtonGroup>
-                    <ButtonContainer>
-                        <Button
-                            disabled={!this.state.username || !this.state.password}
-                            width="50%"
-                            onClick={() => {
-                                this.login();
-                            }}
-                        >
-                            Login
-                        </Button>
-                    </ButtonContainer>
-                    <ButtonContainer>
-                        <Button
-                            width="50%"
-                            onClick={() => {
-                                this.register();
-                            }}
-                        >
-                            Back to Registration
-                        </Button>
-                    </ButtonContainer>
-                </ButtonGroup>
+                </TopButtonContainer>
             </BaseContainer>
         );
     }
