@@ -5,7 +5,7 @@ import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from '../../views/pictures/TriangleBackground.png';
-import JustOneLogo from "../../views/pictures/JustOneLogo.png";
+import RulesPicture from "../.../views/pictures/RulesPicture.jpg";
 
 const FormContainer = styled.div` 
   display: flex;
@@ -207,6 +207,7 @@ class Rules extends React.Component {
                         Tutorial
                     </LogoutButton>
                 </TopButtonContainer>
+                <img className={"center"} src={RulesPicture} alt={"RulesPicture"}/>
             </BaseContainer>
         );
     }

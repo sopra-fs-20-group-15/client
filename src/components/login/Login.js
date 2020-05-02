@@ -7,7 +7,6 @@ import {Button, LogoutButton} from '../../views/design/Button';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 
-
 const FormContainer = styled.div` 
   display: flex;
   flex-direction: column;
