@@ -187,7 +187,6 @@ class Rules extends React.Component {
     render() {
         return (
             <BaseContainer  style={background}>
-                <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
                 <RulesButtonContainer>
                     <LogoutButton
                         width="255px"

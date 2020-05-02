@@ -225,10 +225,11 @@ class Register extends React.Component {
                     <LogoutButton
                         width="255px"
                         onClick={() => {
+                            localStorage.setItem('QA', "register");
                             this.props.history.push("/tutorial");
                         }}
                     >
-                        Rules
+                        Rules & Tutorial
                     </LogoutButton>
                 </RulesButtonContainer>
                 <FormContainer>

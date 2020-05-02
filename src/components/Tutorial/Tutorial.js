@@ -72,10 +72,10 @@ const ButtonGroup = styled.div`
   right: 30%;
 `;
 
-const RulesButtonContainer = styled.div`
+const TopButtonContainer = styled.div`
   position: absolute;
   top: 20px;
-  right: 15px;
+  // right: 15px;
   justify-content: center;
 `;
 
@@ -187,17 +187,26 @@ class Tutorial extends React.Component {
     render() {
         return (
             <BaseContainer  style={background}>
-                <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
-                <RulesButtonContainer>
+                <TopButtonContainer style={{left:"15px"}}>
                     <LogoutButton
                         width="255px"
                         onClick={() => {
-                            this.props.history.push("/tutorial");
+                            this.props.history.push("/"+localStorage.getItem('QA'));
+                        }}
+                    >
+                        Go Back
+                    </LogoutButton>
+                </TopButtonContainer>
+                <TopButtonContainer style={{right:"15px"}}>
+                    <LogoutButton
+                        width="255px"
+                        onClick={() => {
+                            this.props.history.push("/rules");
                         }}
                     >
                         Rules
                     </LogoutButton>
-                </RulesButtonContainer>
+                </TopButtonContainer>
                 <FormContainer>
                     <Form>
                         <UsernameInputField

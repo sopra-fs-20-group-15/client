@@ -294,6 +294,7 @@ class Leaderboard extends Component {
                     <LogoutButton
                         width="255px"
                         onClick={() => {
+                            localStorage.setItem('QA', "leaderboard");
                             this.props.history.push('/tutorial');
                         }}
                     >

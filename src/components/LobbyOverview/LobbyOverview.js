@@ -363,6 +363,7 @@ class LobbyOverview extends Component {
                     <LogoutButton
                         width="255px"
                         onClick={() => {
+                            localStorage.setItem('QA', "lobbyOverview");
                             this.props.history.push('/tutorial');
                         }}
                     >

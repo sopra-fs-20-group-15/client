@@ -193,10 +193,11 @@ class Login extends React.Component {
               <LogoutButton
                   width="255px"
                   onClick={() => {
+                    localStorage.setItem('QA', "login");
                     this.props.history.push("/tutorial");
                   }}
               >
-                  Rules
+                  Rules & Tutorial
               </LogoutButton>
           </RulesButtonContainer>
           <FormContainer>
