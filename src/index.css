@@ -53,16 +53,6 @@ button {
   margin-left: -135px;
 }
 
-GridItemTitle {
-  background: #FCC812;
-  font-family: "Happy Monkey", sans-serif;
-  font-size: 24px;
-  text-decoration: underline;
-  text-transform: uppercase;
-  justify-content: center;
-  align-items: center;
-}
-
 title {
   margin: 0;
   padding: 0;

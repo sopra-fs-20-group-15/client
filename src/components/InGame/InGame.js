@@ -605,8 +605,6 @@ class InGame extends React.Component {
     async gameHasEnded() {
         try {
 
-            /** Necessary because otherwise the GET method will also be executed after the games deletion
-             * which will cause an error. */
              const response = await api.get('/games/' + this.state.gameId + '/ends/' + localStorage.getItem('token'));
 
              this.setState({
