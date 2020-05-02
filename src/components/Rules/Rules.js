@@ -5,18 +5,17 @@ import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from '../../views/pictures/TriangleBackground.png';
-import RulesPicture from "../.../views/pictures/RulesPicture.jpg";
+import RulesPicture from '../../views/pictures/RulesPicture.jpg';
 
 const FormContainer = styled.div` 
   display: flex;
   flex-direction: column;
   align-items: center;
  
+  top:70px;
+  left:315px;
+ 
   position: absolute;
-  left: 380px;
-  right: 380px;
-  top: 260px;
-  bottom: 200px;
   justify-content: center;
 `;
 
@@ -207,7 +206,9 @@ class Rules extends React.Component {
                         Tutorial
                     </LogoutButton>
                 </TopButtonContainer>
-                <img className={"center"} src={RulesPicture} alt={"RulesPicture"}/>
+                <FormContainer>
+                    <img className={"center"} src={RulesPicture} alt={"RulesPicture"}/>
+                </FormContainer>
             </BaseContainer>
         );
     }
