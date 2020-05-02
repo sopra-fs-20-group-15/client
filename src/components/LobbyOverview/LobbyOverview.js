@@ -176,7 +176,7 @@ const ButtonGroup = styled.div`
 const LogoutButtonContainer = styled.div`
   position: absolute;
   top: 20px;
-  left: 15px;
+  // left: 15px;
   justify-content: center;
 `;
 
@@ -349,7 +349,7 @@ class LobbyOverview extends Component {
                         </Button>
                     </OverlayButtonContainer>
                 </PasswordContainer>
-                <LogoutButtonContainer>
+                <LogoutButtonContainer style={{left:"15px"}}>
                     <LogoutButton
                         width="255px"
                         onClick={() => {
@@ -357,6 +357,17 @@ class LobbyOverview extends Component {
                         }}
                     >
                         Logout
+                    </LogoutButton>
+                </LogoutButtonContainer>
+                <LogoutButtonContainer style={{right:"15px"}}>
+                    <LogoutButton
+                        width="255px"
+                        onClick={() => {
+                            localStorage.setItem('QA', "lobbyOverview");
+                            this.props.history.push('/tutorial');
+                        }}
+                    >
+                        Rules & Tutorial
                     </LogoutButton>
                 </LogoutButtonContainer>
                 <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>

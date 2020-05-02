@@ -7,7 +7,6 @@ import {Button, LogoutButton} from '../../views/design/Button';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 
-
 const FormContainer = styled.div` 
   display: flex;
   flex-direction: column;
@@ -165,14 +164,6 @@ class Login extends React.Component {
     }
   }
 
-  async showRules() {
-      try {
-          this.props.history.push("/rules")
-      } catch (error) {
-          alert("Something went wrong while trying to access the rules")
-      }
-  }
-
   /**
    *  Every time the user enters something in the input field, the state gets updated.
    * @param key (the key of the state for identifying the field that needs to be updated)
@@ -201,10 +192,11 @@ class Login extends React.Component {
               <LogoutButton
                   width="255px"
                   onClick={() => {
-                      this.showRules();
+                    localStorage.setItem('QA', "login");
+                    this.props.history.push("/tutorial");
                   }}
               >
-                  Rules
+                  Rules & Tutorial
               </LogoutButton>
           </RulesButtonContainer>
           <FormContainer>

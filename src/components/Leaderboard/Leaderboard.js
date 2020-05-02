@@ -5,7 +5,7 @@ import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
-import TriangleBackground from '../../views/pictures/TriangleBackground.png'
+import TriangleBackground from '../../views/pictures/TriangleBackground.png';
 
 
 const GridItemTitle = styled.div`
@@ -176,7 +176,7 @@ const ButtonGroup = styled.div`
 const LogoutButtonContainer = styled.div`
   position: absolute;
   top: 20px;
-  left: 15px;
+  // left: 15px;
   justify-content: center;
 `;
 
@@ -235,6 +235,8 @@ class Leaderboard extends Component {
             await api.put('/logout', requestBody);
             // token shows that user is logged in -> removing it shows that he has logged out
             localStorage.removeItem('token');
+            localStorage.removeItem('id');
+            localStorage.removeItem('username');
 
 
             // Logout successfully worked --> navigate to the route /login
@@ -278,7 +280,7 @@ class Leaderboard extends Component {
     render() {
         return (
             <BaseContainer style={background}>
-                <LogoutButtonContainer>
+                <LogoutButtonContainer style={{left:"15px"}}>
                     <LogoutButton
                         width="255px"
                         onClick={() => {
@@ -286,6 +288,17 @@ class Leaderboard extends Component {
                         }}
                     >
                         Logout
+                    </LogoutButton>
+                </LogoutButtonContainer>
+                <LogoutButtonContainer style={{right:"15px"}}>
+                    <LogoutButton
+                        width="255px"
+                        onClick={() => {
+                            localStorage.setItem('QA', "leaderboard");
+                            this.props.history.push('/tutorial');
+                        }}
+                    >
+                        Rules & Tutorial
                     </LogoutButton>
                 </LogoutButtonContainer>
                 <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
