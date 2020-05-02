@@ -605,14 +605,13 @@ class InGame extends React.Component {
     async gameHasEnded() {
         try {
 
-             const response = await api.get('/games/' + this.state.gameId + '/ends/' + localStorage.getItem('token'));
-
-             this.setState({
-                 gameHasEnded: response.data.hasGameEnded
-             });
-
-             console.log('response', response);
-
+            if (!this.state.gameHasEnded) {
+                const response = await api.get('/games/' + this.state.gameId + '/ends/' + localStorage.getItem('token'));
+                console.log('executed response', response);
+                this.setState({
+                    gameHasEnded: response.data.hasGameEnded
+                });
+            }
 
             if (this.state.gameHasEnded) {
                 this.getHighestNumberOfGuesses();
