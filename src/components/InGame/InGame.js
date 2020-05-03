@@ -600,7 +600,8 @@ class InGame extends React.Component {
             await api.put('/games/' + this.state.gameId + '/initializations', requestBody);
 
         } catch (error) {
-            alert(`Something went wrong while initializing the turn: \n${handleError(error)}`);
+            alert(`Something went wrong while initializing the turn!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -629,7 +630,8 @@ class InGame extends React.Component {
             }
         } catch (error) {
             this.props.history.push('/lobbyOverview');
-            alert(`Something went wrong while checking end: \n${handleError(error)}`);
+            alert(`Something went wrong while checking whether the game has ended!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -705,14 +707,13 @@ class InGame extends React.Component {
                 }
             }
         } catch (error) {
-            alert(`Something went wrong while determining the Mystery Word: \n${handleError(error)}`)
+            alert(`Something went wrong while determining the Mystery Word!`);
+            console.log('error', handleError(error))
         }
     }
 
     async resetMysteryWord() {
-        console.log('gets in');
         if (this.state.phaseNumber === 4) {
-            console.log('and resets');
             this.setState({
                 mysteryWord: "",
                 mysteryWordId: null
@@ -728,8 +729,6 @@ class InGame extends React.Component {
                     mysteryWord: response.data.word,
                 });
             }
-
-            console.log('response from getting mw', response);
 
             for (let i = 0; i < this.state.currentCard.length; i++) {
                 if (this.state.mysteryWord && this.state.mysteryWord === this.state.currentCard[i]) {
@@ -778,7 +777,8 @@ class InGame extends React.Component {
             }
         } catch (error) {
             if (error.response.status !== 500) {
-                alert(`Something went wrong while trying to give a clue: \n${handleError(error)}`)
+                alert(`Something went wrong while trying to give a clue!`);
+                console.log('error', handleError(error))
             }
         }
     }
@@ -828,7 +828,8 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the valid clues: \n${handleError(error)}`);
+            alert(`Something went wrong while getting the valid clues!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -843,7 +844,8 @@ class InGame extends React.Component {
                 await api.post('/games/' + this.state.gameId + "/guesses", requestBody);
             }
         } catch (error) {
-            alert(`Something went wrong while giving the Guess: \n${handleError(error)}`);
+            alert(`Something went wrong while giving the guess!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -861,7 +863,8 @@ class InGame extends React.Component {
             this.displayGuess();
 
         } catch (error) {
-            alert(`Something went wrong while getting the Guess: \n${handleError(error)}`);
+            alert(`Something went wrong while getting the guess!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -888,7 +891,10 @@ class InGame extends React.Component {
                 });
             }
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the scores!`);
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -911,7 +917,10 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the highest score!`);
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -933,7 +942,10 @@ class InGame extends React.Component {
                 })
             }
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the highest number of guesses!`);
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -957,7 +969,10 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the lowest number of guesses!`)
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -979,7 +994,10 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the total number of guesses!`);
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -994,7 +1012,8 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the current Deck Size: \n${handleError(error)}`);
+            alert(`Something went wrong while getting the current Deck Size!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -1028,7 +1047,8 @@ class InGame extends React.Component {
             }*/
 
         } catch (error) {
-            alert(`Something went wrong while trying to get the players and their clues: \n${handleError(error)}`);
+            alert(`Something went wrong while trying to get the players and their clues!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -1156,7 +1176,9 @@ class InGame extends React.Component {
     }
 
     async overlayOn() {
-        document.getElementById("end").style.display = "block";
+        if (document.getElementById("end") !== null) {
+            document.getElementById("end").style.display = "block";
+        }
     }
 
     updatePhaseHUD(id) {
@@ -1278,7 +1300,8 @@ class InGame extends React.Component {
                 this.props.history.push('/lobbyOverview/')
             } else {
                 */
-            alert(`Something went wrong during the polling process: \n${handleError(error)}`);
+            alert(`Something went wrong during the polling process!`);
+            console.log('error', handleError(error))
         }
     };
 
@@ -1296,7 +1319,8 @@ class InGame extends React.Component {
             this.getPlayers();
 
         } catch (error) {
-            alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
+            alert(`Something went wrong while fetching the players!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -1372,7 +1396,7 @@ class InGame extends React.Component {
                                 <NameField>2. {this.state.players[1]}</NameField> :
                                 <NameFieldActivePlayer>2. {this.state.players[1]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[1])) || this.state.phaseNumber === 4 || localStorage.getItem('username') !== this.state.players[1] ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[1])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue2"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1395,7 +1419,7 @@ class InGame extends React.Component {
                                 <NameField>3. {this.state.players[2]}</NameField> :
                                 <NameFieldActivePlayer>3. {this.state.players[2]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[2])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[2]? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[2])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue3"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1421,7 +1445,7 @@ class InGame extends React.Component {
                                 <NameField>4. {this.state.players[3]}</NameField> :
                                 <NameFieldActivePlayer>4. {this.state.players[3]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[3])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[3]? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[3])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue4"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1444,7 +1468,7 @@ class InGame extends React.Component {
                                     <NameField>5. {this.state.players[4]}</NameField> :
                                     <NameFieldActivePlayer>5. {this.state.players[4]}</NameFieldActivePlayer>}
                                 <InputField>
-                                    {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[4])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[4]? (
+                                    {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[4])) || this.state.phaseNumber === 4 ? (
                                         <Output id={"clue5"}></Output>
                                     ):(
                                         <Input placeholder="Enter here.." onChange=
@@ -1516,7 +1540,7 @@ class InGame extends React.Component {
                                 <NameField>6. {this.state.players[5]}</NameField> :
                                 <NameFieldActivePlayer>6. {this.state.players[5]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[5])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[5]? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[5])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue6"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1539,7 +1563,7 @@ class InGame extends React.Component {
                                 <NameField>7. {this.state.players[6]}</NameField> :
                                 <NameFieldActivePlayer>7. {this.state.players[6]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[6])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[6]? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[6])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue7"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1564,7 +1588,7 @@ class InGame extends React.Component {
                                 <NameField>1. {this.state.players[0]}</NameField> :
                                 <NameFieldActivePlayer>1. {this.state.players[0]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[0])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[0]? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[0])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue1"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
