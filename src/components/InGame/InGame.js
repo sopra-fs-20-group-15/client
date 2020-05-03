@@ -1379,7 +1379,7 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field2"} disabled={!this.state.player2Input || localStorage.getItem('username') !== this.state.players[1]}
                                         onClick={() => {this.handleInput(this.state.players[1],this.state.player2Input);}}>
-                                <img src={ClickIcon} alt={"ClickIcon"}/>
+                                {localStorage.getItem('username') === this.state.players[1] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1402,7 +1402,7 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field3"} disabled={!this.state.player3Input || localStorage.getItem('username') !== this.state.players[2]}
                                         onClick={() => {this.handleInput(this.state.players[2],this.state.player3Input);}}>
-                                <img src={ClickIcon} alt={"ClickIcon"}/>
+                                {localStorage.getItem('username') === this.state.players[2] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1428,7 +1428,7 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field4"} disabled={!this.state.player4Input || localStorage.getItem('username') !== this.state.players[3]}
                                         onClick={() => {this.handleInput(this.state.players[3],this.state.player4Input);}}>
-                                <img src={ClickIcon} alt={"ClickIcon"}/>
+                                {localStorage.getItem('username') === this.state.players[3] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1451,7 +1451,7 @@ class InGame extends React.Component {
                                 </InputField>
                                 <ReadyField id={"field5"} disabled={!this.state.player5Input || localStorage.getItem('username') !== this.state.players[4]}
                                             onClick={() => {this.handleInput(this.state.players[4],this.state.player5Input);}}>
-                                    <img src={ClickIcon} alt={"ClickIcon"}/>
+                                    {localStorage.getItem('username') === this.state.players[4] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                                 </ReadyField>
                             </Player>
                         ): (<Player/>)}
@@ -1523,7 +1523,7 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field6"} disabled={!this.state.player6Input || localStorage.getItem('username') !== this.state.players[5]}
                                         onClick={() => {this.handleInput(this.state.players[5],this.state.player6Input);}}>
-                                <img src={ClickIcon} alt={"ClickIcon"}/>
+                                {localStorage.getItem('username') === this.state.players[5] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1546,7 +1546,7 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field7"} disabled={!this.state.player7Input || localStorage.getItem('username') !== this.state.players[6]}
                                         onClick={() => {this.handleInput(this.state.players[6],this.state.player7Input);}}>
-                                <img src={ClickIcon} alt={"ClickIcon"}/>
+                                {localStorage.getItem('username') === this.state.players[6] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1571,7 +1571,7 @@ class InGame extends React.Component {
                             </InputField>
                             <ReadyField id={"field1"} disabled={!this.state.player1Input || localStorage.getItem('username') !== this.state.players[0]}
                                         onClick={() => {this.handleInput(this.state.players[0],this.state.player1Input);}}>
-                                <img src={ClickIcon} alt={"ClickIcon"}/>
+                                {localStorage.getItem('username') === this.state.players[0] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
