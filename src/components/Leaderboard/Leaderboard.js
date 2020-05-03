@@ -29,7 +29,7 @@ const GridNormalItem = styled.div`
   align-items: center;
   display: flex;
   font-family: Happy Monkey;
-  font-size: 24px;
+  font-size: 20px;
   outline-style: solid;
 
 `;
@@ -42,89 +42,16 @@ const GridContainer = styled.div`
   border-radius: 25px;
   border-style: solid;
   position: absolute;
-  grid-auto-rows: 74px;
+  grid-auto-rows: 30px;
   
   left: 316px;
   right: 316px;
   top: 260px;
-  bottom: 200px;
+  bottom: 145px;
   overflow-y: scroll;
   
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-`;
-
-/** The property z-index sets the stack order. Giving it a higher value than the rest (here 2) will make sure the
- * overlay is displayed in front of all other elements. */
-const PasswordOverlayContainer = styled.div`    
-  box-sizing: border-box;
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-  
-  position: fixed;
-  display: none;
-  width: 100%;
-  height: 100%;
-  top: 0; 
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.5);
-  cursor: pointer;
-  
-  justify-content: center;
-  align-items: center;
-
-  z-index: 2;
-`;
-
-const PasswordContainer = styled.div`
-  background-color: #ECDD8F;
-  border-radius: 25px;
-  border-style: solid;
-  
-  display: none;
-  
-  width: 350px;
-  height: 158px;
-  
-  justify-content: center;
-  align-items: center;
-  
-  font-family: Happy Monkey;
-  font-size: 24px;
-  
-  padding-left: 18px;
-  padding-right: 18px;
-  padding-top: 10px;
-  
-  /* needed for centering */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%) }
-  
-  z-index: 3;
-`;
-
-const InputField = styled.input`
-  &::placeholder {
-    font-family: Happy Monkey;
-    color: rgba(0, 0, 0, 0.5);
-  }
-  position: absolute;
-  height: 40px;
-  background: rgba(203, 189, 140, 0.54);
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 20px;
-  border-color: rgba(203, 189, 140, 0.54);
-  font-family: Happy Monkey;
-  font-size: 16px;
-  
-  
-  width: 90%;
-  left: 5%;
-  top: 50px;
 `;
 
 const ErrorMessage = styled.div`
@@ -140,26 +67,6 @@ const ErrorMessage = styled.div`
   display: flex;
   font-family: Happy Monkey;
   font-size: 40px;
-`;
-
-const BotContainer = styled.div`
-  display: grid;
-  grid-template-rows: auto auto;
-  grid-gap: 3px 3px;
-  background-color: #000000;
-  position: relative;
-  
-  box-sizing: border-box;
-  outline-style: solid;
-`;
-
-const BotCell = styled.li`
-  background: #ECDD8F;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  font-family: Happy Monkey;
-  font-size: 24px;
 `;
 
 const background = {
@@ -184,31 +91,6 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
-`;
-
-const OverlayButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  
-  position: absolute
-  top: 100px
-  left: 5%
-  width: 200px;
-  
-  /* needed for centering */
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%) }
-`;
-
-const ChooseGameContainer = styled.div`
-  background: #ECDD8F;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  position: relative;
-  outline-style: solid;
 `;
 
 
