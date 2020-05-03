@@ -8,6 +8,8 @@ import {Game,BoardContainer,HUDContainer,TableContainer,Table,EndGameContainer,G
 import {TimerContainer,Round} from "../../views/design/TimerUI";
 import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/PhaseUI";
 import {Player,PlayerContainer,ReadyField,Input,InputField,Output,NameField,NameFieldActivePlayer,GuessedCardsField,ScoreField} from "../../views/design/PlayerUI";
+import ClickIcon from '../../views/pictures/ClickIcon.png'
+
 
 const DrawCard = styled.div`
     position: absolute;
@@ -132,7 +134,8 @@ class InGame extends React.Component {
             await api.put('/games/' + this.state.gameId + '/initializations', requestBody);
 
         } catch (error) {
-            alert(`Something went wrong while initializing the turn: \n${handleError(error)}`);
+            alert(`Something went wrong while initializing the turn!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -161,7 +164,8 @@ class InGame extends React.Component {
             }
         } catch (error) {
             this.props.history.push('/lobbyOverview');
-            alert(`Something went wrong while checking end: \n${handleError(error)}`);
+            alert(`Something went wrong while checking whether the game has ended!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -169,10 +173,7 @@ class InGame extends React.Component {
 
         if (localStorage.getItem('username') === this.state.activePlayer) {
             this.deleteGameSetUp();
-            const requestBody = JSON.stringify({
-                playerToken: localStorage.getItem('token')
-            });
-            await api.delete('/activeGames/' + this.state.gameId, {data: requestBody});
+            await api.delete('/activeGames/' + this.state.gameId);
         }
 
         this.props.history.push('/lobbyOverview');
@@ -192,6 +193,8 @@ class InGame extends React.Component {
             /** The active card is fetch (already set by POST request in first round and later initializeTurn()),
              * it's words are saved and displayed (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
+
+            console.log('response from getting card', response);
 
             if (response.status === 200 && response.data.words !== this.state.currentCard) {
                 this.setState({
@@ -222,7 +225,9 @@ class InGame extends React.Component {
                         mysteryWordId: wordId
                     });
 
-                    await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
+                    const response = await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
+
+                    console.log('response from determining mw', response);
 
                     /** All words except for the mystery word on the card are crossed out. */
                     for (let i = 0; i < this.state.currentCard.length; i++) {
@@ -236,7 +241,8 @@ class InGame extends React.Component {
                 }
             }
         } catch (error) {
-            alert(`Something went wrong while determining the Mystery Word: \n${handleError(error)}`)
+            alert(`Something went wrong while determining the Mystery Word!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -304,7 +310,10 @@ class InGame extends React.Component {
                 }
             }
         } catch (error) {
-            alert(`Something went wrong while trying to give a clue: \n${handleError(error)}`)
+            if (error.response.status !== 500) {
+                alert(`Something went wrong while trying to give a clue!`);
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -353,7 +362,8 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the valid clues: \n${handleError(error)}`);
+            alert(`Something went wrong while getting the valid clues!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -368,7 +378,8 @@ class InGame extends React.Component {
                 await api.post('/games/' + this.state.gameId + "/guesses", requestBody);
             }
         } catch (error) {
-            alert(`Something went wrong while giving the Guess: \n${handleError(error)}`);
+            alert(`Something went wrong while giving the guess!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -386,7 +397,8 @@ class InGame extends React.Component {
             this.displayGuess();
 
         } catch (error) {
-            alert(`Something went wrong while getting the Guess: \n${handleError(error)}`);
+            alert(`Something went wrong while getting the guess!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -413,7 +425,10 @@ class InGame extends React.Component {
                 });
             }
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the scores!`);
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -436,7 +451,10 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the highest score!`);
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -458,7 +476,10 @@ class InGame extends React.Component {
                 })
             }
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the highest number of guesses!`);
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -482,7 +503,10 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the lowest number of guesses!`)
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -504,7 +528,10 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the Scores: \n${handleError(error)}`);
+            if (error.response.status !== 404) {
+                alert(`Something went wrong while getting the total number of guesses!`);
+                console.log('error', handleError(error))
+            }
         }
     }
 
@@ -519,7 +546,8 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the current Deck Size: \n${handleError(error)}`);
+            alert(`Something went wrong while getting the current Deck Size!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -553,7 +581,8 @@ class InGame extends React.Component {
             }*/
 
         } catch (error) {
-            alert(`Something went wrong while trying to get the players and their clues: \n${handleError(error)}`);
+            alert(`Something went wrong while trying to get the players and their clues!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -681,7 +710,9 @@ class InGame extends React.Component {
     }
 
     async overlayOn() {
-        document.getElementById("end").style.display = "block";
+        if (document.getElementById("end") !== null) {
+            document.getElementById("end").style.display = "block";
+        }
     }
 
     updatePhaseHUD(id) {
@@ -795,7 +826,8 @@ class InGame extends React.Component {
                 this.props.history.push('/lobbyOverview/')
             } else {
                 */
-            alert(`Something went wrong during the polling process: \n${handleError(error)}`);
+            alert(`Something went wrong during the polling process!`);
+            console.log('error', handleError(error))
         }
     };
 
@@ -813,7 +845,8 @@ class InGame extends React.Component {
             this.getPlayers();
 
         } catch (error) {
-            alert(`Something went wrong while fetching the players: \n${handleError(error)}`);
+            alert(`Something went wrong while fetching the players!`);
+            console.log('error', handleError(error))
         }
     }
 
@@ -896,8 +929,9 @@ class InGame extends React.Component {
                                         {e => {this.handleInputChange('player2Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field2"} disabled={!this.state.player2Input}
+                            <ReadyField id={"field2"} disabled={!this.state.player2Input || localStorage.getItem('username') !== this.state.players[1]}
                                         onClick={() => {this.handleInput(this.state.players[1],this.state.player2Input);}}>
+                                {localStorage.getItem('username') === this.state.players[1] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -918,8 +952,9 @@ class InGame extends React.Component {
                                         {e => {this.handleInputChange('player3Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field3"} disabled={!this.state.player3Input}
+                            <ReadyField id={"field3"} disabled={!this.state.player3Input || localStorage.getItem('username') !== this.state.players[2]}
                                         onClick={() => {this.handleInput(this.state.players[2],this.state.player3Input);}}>
+                                {localStorage.getItem('username') === this.state.players[2] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -943,8 +978,9 @@ class InGame extends React.Component {
                                         {e => {this.handleInputChange('player4Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field4"} disabled={!this.state.player4Input}
+                            <ReadyField id={"field4"} disabled={!this.state.player4Input || localStorage.getItem('username') !== this.state.players[3]}
                                         onClick={() => {this.handleInput(this.state.players[3],this.state.player4Input);}}>
+                                {localStorage.getItem('username') === this.state.players[3] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -965,8 +1001,9 @@ class InGame extends React.Component {
                                             {e => {this.handleInputChange('player5Input', e.target.value);}}/>)
                                     }
                                 </InputField>
-                                <ReadyField id={"field5"} disabled={!this.state.player5Input}
+                                <ReadyField id={"field5"} disabled={!this.state.player5Input || localStorage.getItem('username') !== this.state.players[4]}
                                             onClick={() => {this.handleInput(this.state.players[4],this.state.player5Input);}}>
+                                    {localStorage.getItem('username') === this.state.players[4] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                                 </ReadyField>
                             </Player>
                         ): (<Player/>)}
@@ -1036,8 +1073,9 @@ class InGame extends React.Component {
                                         {e => {this.handleInputChange('player6Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field6"} disabled={!this.state.player6Input}
+                            <ReadyField id={"field6"} disabled={!this.state.player6Input || localStorage.getItem('username') !== this.state.players[5]}
                                         onClick={() => {this.handleInput(this.state.players[5],this.state.player6Input);}}>
+                                {localStorage.getItem('username') === this.state.players[5] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1058,8 +1096,9 @@ class InGame extends React.Component {
                                         {e => {this.handleInputChange('player7Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field7"} disabled={!this.state.player7Input}
+                            <ReadyField id={"field7"} disabled={!this.state.player7Input || localStorage.getItem('username') !== this.state.players[6]}
                                         onClick={() => {this.handleInput(this.state.players[6],this.state.player7Input);}}>
+                                {localStorage.getItem('username') === this.state.players[6] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
@@ -1082,8 +1121,9 @@ class InGame extends React.Component {
                                         {e => {this.handleInputChange('player1Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field1"} disabled={!this.state.player1Input}
+                            <ReadyField id={"field1"} disabled={!this.state.player1Input || localStorage.getItem('username') !== this.state.players[0]}
                                         onClick={() => {this.handleInput(this.state.players[0],this.state.player1Input);}}>
+                                {localStorage.getItem('username') === this.state.players[0] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}
