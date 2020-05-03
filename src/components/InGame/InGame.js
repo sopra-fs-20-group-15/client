@@ -91,7 +91,7 @@ class InGame extends React.Component {
             clueNumber: null,
             round: 1,
             phaseNumber: 1,
-            phases: ["Choose Number", "Write Clues", "Guess Word", "Word Reveal"],
+            phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
             player1Input: null,
             player2Input: null,
             player3Input: null,
