@@ -777,7 +777,9 @@ class InGame extends React.Component {
                 }
             }
         } catch (error) {
-            alert(`Something went wrong while trying to give a clue: \n${handleError(error)}`)
+            if (error.response.status !== 500) {
+                alert(`Something went wrong while trying to give a clue: \n${handleError(error)}`)
+            }
         }
     }
 
@@ -1370,7 +1372,7 @@ class InGame extends React.Component {
                                 <NameField>2. {this.state.players[1]}</NameField> :
                                 <NameFieldActivePlayer>2. {this.state.players[1]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[1])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[1])) || this.state.phaseNumber === 4 || localStorage.getItem('username') !== this.state.players[1] ? (
                                     <Output id={"clue2"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1393,7 +1395,7 @@ class InGame extends React.Component {
                                 <NameField>3. {this.state.players[2]}</NameField> :
                                 <NameFieldActivePlayer>3. {this.state.players[2]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[2])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[2])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[2]? (
                                     <Output id={"clue3"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1419,7 +1421,7 @@ class InGame extends React.Component {
                                 <NameField>4. {this.state.players[3]}</NameField> :
                                 <NameFieldActivePlayer>4. {this.state.players[3]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[3])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[3])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[3]? (
                                     <Output id={"clue4"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1442,7 +1444,7 @@ class InGame extends React.Component {
                                     <NameField>5. {this.state.players[4]}</NameField> :
                                     <NameFieldActivePlayer>5. {this.state.players[4]}</NameFieldActivePlayer>}
                                 <InputField>
-                                    {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[4])) || this.state.phaseNumber === 4 ? (
+                                    {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[4])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[4]? (
                                         <Output id={"clue5"}></Output>
                                     ):(
                                         <Input placeholder="Enter here.." onChange=
@@ -1514,7 +1516,7 @@ class InGame extends React.Component {
                                 <NameField>6. {this.state.players[5]}</NameField> :
                                 <NameFieldActivePlayer>6. {this.state.players[5]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[5])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[5])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[5]? (
                                     <Output id={"clue6"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1537,7 +1539,7 @@ class InGame extends React.Component {
                                 <NameField>7. {this.state.players[6]}</NameField> :
                                 <NameFieldActivePlayer>7. {this.state.players[6]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[6])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[6])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[6]? (
                                     <Output id={"clue7"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
@@ -1562,7 +1564,7 @@ class InGame extends React.Component {
                                 <NameField>1. {this.state.players[0]}</NameField> :
                                 <NameFieldActivePlayer>1. {this.state.players[0]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[0])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[0])) || this.state.phaseNumber === 4  || localStorage.getItem('username') !== this.state.players[0]? (
                                     <Output id={"clue1"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
