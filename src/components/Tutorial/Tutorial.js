@@ -6,33 +6,31 @@ import {Button, LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
 
-const FormContainer = styled.div` 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
- 
-  position: absolute;
-  left: 380px;
-  right: 380px;
-  top: 260px;
-  bottom: 200px;
-  justify-content: center;
-`;
-
 const Form = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  height: 316px;
-  mix-blend-mode: normal;
-  border: 1px solid rgba(203, 189, 140, 0.95);
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: center;
+  
+  position: absolute;
+  
+  right: 25%;
+  height: 600px;
+  width: 1200px;
+  top: 100px;
+  bottom: 200px;
+  
+  padding-top: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
+  
+  border: 2px solid rgba(0, 0, 0, 1);
   box-sizing: border-box;
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  
+  font-family: Happy Monkey;
   font-size: 20px;
-  font-weight: 700;
-  padding-left: 125px;
-  padding-right: 125px;
+  font-weight: 500;
+  
   border-radius: 20px;
   background: #E4DAA5;
 `;
@@ -41,70 +39,11 @@ const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
 };
 
-const UsernameInputField = styled.input`
-  mix-blend-mode: normal;
-  border: 1px solid rgba(203, 189, 140, 0.95);
-  box-sizing: border-box;
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-  &::placeholder {
-    color: rgba(256, 256, 200, 0.3);
-  }
-  position: relative;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 30px; 
-  height: 60px;
-  padding-left: 45px;
-  margin-left: -4px;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  background: rgba(203, 189, 140, 0.95);
-  color: brown;
-`;
-
-
-const ButtonGroup = styled.div`
-  position: absolute;
-  bottom: 10%;
-  left: 30%;
-  right: 30%;
-`;
-
 const TopButtonContainer = styled.div`
   position: absolute;
   top: 20px;
   // right: 15px;
   justify-content: center;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  border-radius: 20px;
-  margin-top: 20px;
-`;
-
-const PasswordInputField = styled.input`
-  mix-blend-mode: normal;
-  border: 1px solid rgba(203, 189, 140, 0.95);
-  box-sizing: border-box;
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-  &::placeholder {
-    color: rgba(256, 256, 200, 0.3);
-  }
-  position: relative;
-  left: 0px;
-  right: 0px;
-  top: 30px;
-  bottom: 30px;
-  height: 60px;
-  padding-left: 45px;
-  margin-left: -4px;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  background: rgba(203, 189, 140, 0.95);
-  color: brown;
 `;
 
 /**
@@ -205,6 +144,9 @@ class Tutorial extends React.Component {
                     >
                         Rules
                     </LogoutButton>
+                    <Form>
+                        Hellooo
+                    </Form>
                 </TopButtonContainer>
             </BaseContainer>
         );
