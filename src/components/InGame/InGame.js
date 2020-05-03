@@ -144,13 +144,14 @@ class InGame extends React.Component {
 
             if (!this.state.gameHasEnded) {
                 const response = await api.get('/games/' + this.state.gameId + '/ends/' + localStorage.getItem('token'));
-                console.log('executed response', response);
+                console.log('gets in has ended', response);
                 this.setState({
                     gameHasEnded: response.data.hasGameEnded
                 });
             }
 
             if (this.state.gameHasEnded) {
+                console.log('has ended');
                 this.getHighestNumberOfGuesses();
                 this.getLowestNumberOfGuesses();
                 this.getTotalNumberOfGuesses();
@@ -158,11 +159,13 @@ class InGame extends React.Component {
                 this.overlayOn();
                 setTimeout(() => this.deleteGame(), 15000)
             } else {
+                console.log('has not ended');
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.initializeTurn();
                 }
             }
         } catch (error) {
+            console.log('errrrrrroooooooor')
             this.props.history.push('/lobbyOverview');
             alert(`Something went wrong while checking whether the game has ended!`);
             console.log('error', handleError(error))
@@ -174,6 +177,7 @@ class InGame extends React.Component {
         if (localStorage.getItem('username') === this.state.activePlayer) {
             this.deleteGameSetUp();
             await api.delete('/activeGames/' + this.state.gameId);
+            console.log('deletes game');
         }
 
         this.props.history.push('/lobbyOverview');
@@ -193,8 +197,6 @@ class InGame extends React.Component {
             /** The active card is fetch (already set by POST request in first round and later initializeTurn()),
              * it's words are saved and displayed (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
-
-            console.log('response from getting card', response);
 
             if (response.status === 200 && response.data.words !== this.state.currentCard) {
                 this.setState({
@@ -226,8 +228,6 @@ class InGame extends React.Component {
                     });
 
                     const response = await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
-
-                    console.log('response from determining mw', response);
 
                     /** All words except for the mystery word on the card are crossed out. */
                     for (let i = 0; i < this.state.currentCard.length; i++) {
