@@ -36,7 +36,7 @@ const GridNormalItem = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: 210px 133px 126px 150px auto;
+  grid-template-columns:195px 133px 126px 150px auto;
   grid-gap: 3px 3px;
   background-color: #ECDD8F;
   border-radius: 25px;
