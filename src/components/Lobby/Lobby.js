@@ -58,7 +58,7 @@ const ChatContainer = styled.div`
   height: 350px;
   width: 400px;
   
-  overflow-y: scroll;
+  overflow-y: auto;
   right: 0%;
   
   border: 3px solid;
@@ -76,7 +76,7 @@ const GridContainer = styled.div`
   width: 400px;
   display: inline-block;
   
-  overflow-y: scroll;
+  overflow-y: hidden;
   
   border: 3px solid;
   // box-sizing: border-box;

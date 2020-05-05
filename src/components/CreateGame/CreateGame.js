@@ -36,7 +36,7 @@ const GridContainer = styled.div`
   left: 27.71%;
   right: 27.71%;
   top: 35%;
-  overflow-y: scroll;
+  overflow-y: hidden;
 `;
 
 const GridItemInput = styled.div`

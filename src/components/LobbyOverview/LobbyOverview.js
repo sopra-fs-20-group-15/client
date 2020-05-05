@@ -48,7 +48,8 @@ const GridContainer = styled.div`
   right: 316px;
   top: 260px;
   bottom: 200px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
