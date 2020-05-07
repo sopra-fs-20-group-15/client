@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
-import {GuessedCards,Deck,ActiveCard,Number,Word} from "../../views/design/CardsUI";
-import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/PhaseUI";
-import {Player,PlayerContainer,ReadyField,Input,InputField,Output,NameField,NameFieldActivePlayer,GuessedCardsField,ScoreField} from "../../views/design/PlayerUI";
+import {GuessedCards,Deck,ActiveCard,Number,Word} from "../../views/design/InGame/CardsUI";
+import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/InGame/PhaseUI";
+import {Player,PlayerContainer,ReadyField,Input,InputField,Output,NameField,NameFieldActivePlayer,GuessedCardsField,ScoreField} from "../../views/design/InGame/PlayerUI";
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
-import {HUDContainer} from "../../views/design/InGameUI";
+import {HUDContainer} from "../../views/design/InGame/InGameUI";
 
 const Form = styled.div`
   // display: flex;

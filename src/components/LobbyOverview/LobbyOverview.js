@@ -47,7 +47,7 @@ const GridContainer = styled.div`
   left: 316px;
   right: 316px;
   top: 260px;
-  bottom: 200px;
+  bottom: 197px;
   overflow-y: auto;
   overflow-x: hidden;
   

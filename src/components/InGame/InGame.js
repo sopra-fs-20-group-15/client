@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { api, handleError } from '../../helpers/api';
 import {StaticRouter, withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
-import {GuessedCards,Deck,ActiveCard,Number,Word} from "../../views/design/CardsUI";
-import {Game,BoardContainer,HUDContainer,TableContainer,Table,EndGameContainer,GameOver,Statistics,StatisticsContainer,Waiting} from "../../views/design/InGameUI";
-import {TimerContainer,Round} from "../../views/design/TimerUI";
-import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/PhaseUI";
-import {Player,PlayerContainer,ReadyField,Input,InputField,Output,NameField,NameFieldActivePlayer,GuessedCardsField,ScoreField} from "../../views/design/PlayerUI";
+import {GuessedCards,Deck,ActiveCard,Number,Word} from "../../views/design/InGame/CardsUI";
+import {Game,BoardContainer,HUDContainer,TableContainer,Table,EndGameContainer,GameOver,Statistics,StatisticsContainer,Waiting} from "../../views/design/InGame/InGameUI";
+import {TimerContainer,Round} from "../../views/design/InGame/TimerUI";
+import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/InGame/PhaseUI";
+import {Player,PlayerContainer,ReadyField,Input,InputField,Output,NameField,NameFieldActivePlayer,GuessedCardsField,ScoreField} from "../../views/design/InGame/PlayerUI";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
 
 
@@ -115,7 +115,7 @@ class InGame extends React.Component {
             totalGuesses: null,
         };
         // some error here...
-        this.interval = setInterval(this.handlePolling, 500);
+        this.interval = setInterval(this.handlePolling, 2000);
         this.handlePolling = this.handlePolling.bind(this);
         this.determineMysteryWord = this.determineMysteryWord.bind(this);
         this.giveClue = this.giveClue.bind(this);
