@@ -7,7 +7,7 @@ import {GuessedCards,Deck,ActiveCard,Number,Word} from "../../views/design/InGam
 import {Game,BoardContainer,HUDContainer,TableContainer,Table,EndGameContainer,GameOver,Statistics,StatisticsContainer,Waiting} from "../../views/design/InGame/InGameUI";
 import {TimerContainer,Round} from "../../views/design/InGame/TimerUI";
 import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/InGame/PhaseUI";
-import {Player,PlayerContainer,ReadyField,Input,InputField,Output,NameField,NameFieldActivePlayer,GuessedCardsField,ScoreField} from "../../views/design/InGame/PlayerUI";
+import {Player,PlayerContainer,SignalField,SignalFieldPlayer,Input,InputField,Output,NameField,NameFieldActivePlayer,GuessedCardsField,ScoreField} from "../../views/design/InGame/PlayerUI";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
 
 
@@ -79,6 +79,7 @@ class InGame extends React.Component {
             mysteryWordId: null,
             mysteryWord: "",
             players: [],
+            clonePlayers: [],
             activePlayer: null,
             passivePlayers: [],
             passivePlayersCluesGiven: [],
@@ -337,23 +338,37 @@ class InGame extends React.Component {
             //     }
             // }
 
+            /** Making sure that the clue of the person who plays is also being displayed. This has
+             * to be done separately since the player itself is not in the clonePlayers list. */
+            if (localStorage.getItem('username') !== this.state.activePlayer) {
+                for (let i=0; i < this.state.clues.length; i++) {
+                    if (this.state.clues[i].playerName === localStorage.getItem('username')) {
+                        let output = document.getElementById("clue1");
+                        output.textContent = this.state.clues[i].clue;
+                        break;
+                    }
+                    let output = document.getElementById("clue1");
+                    output.textContent = "'invalid clue'";
+                }
+            }
+
             /** display clues if valid*/
-            for (let i=0; i < this.state.players.length; i++) {
-                if (this.state.players[i] !== this.state.activePlayer) {
+            for (let i=0; i < this.state.clonePlayers.length; i++) {
+                if (this.state.clonePlayers[i] !== this.state.activePlayer) {
                     for (let j=0; j < this.state.clues.length; j++) {
-                        if (this.state.clues[j].playerName === this.state.players[i]) {
-                            let output = document.getElementById("clue" + (i + 1));
+                        if (this.state.clues[j].playerName === this.state.clonePlayers[i]) {
+                            let output = document.getElementById("clue" + (i + 2));
                             output.textContent = this.state.clues[j].clue;
                             break;
                         }
-                        let output = document.getElementById("clue" + (i + 1));
+                        let output = document.getElementById("clue" + (i + 2));
                         output.textContent = "'invalid clue'";
                     }
 
                     if (this.state.clues.length === 0) {
-                        for (let i = 0; i < this.state.players.length; i++) {
-                            if (this.state.players[i] !== this.state.activePlayer) {
-                                let output = document.getElementById("clue" + (i + 1));
+                        for (let i = 0; i < this.state.clonePlayers.length; i++) {
+                            if (this.state.clonePlayers[i] !== this.state.activePlayer) {
+                                let output = document.getElementById("clue" + (i + 2));
                                 output.textContent = "'invalid clue'";
                             }
                         }
@@ -595,22 +610,40 @@ class InGame extends React.Component {
             activePlayer: response.data.activePlayerName,
             passivePlayers: response.data.passivePlayerNames
         });
+
+        this.playersWithoutUser(response.data.playerNames).then(result => this.setState({
+            clonePlayers: result
+        }));
+
+        console.log('state', this.state);
     }
 
     displayGuess() {
         /**displays guess in phase 4*/
         if (this.state.phaseNumber === 4 && (this.state.guess !== null || this.state.guess !== "")) {
-            for (let i=0; i < this.state.players.length; i++) {
-                if (this.state.players[i] === this.state.activePlayer) {
-                    let output = document.getElementById("clue" + (i + 1));
-                    output.textContent = this.state.guess;
-                    if (this.state.validGuess === true) {
-                        let field = document.getElementById("field"+(1+i));
-                        field.style.backgroundColor = "#0900ff";
-                    } else {
-                        let field = document.getElementById("field"+(1+i));
-                        field.style.backgroundColor = "#ED0101";
+            if (this.state.clonePlayers.includes(this.state.activePlayer)) {
+                for (let i = 0; i < this.state.clonePlayers.length; i++) {
+                    if (this.state.clonePlayers[i] === this.state.activePlayer) {
+                        let output = document.getElementById("clue" + (i + 2));
+                        output.textContent = this.state.guess;
+                        if (this.state.validGuess === true) {
+                            let field = document.getElementById("field" + (2 + i));
+                            field.style.backgroundColor = "#0900ff";
+                        } else {
+                            let field = document.getElementById("field" + (2 + i));
+                            field.style.backgroundColor = "#ED0101";
+                        }
                     }
+                }
+            } else {
+                let output = document.getElementById("clue1");
+                output.textContent = this.state.guess;
+                if (this.state.validGuess === true) {
+                    let field = document.getElementById("field1");
+                    field.style.backgroundColor = "#0900ff";
+                } else {
+                    let field = document.getElementById("field1");
+                    field.style.backgroundColor = "#ED0101";
                 }
             }
         }
@@ -736,9 +769,14 @@ class InGame extends React.Component {
     }
 
     async signalSubmission(player) {
-        let i = this.state.players.indexOf(player);
-        let field = document.getElementById("field"+(1+i));
-        field.style.backgroundColor = "#0900ff";
+        if (this.state.clonePlayers.includes(player)) {
+            let i = this.state.clonePlayers.indexOf(player);
+            let field = document.getElementById("field" + (2+i));
+            field.style.backgroundColor = "#0900ff";
+        } else {
+            let field = document.getElementById("field1");
+            field.style.backgroundColor = "#0900ff";
+        }
     }
 
     async unsignalSubmission() {
@@ -856,12 +894,14 @@ class InGame extends React.Component {
 
     async playersWithoutUser(players) {
         let clonePlayers = [...players];
+        console.log('...', clonePlayers);
         let index = clonePlayers.indexOf(localStorage.getItem('username'));
         if (index > -1) {
             clonePlayers.splice(index, 1);
         } else {
             console.log('There is some error, the user is not in the list of players!')
         }
+        console.log('clones', clonePlayers);
         return clonePlayers;
     }
 
@@ -888,22 +928,6 @@ class InGame extends React.Component {
                             <Statistics> Highest Score: {this.state.highestScore.playerName} ({this.state.highestScore.score})</Statistics>
                         </StatisticsContainer>
                         <Waiting> Redirected in 15 seconds... </Waiting>
-{/*
-                        <Timer seconds={15} phaseNumber={5} deleteGame={this.deleteGame}/>
-*/}
-                        {/*{this.state.activePlayer !== localStorage.getItem('username')
-                            ? <ButtonContainer>
-                                <Button
-                                    width="100%"
-                                    onClick={() => {
-                                        this.deleteGame();
-                                    }}
-                                >
-                                    Go Back to Lobby Overview
-                                </Button>
-                            </ButtonContainer>
-                            : <Waiting> Waiting for the active player to terminate the game... </Waiting>
-                        }*/}
                     </EndGameContainer>
                     {/*Timer and Phase*/}
                     <HUDContainer>
@@ -929,21 +953,18 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}/>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[1]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[1]}</ScoreField>
-                            {this.state.players[1] !== this.state.activePlayer ?
-                                <NameField>2. {this.state.players[1]}</NameField> :
-                                <NameFieldActivePlayer>2. {this.state.players[1]}</NameFieldActivePlayer>}
+                            {this.state.clonePlayers[0] !== this.state.activePlayer ?
+                                <NameField>2. {this.state.clonePlayers[0]}</NameField> :
+                                <NameFieldActivePlayer>2. {this.state.clonePlayers[0]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[1])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[0])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue2"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player2Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field2"} disabled={!this.state.player2Input || localStorage.getItem('username') !== this.state.players[1]}
-                                        onClick={() => {this.handleInput(this.state.players[1],this.state.player2Input);}}>
-                                {localStorage.getItem('username') === this.state.players[1] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
-                            </ReadyField>
+                            <SignalField id={"field2"}/>
                         </Player>
                         ): (<Player/>)}
                         {/*Player 3*/}
@@ -952,21 +973,18 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}/>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[2]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[2]}</ScoreField>
-                            {this.state.players[2] !== this.state.activePlayer ?
-                                <NameField>3. {this.state.players[2]}</NameField> :
-                                <NameFieldActivePlayer>3. {this.state.players[2]}</NameFieldActivePlayer>}
+                            {this.state.clonePlayers[1] !== this.state.activePlayer ?
+                                <NameField>3. {this.state.clonePlayers[1]}</NameField> :
+                                <NameFieldActivePlayer>3. {this.state.clonePlayers[1]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[2])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[1])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue3"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player3Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field3"} disabled={!this.state.player3Input || localStorage.getItem('username') !== this.state.players[2]}
-                                        onClick={() => {this.handleInput(this.state.players[2],this.state.player3Input);}}>
-                                {localStorage.getItem('username') === this.state.players[2] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
-                            </ReadyField>
+                            <SignalField id={"field3"}/>
                         </Player>
                         ): (<Player/>)}
                     </PlayerContainer>
@@ -978,21 +996,18 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}/>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[3]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[3]}</ScoreField>
-                            {this.state.players[3] !== this.state.activePlayer ?
-                                <NameField>4. {this.state.players[3]}</NameField> :
-                                <NameFieldActivePlayer>4. {this.state.players[3]}</NameFieldActivePlayer>}
+                            {this.state.clonePlayers[2] !== this.state.activePlayer ?
+                                <NameField>4. {this.state.clonePlayers[2]}</NameField> :
+                                <NameFieldActivePlayer>4. {this.state.clonePlayers[2]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[3])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[2])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue4"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player4Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field4"} disabled={!this.state.player4Input || localStorage.getItem('username') !== this.state.players[3]}
-                                        onClick={() => {this.handleInput(this.state.players[3],this.state.player4Input);}}>
-                                {localStorage.getItem('username') === this.state.players[3] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
-                            </ReadyField>
+                            <SignalField id={"field4"}/>
                         </Player>
                         ): (<Player/>)}
                         {/*Player 5*/}
@@ -1001,21 +1016,18 @@ class InGame extends React.Component {
                                 <GuessedCardsField style={{top:"10%", left:"8%"}}/>
                                 <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[4]}</GuessedCardsField>
                                 <ScoreField>{this.state.scores[4]}</ScoreField>
-                                {this.state.players[4] !== this.state.activePlayer ?
-                                    <NameField>5. {this.state.players[4]}</NameField> :
-                                    <NameFieldActivePlayer>5. {this.state.players[4]}</NameFieldActivePlayer>}
+                                {this.state.clonePlayers[3] !== this.state.activePlayer ?
+                                    <NameField>5. {this.state.clonePlayers[3]}</NameField> :
+                                    <NameFieldActivePlayer>5. {this.state.clonePlayers[3]}</NameFieldActivePlayer>}
                                 <InputField>
-                                    {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[4])) || this.state.phaseNumber === 4 ? (
+                                    {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[3])) || this.state.phaseNumber === 4 ? (
                                         <Output id={"clue5"}></Output>
                                     ):(
                                         <Input placeholder="Enter here.." onChange=
                                             {e => {this.handleInputChange('player5Input', e.target.value);}}/>)
                                     }
                                 </InputField>
-                                <ReadyField id={"field5"} disabled={!this.state.player5Input || localStorage.getItem('username') !== this.state.players[4]}
-                                            onClick={() => {this.handleInput(this.state.players[4],this.state.player5Input);}}>
-                                    {localStorage.getItem('username') === this.state.players[4] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
-                                </ReadyField>
+                                <SignalField id={"field5"}/>
                             </Player>
                         ): (<Player/>)}
                     </PlayerContainer>
@@ -1073,21 +1085,18 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}/>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[5]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[5]}</ScoreField>
-                            {this.state.players[5] !== this.state.activePlayer ?
-                                <NameField>6. {this.state.players[5]}</NameField> :
-                                <NameFieldActivePlayer>6. {this.state.players[5]}</NameFieldActivePlayer>}
+                            {this.state.clonePlayers[4] !== this.state.activePlayer ?
+                                <NameField>6. {this.state.clonePlayers[4]}</NameField> :
+                                <NameFieldActivePlayer>6. {this.state.clonePlayers[4]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[5])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[4])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue6"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player6Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field6"} disabled={!this.state.player6Input || localStorage.getItem('username') !== this.state.players[5]}
-                                        onClick={() => {this.handleInput(this.state.players[5],this.state.player6Input);}}>
-                                {localStorage.getItem('username') === this.state.players[5] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
-                            </ReadyField>
+                            <SignalField id={"field6"}/>
                         </Player>
                         ): (<Player/>)}
                         {/*Player 7*/}
@@ -1096,21 +1105,18 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}/>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[6]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[6]}</ScoreField>
-                            {this.state.players[6] !== this.state.activePlayer ?
-                                <NameField>7. {this.state.players[6]}</NameField> :
-                                <NameFieldActivePlayer>7. {this.state.players[6]}</NameFieldActivePlayer>}
+                            {this.state.clonePlayers[5] !== this.state.activePlayer ?
+                                <NameField>7. {this.state.clonePlayers[5]}</NameField> :
+                                <NameFieldActivePlayer>7. {this.state.clonePlayers[5]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[6])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[5])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue7"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player7Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field7"} disabled={!this.state.player7Input || localStorage.getItem('username') !== this.state.players[6]}
-                                        onClick={() => {this.handleInput(this.state.players[6],this.state.player7Input);}}>
-                                {localStorage.getItem('username') === this.state.players[6] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
-                            </ReadyField>
+                            <SignalField id={"field7"}/>
                         </Player>
                         ): (<Player/>)}
                     </PlayerContainer>
@@ -1121,21 +1127,21 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"10%", left:"8%"}}/>
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[0]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[0]}</ScoreField>
-                            {this.state.players[0] !== this.state.activePlayer ?
-                                <NameField>1. {localStorage.getItem('username')}</NameField> :
-                                <NameFieldActivePlayer>1. {localStorage.getItem('username')}</NameFieldActivePlayer>}
+                            {localStorage.getItem('username') !== this.state.activePlayer ?
+                                <NameField>1. {localStorage.getItem('username')} </NameField> :
+                                <NameFieldActivePlayer>1. {localStorage.getItem('username')} </NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[0])) || this.state.phaseNumber === 4 ? (
+                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(localStorage.getItem('username'))) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue1"}></Output>
                                 ):(
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('player1Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field1"} disabled={!this.state.player1Input}
+                            <SignalFieldPlayer id={"field1"} disabled={!this.state.player1Input}
                                         onClick={() => {this.handleInput(localStorage.getItem('username'), this.state.player1Input);}}>
                                 <img src={ClickIcon} alt={"ClickIcon"}/>
-                            </ReadyField>
+                            </SignalFieldPlayer>
                         </Player>
                         ): (<Player/>)}
                     </PlayerContainer>

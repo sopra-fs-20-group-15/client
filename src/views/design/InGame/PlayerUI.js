@@ -13,7 +13,28 @@ export const Player = styled.div`
 export const PlayerContainer = styled.div`
 `;
 
-export const ReadyField = styled.button`
+export const SignalField = styled.div`
+  height: 70px;
+  width: 70px;
+  
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+  
+  background: #CBBD8C;
+  border: 3px solid #000000;
+  border-radius: 100px;
+  
+  text-position: absolute;
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 70px;
+  display: flex;
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
+`;
+
+export const SignalFieldPlayer = styled.button`
   &:hover {
     transform: translateY(-2px);
   }

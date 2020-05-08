@@ -5,7 +5,18 @@ import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
 import {GuessedCards,Deck,ActiveCard,Number,Word} from "../../views/design/InGame/CardsUI";
 import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/InGame/PhaseUI";
-import {Player,PlayerContainer,ReadyField,Input,InputField,Output,NameField,NameFieldActivePlayer,GuessedCardsField,ScoreField} from "../../views/design/InGame/PlayerUI";
+import {
+    Player,
+    PlayerContainer,
+    SignalFieldPlayer,
+    Input,
+    InputField,
+    Output,
+    NameField,
+    NameFieldActivePlayer,
+    GuessedCardsField,
+    ScoreField
+} from "../../views/design/InGame/PlayerUI";
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
 import {HUDContainer} from "../../views/design/InGame/InGameUI";
@@ -266,9 +277,9 @@ class Tutorial extends React.Component {
                                         <Input placeholder="Enter here.." onChange=
                                             {e => {this.handleInputChange('aliceInput', e.target.value);}}/>)
                                     </InputField>
-                                    <ReadyField id={"alice"}
+                                    <SignalFieldPlayer id={"alice"}
                                                 onClick={() => {this.handleInputAlice();}}>
-                                    </ReadyField>
+                                    </SignalFieldPlayer>
                                 </Player>
                         </PlayerContainer>
                         <PlayerContainer style={{position:"absolute", top:"65%", right:"11%"}}>
@@ -281,9 +292,9 @@ class Tutorial extends React.Component {
                                     <Input placeholder="Enter here.." onChange=
                                         {e => {this.handleInputChange('bobInput', e.target.value);}}/>)
                                 </InputField>
-                                <ReadyField
+                                <SignalFieldPlayer
                                     onClick={() => {this.handleInputBob();}}>
-                                </ReadyField>
+                                </SignalFieldPlayer>
                             </Player>
                         </PlayerContainer>
                         <Phase style={{position:"absolute", bottom:"20%", left:"50%"}}>

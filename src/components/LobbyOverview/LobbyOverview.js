@@ -283,7 +283,7 @@ class LobbyOverview extends Component {
                     password: ""
                 });
 
-                const response = await api.put('/games/' + this.state.chosenLobby.id + '/players', requestBody);
+                await api.put('/games/' + this.state.chosenLobby.id + '/players', requestBody);
 
                 this.props.history.push('/lobby/' + this.state.chosenLobby.id)
 
