@@ -854,6 +854,17 @@ class InGame extends React.Component {
         clearInterval(this.interval)
     }
 
+    async playersWithoutUser(players) {
+        let clonePlayers = [...players];
+        let index = clonePlayers.indexOf(localStorage.getItem('username'));
+        if (index > -1) {
+            clonePlayers.splice(index, 1);
+        } else {
+            console.log('There is some error, the user is not in the list of players!')
+        }
+        return clonePlayers;
+    }
+
     render() {
         // this construction of the variable name for the different timer seconds helps us to render the timer dynamically
         // let t = {};
@@ -1111,8 +1122,8 @@ class InGame extends React.Component {
                             <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[0]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[0]}</ScoreField>
                             {this.state.players[0] !== this.state.activePlayer ?
-                                <NameField>1. {this.state.players[0]}</NameField> :
-                                <NameFieldActivePlayer>1. {this.state.players[0]}</NameFieldActivePlayer>}
+                                <NameField>1. {localStorage.getItem('username')}</NameField> :
+                                <NameFieldActivePlayer>1. {localStorage.getItem('username')}</NameFieldActivePlayer>}
                             <InputField>
                                 {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.players[0])) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue1"}></Output>
@@ -1121,9 +1132,9 @@ class InGame extends React.Component {
                                         {e => {this.handleInputChange('player1Input', e.target.value);}}/>)
                                 }
                             </InputField>
-                            <ReadyField id={"field1"} disabled={!this.state.player1Input || localStorage.getItem('username') !== this.state.players[0]}
-                                        onClick={() => {this.handleInput(this.state.players[0],this.state.player1Input);}}>
-                                {localStorage.getItem('username') === this.state.players[0] ? <img src={ClickIcon} alt={"ClickIcon"}/> : null}
+                            <ReadyField id={"field1"} disabled={!this.state.player1Input}
+                                        onClick={() => {this.handleInput(localStorage.getItem('username'), this.state.player1Input);}}>
+                                <img src={ClickIcon} alt={"ClickIcon"}/>
                             </ReadyField>
                         </Player>
                         ): (<Player/>)}

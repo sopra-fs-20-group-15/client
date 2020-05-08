@@ -6,15 +6,7 @@ import {withRouter} from 'react-router-dom';
 import {Button, LogoutButton} from '../../views/design/Button';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
-import {
-    ButtonContainer,
-    ButtonGroup,
-    Form,
-    FormContainer,
-    RulesButtonContainer,
-    UsernameInputField,
-    PasswordInputField
-} from "../../views/design/RegisterAndLogin/RegisterAndLoginUI";
+import {ButtonContainer, ButtonGroup, Form, FormContainer, RulesButtonContainer, UsernameInputField, PasswordInputField} from "../../views/design/RegisterAndLogin/RegisterAndLoginUI";
 
 const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
