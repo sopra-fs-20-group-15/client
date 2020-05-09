@@ -42,7 +42,7 @@ class Timer extends Component{
         if (phaseNumber === 1) {
             this.props.determineMysteryWord(Math.floor(Math.random() * 5) + 1);
         } else if (phaseNumber === 2) {
-            this.props.giveClue("'invalid_clue'");
+            this.props.giveClue(this.props.mysteryWord);
         } else if (phaseNumber === 3) {
             this.props.setGuess("'too_slow'");
         } else if (phaseNumber === 4) {

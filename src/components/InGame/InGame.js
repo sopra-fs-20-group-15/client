@@ -1,13 +1,36 @@
 import React, {Fragment} from 'react';
 import styled from 'styled-components';
-import { api, handleError } from '../../helpers/api';
+import {api, handleError} from '../../helpers/api';
 import {StaticRouter, withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
-import {GuessedCards,Deck,ActiveCard,Number,Word} from "../../views/design/InGame/CardsUI";
-import {Game,BoardContainer,HUDContainer,TableContainer,Table,EndGameContainer,GameOver,Statistics,StatisticsContainer,Waiting} from "../../views/design/InGame/InGameUI";
-import {TimerContainer,Round} from "../../views/design/InGame/TimerUI";
-import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/InGame/PhaseUI";
-import {Player,PlayerContainer,SignalField,SignalFieldPlayer,Input,InputField,Output,NameField,NameFieldActivePlayer,GuessedCardsField,ScoreField} from "../../views/design/InGame/PlayerUI";
+import {GuessedCards, Deck, ActiveCard, Number, Word} from "../../views/design/InGame/CardsUI";
+import {
+    Game,
+    BoardContainer,
+    HUDContainer,
+    TableContainer,
+    Table,
+    EndGameContainer,
+    GameOver,
+    Statistics,
+    StatisticsContainer,
+    Waiting
+} from "../../views/design/InGame/InGameUI";
+import {TimerContainer, Round} from "../../views/design/InGame/TimerUI";
+import {Phase, PhaseCircle, PhaseMessage} from "../../views/design/InGame/PhaseUI";
+import {
+    Player,
+    PlayerContainer,
+    SignalField,
+    SignalFieldPlayer,
+    Input,
+    InputField,
+    Output,
+    NameField,
+    NameFieldActivePlayer,
+    GuessedCardsField,
+    ScoreField
+} from "../../views/design/InGame/PlayerUI";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
 
 
@@ -88,8 +111,8 @@ class InGame extends React.Component {
             validGuess: false,
             timer: 30,
             remainingCards: 13,
-            guessedCards: [0,0,0,0,0,0,0],
-            scores: [0,0,0,0,0,0,0],
+            guessedCards: [0, 0, 0, 0, 0, 0, 0],
+            scores: [0, 0, 0, 0, 0, 0, 0],
             //frontend variables
             clueNumber: null,
             round: 1,
@@ -116,7 +139,7 @@ class InGame extends React.Component {
             totalGuesses: null,
         };
         // some error here...
-        this.interval = setInterval(this.handlePolling, 2000);
+        this.interval = setInterval(this.handlePolling, 500);
         this.handlePolling = this.handlePolling.bind(this);
         this.determineMysteryWord = this.determineMysteryWord.bind(this);
         this.giveClue = this.giveClue.bind(this);
@@ -190,7 +213,7 @@ class InGame extends React.Component {
             playerToken: localStorage.getItem('token')
         });
 
-        await api.delete('/gameSetUps/'+this.state.gameId, {data: requestBody});
+        await api.delete('/gameSetUps/' + this.state.gameId, {data: requestBody});
     }
 
     async getCard() {
@@ -242,7 +265,9 @@ class InGame extends React.Component {
                 }
             }
         } catch (error) {
-            alert(`Something went wrong while determining the Mystery Word!`);
+            if (error.response.status !== 500) {
+                alert(`Something went wrong while determining the Mystery Word!`);
+            }
             console.log('error', handleError(error))
         }
     }
@@ -258,7 +283,7 @@ class InGame extends React.Component {
 
     async getMysteryWord() {
         try {
-            const response = await api.get('/games/'+this.state.gameId+"/mysteryWord/"+localStorage.getItem('token'));
+            const response = await api.get('/games/' + this.state.gameId + "/mysteryWord/" + localStorage.getItem('token'));
             if (response.status === 200) {
                 this.setState({
                     mysteryWord: response.data.word,
@@ -268,13 +293,13 @@ class InGame extends React.Component {
             for (let i = 0; i < this.state.currentCard.length; i++) {
                 if (this.state.mysteryWord && this.state.mysteryWord === this.state.currentCard[i]) {
                     this.setState({
-                        mysteryWordId: i+1
+                        mysteryWordId: i + 1
                     });
                 }
             }
 
             for (let k = 0; k < this.state.currentCard.length; k++) {
-                if (this.state.mysteryWordId && this.state.currentCard[this.state.mysteryWordId-1] !== this.state.currentCard[k]) {
+                if (this.state.mysteryWordId && this.state.currentCard[this.state.mysteryWordId - 1] !== this.state.currentCard[k]) {
                     let lineThroughWord = document.getElementById("word" + (k + 1));
                     lineThroughWord.style.textDecoration = "line-through";
                 }
@@ -287,7 +312,7 @@ class InGame extends React.Component {
     }
 
     async unsignalMysteryWord() {
-        for (let k=0 ; k<this.state.currentCard.length ; k++) {
+        for (let k = 0; k < this.state.currentCard.length; k++) {
             let lineThroughWord = document.getElementById("word" + (k + 1));
             lineThroughWord.style.textDecoration = "none";
         }
@@ -311,10 +336,10 @@ class InGame extends React.Component {
                 }
             }
         } catch (error) {
-            if (error.response.status !== 500) {
+            if (error.response.status !== 500 && error.response.status !== 401) {
                 alert(`Something went wrong while trying to give a clue!`);
-                console.log('error', handleError(error))
             }
+            console.log('error', handleError(error))
         }
     }
 
@@ -341,7 +366,7 @@ class InGame extends React.Component {
             /** Making sure that the clue of the person who plays is also being displayed. This has
              * to be done separately since the player itself is not in the clonePlayers list. */
             if (localStorage.getItem('username') !== this.state.activePlayer) {
-                for (let i=0; i < this.state.clues.length; i++) {
+                for (let i = 0; i < this.state.clues.length; i++) {
                     if (this.state.clues[i].playerName === localStorage.getItem('username')) {
                         let output = document.getElementById("clue1");
                         output.textContent = this.state.clues[i].clue;
@@ -353,9 +378,9 @@ class InGame extends React.Component {
             }
 
             /** display clues if valid*/
-            for (let i=0; i < this.state.clonePlayers.length; i++) {
+            for (let i = 0; i < this.state.clonePlayers.length; i++) {
                 if (this.state.clonePlayers[i] !== this.state.activePlayer) {
-                    for (let j=0; j < this.state.clues.length; j++) {
+                    for (let j = 0; j < this.state.clues.length; j++) {
                         if (this.state.clues[j].playerName === this.state.clonePlayers[i]) {
                             let output = document.getElementById("clue" + (i + 2));
                             output.textContent = this.state.clues[j].clue;
@@ -383,8 +408,8 @@ class InGame extends React.Component {
     }
 
     async undisplayClues() {
-        for (let i=0; i < this.state.clonePlayers.length; i++) {
-            let output = document.getElementById("clue"+(2+i));
+        for (let i = 0; i < this.state.clonePlayers.length; i++) {
+            let output = document.getElementById("clue" + (2 + i));
             output.textContent = "";
         }
     }
@@ -400,7 +425,9 @@ class InGame extends React.Component {
                 await api.post('/games/' + this.state.gameId + "/guesses", requestBody);
             }
         } catch (error) {
-            alert(`Something went wrong while giving the guess!`);
+            if (error.response.status !== 500) {
+                alert(`Something went wrong while giving the guess!`);
+            }
             console.log('error', handleError(error))
         }
     }
@@ -430,14 +457,14 @@ class InGame extends React.Component {
 
             if (response.status === 200) {
 
-                let scoreList = [0,0,0,0,0,0,0];
-                let guessedCardsList = [0,0,0,0,0,0,0];
+                let scoreList = [0, 0, 0, 0, 0, 0, 0];
+                let guessedCardsList = [0, 0, 0, 0, 0, 0, 0];
 
-                for (let i=0 ; i<this.state.clonePlayers.length ; i++) {
-                    for (let k=0 ; k<response.data.length ; k++) {
+                for (let i = 0; i < this.state.clonePlayers.length; i++) {
+                    for (let k = 0; k < response.data.length; k++) {
                         if (this.state.clonePlayers[i] === response.data[k].playerName) {
-                        scoreList[i+1] = response.data[k].score;
-                        guessedCardsList[i+1] = response.data[k].numberOfCorrectlyGuessedMysteryWords;
+                            scoreList[i + 1] = response.data[k].score;
+                            guessedCardsList[i + 1] = response.data[k].numberOfCorrectlyGuessedMysteryWords;
                         }
                         if (localStorage.getItem('username') === response.data[k].playerName) {
                             scoreList[0] = response.data[k].score;
@@ -446,8 +473,8 @@ class InGame extends React.Component {
                     }
                 }
                 this.setState({
-                   scores: scoreList,
-                   guessedCards: guessedCardsList
+                    scores: scoreList,
+                    guessedCards: guessedCardsList
                 });
             }
         } catch (error) {
@@ -466,11 +493,11 @@ class InGame extends React.Component {
 
                 let highestScore = response.data[0];
 
-                for (let i=1 ; i<response.data.length ; i++) {
-                        if (response.data[i].score >= highestScore) {
-                            highestScore = response.data[i];
-                        }
+                for (let i = 1; i < response.data.length; i++) {
+                    if (response.data[i].score >= highestScore) {
+                        highestScore = response.data[i];
                     }
+                }
                 this.setState({
                     highestScore: highestScore
                 });
@@ -492,7 +519,7 @@ class InGame extends React.Component {
 
                 let mostGuesses = response.data[0];
 
-                for (let i=1 ; i<response.data.length ; i++) {
+                for (let i = 1; i < response.data.length; i++) {
                     if (response.data[i].numberOfCorrectlyGuessedMysteryWords >= mostGuesses.numberOfCorrectlyGuessedMysteryWords) {
                         mostGuesses = response.data[i];
                     }
@@ -517,7 +544,7 @@ class InGame extends React.Component {
 
                 let leastGuesses = response.data[0];
 
-                for (let i=1 ; i<response.data.length ; i++) {
+                for (let i = 1; i < response.data.length; i++) {
                     if (response.data[i].numberOfCorrectlyGuessedMysteryWords <= leastGuesses.numberOfCorrectlyGuessedMysteryWords) {
                         leastGuesses = response.data[i];
                     }
@@ -544,7 +571,7 @@ class InGame extends React.Component {
 
                 let totalGuesses = 0;
 
-                for (let i=0 ; i<response.data.length ; i++) {
+                for (let i = 0; i < response.data.length; i++) {
                     totalGuesses += response.data[i].numberOfCorrectlyGuessedMysteryWords;
                 }
 
@@ -697,7 +724,7 @@ class InGame extends React.Component {
     handleInputChange(key, value) {
         // Example: if the key is username, this statement is the equivalent to the following one:
         // this.setState({'username': value});
-        this.setState({ [key]: value });
+        this.setState({[key]: value});
     }
 
     updatePhase() {
@@ -713,8 +740,7 @@ class InGame extends React.Component {
                 });
                 this.updatePhaseHUD(4);
             }
-        }
-        else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
+        } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 // console.log('gets in phase 3', this.state);
                 this.setState({
@@ -761,7 +787,7 @@ class InGame extends React.Component {
     }
 
     updatePhaseHUD(id) {
-        for (let i=1 ; i<=4 ; i++) {
+        for (let i = 1; i <= 4; i++) {
             if (i === id) {
                 if (id === 1 || id === 3) {
                     let greenPhase = document.getElementById("phase" + i);
@@ -774,7 +800,7 @@ class InGame extends React.Component {
                     greenPhase.style.backgroundColor = "#05FF00";
                 }
             } else {
-                let greyPhase = document.getElementById("phase"+i);
+                let greyPhase = document.getElementById("phase" + i);
                 greyPhase.style.backgroundColor = "#817857";
             }
         }
@@ -783,7 +809,7 @@ class InGame extends React.Component {
     async signalSubmission(player) {
         if (this.state.clonePlayers.includes(player)) {
             let i = this.state.clonePlayers.indexOf(player);
-            let field = document.getElementById("field" + (2+i));
+            let field = document.getElementById("field" + (2 + i));
             field.style.backgroundColor = "#0900ff";
         } else {
             let field = document.getElementById("field1");
@@ -792,8 +818,8 @@ class InGame extends React.Component {
     }
 
     async unsignalSubmission() {
-        for (let i=0; i < this.state.players.length; i++) {
-            let field = document.getElementById("field"+(1+i));
+        for (let i = 0; i < this.state.players.length; i++) {
+            let field = document.getElementById("field" + (1 + i));
             field.style.backgroundColor = "#CBBD8C";
         }
     }
@@ -930,40 +956,46 @@ class InGame extends React.Component {
         // t['timer' + d] = 10;
         // -> maybe needed later
         return (
-                <Game>
-                    <EndGameContainer id={"end"}>
-                        <GameOver> Well played! </GameOver>
-                        <StatisticsContainer>
-                            <Statistics> Total Words guessed: {this.state.totalGuesses} </Statistics>
-                            <Statistics> Most Words guessed: {this.state.mostGuesses.playerName} ({this.state.mostGuesses.numberOfCorrectlyGuessedMysteryWords}) </Statistics>
-                            <Statistics> Least Words guessed: {this.state.leastGuesses.playerName} ({this.state.leastGuesses.numberOfCorrectlyGuessedMysteryWords}) </Statistics>
-                            <Statistics> Highest Score: {this.state.highestScore.playerName} ({this.state.highestScore.score})</Statistics>
-                        </StatisticsContainer>
-                        <Waiting> Redirected in 15 seconds... </Waiting>
-                    </EndGameContainer>
-                    {/*Timer and Phase*/}
-                    <HUDContainer>
-                        <TimerContainer>
-                            <Round> Round {this.state.round} </Round>
-                            <Timer seconds={this.state.timer} phaseNumber={this.state.phaseNumber} determineMysteryWord={this.determineMysteryWord}
-                                   giveClue={this.giveClue} setGuess={this.setGuess} gameHasEnded={this.gameHasEnded} gameId={this.state.gameId}/>
-                        </TimerContainer>
-                        <Phase>
-                            <PhaseCircle id={"phase1"} style={{left:"26px", backgroundColor:"#FF0000"}}/>
-                            <PhaseCircle id={"phase2"} style={{left:"82px"}}/>
-                            <PhaseCircle id={"phase3"} style={{left:"138px"}}/>
-                            <PhaseCircle id={"phase4"} style={{left:"194px"}}/>
-                            {/* need props here, just placeholder for now*/}
-                            <PhaseMessage> {this.state.phases[this.state.phaseNumber-1]} </PhaseMessage>
-                        </Phase>
-                    </HUDContainer>
-                    {/*First Player Row*/}
-                    <PlayerContainer>
-                        {/*Player 2*/}
-                        {this.state.players.length>=2 ? (
-                        <Player style={{marginTop:"-8%", marginLeft:"20%"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[1]}</GuessedCardsField>
+            <Game>
+                <EndGameContainer id={"end"}>
+                    <GameOver> Well played! </GameOver>
+                    <StatisticsContainer>
+                        <Statistics> Total Words guessed: {this.state.totalGuesses} </Statistics>
+                        <Statistics> Most Words
+                            guessed: {this.state.mostGuesses.playerName} ({this.state.mostGuesses.numberOfCorrectlyGuessedMysteryWords}) </Statistics>
+                        <Statistics> Least Words
+                            guessed: {this.state.leastGuesses.playerName} ({this.state.leastGuesses.numberOfCorrectlyGuessedMysteryWords}) </Statistics>
+                        <Statistics> Highest
+                            Score: {this.state.highestScore.playerName} ({this.state.highestScore.score})</Statistics>
+                    </StatisticsContainer>
+                    <Waiting> Redirected in 15 seconds... </Waiting>
+                </EndGameContainer>
+                {/*Timer and Phase*/}
+                <HUDContainer>
+                    <TimerContainer>
+                        <Round> Round {this.state.round} </Round>
+                        <Timer seconds={this.state.timer} phaseNumber={this.state.phaseNumber}
+                               determineMysteryWord={this.determineMysteryWord}
+                               giveClue={this.giveClue} setGuess={this.setGuess} gameHasEnded={this.gameHasEnded}
+                               gameId={this.state.gameId} mysteryWord={this.state.mysteryWord}/>
+                    </TimerContainer>
+                    <Phase>
+                        <PhaseCircle id={"phase1"} style={{left: "26px", backgroundColor: "#FF0000"}}/>
+                        <PhaseCircle id={"phase2"} style={{left: "82px"}}/>
+                        <PhaseCircle id={"phase3"} style={{left: "138px"}}/>
+                        <PhaseCircle id={"phase4"} style={{left: "194px"}}/>
+                        {/* need props here, just placeholder for now*/}
+                        <PhaseMessage> {this.state.phases[this.state.phaseNumber - 1]} </PhaseMessage>
+                    </Phase>
+                </HUDContainer>
+                {/*First Player Row*/}
+                <PlayerContainer>
+                    {/*Player 2*/}
+                    {this.state.players.length >= 2 ? (
+                        <Player style={{marginTop: "-8%", marginLeft: "20%"}}>
+                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
+                            <GuessedCardsField
+                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[1]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[1]}</ScoreField>
                             {this.state.clonePlayers[0] !== this.state.activePlayer ?
                                 <NameField>2. {this.state.clonePlayers[0]}</NameField> :
@@ -973,12 +1005,13 @@ class InGame extends React.Component {
                             </InputField>
                             <SignalField id={"field2"}/>
                         </Player>
-                        ): (<Player/>)}
-                        {/*Player 3*/}
-                        {this.state.players.length>=3 ? (
-                        <Player style={{marginTop:"-8%", marginRight:"20%", float:"right"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[2]}</GuessedCardsField>
+                    ) : (<Player/>)}
+                    {/*Player 3*/}
+                    {this.state.players.length >= 3 ? (
+                        <Player style={{marginTop: "-8%", marginRight: "20%", float: "right"}}>
+                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
+                            <GuessedCardsField
+                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[2]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[2]}</ScoreField>
                             {this.state.clonePlayers[1] !== this.state.activePlayer ?
                                 <NameField>3. {this.state.clonePlayers[1]}</NameField> :
@@ -988,15 +1021,16 @@ class InGame extends React.Component {
                             </InputField>
                             <SignalField id={"field3"}/>
                         </Player>
-                        ): (<Player/>)}
-                    </PlayerContainer>
-                    {/*Second Player Row*/}
-                    <PlayerContainer>
-                        {/*Player 4*/}
-                        {this.state.players.length>=4 ? (
-                        <Player style={{marginTop:"2%", marginLeft:"0%"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[3]}</GuessedCardsField>
+                    ) : (<Player/>)}
+                </PlayerContainer>
+                {/*Second Player Row*/}
+                <PlayerContainer>
+                    {/*Player 4*/}
+                    {this.state.players.length >= 4 ? (
+                        <Player style={{marginTop: "2%", marginLeft: "0%"}}>
+                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
+                            <GuessedCardsField
+                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[3]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[3]}</ScoreField>
                             {this.state.clonePlayers[2] !== this.state.activePlayer ?
                                 <NameField>4. {this.state.clonePlayers[2]}</NameField> :
@@ -1006,76 +1040,93 @@ class InGame extends React.Component {
                             </InputField>
                             <SignalField id={"field4"}/>
                         </Player>
-                        ): (<Player/>)}
-                        {/*Player 5*/}
-                        {this.state.players.length>=5 ? (
-                            <Player style={{marginTop:"2%", marginRight:"0%", float:"right"}}>
-                                <GuessedCardsField style={{top:"10%", left:"8%"}}/>
-                                <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[4]}</GuessedCardsField>
-                                <ScoreField>{this.state.scores[4]}</ScoreField>
-                                {this.state.clonePlayers[3] !== this.state.activePlayer ?
-                                    <NameField>5. {this.state.clonePlayers[3]}</NameField> :
-                                    <NameFieldActivePlayer>5. {this.state.clonePlayers[3]}</NameFieldActivePlayer>}
-                                <InputField>
-                                    <Output id={"clue5"}></Output>
-                                </InputField>
-                                <SignalField id={"field5"}/>
-                            </Player>
-                        ): (<Player/>)}
-                    </PlayerContainer>
-                    {/*The GameBoard and its Content*/}
-                    <TableContainer>
-                        <Table>
-                            <BoardContainer>
-                                <GuessedCards style={{position:"absolute",left:"1.5%" ,bottom:"1%"}}/>
-                                <GuessedCards style={{position:"absolute",left:"0.75%" ,bottom:"2%"}}/>
-                                <GuessedCards style={{position:"absolute", bottom:"3.5%"}}>
-                                    {this.state.guessedCards[0]+this.state.guessedCards[1]+this.state.guessedCards[2]+
-                                    this.state.guessedCards[3]+this.state.guessedCards[4]+this.state.guessedCards[5]+this.state.guessedCards[6]}
-                                </GuessedCards>
-                                <Deck style={{position:"absolute", bottom:"1%", left:"20%"}}/>
-                                <Deck style={{position:"absolute", bottom:"2%", left:"19%"}}/>
-                                <Deck style={{position: "absolute", bottom: "3.5%", left: "18%"}}>
-                                    {this.state.remainingCards}
-                                </Deck>
-                                {this.state.activePlayer !== localStorage.getItem('username') || this.state.phaseNumber === 4 ? (
+                    ) : (<Player/>)}
+                    {/*Player 5*/}
+                    {this.state.players.length >= 5 ? (
+                        <Player style={{marginTop: "2%", marginRight: "0%", float: "right"}}>
+                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
+                            <GuessedCardsField
+                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[4]}</GuessedCardsField>
+                            <ScoreField>{this.state.scores[4]}</ScoreField>
+                            {this.state.clonePlayers[3] !== this.state.activePlayer ?
+                                <NameField>5. {this.state.clonePlayers[3]}</NameField> :
+                                <NameFieldActivePlayer>5. {this.state.clonePlayers[3]}</NameFieldActivePlayer>}
+                            <InputField>
+                                <Output id={"clue5"}></Output>
+                            </InputField>
+                            <SignalField id={"field5"}/>
+                        </Player>
+                    ) : (<Player/>)}
+                </PlayerContainer>
+                {/*The GameBoard and its Content*/}
+                <TableContainer>
+                    <Table>
+                        <BoardContainer>
+                            <GuessedCards style={{position: "absolute", left: "1.5%", bottom: "1%"}}/>
+                            <GuessedCards style={{position: "absolute", left: "0.75%", bottom: "2%"}}/>
+                            <GuessedCards style={{position: "absolute", bottom: "3.5%"}}>
+                                {this.state.guessedCards[0] + this.state.guessedCards[1] + this.state.guessedCards[2] +
+                                this.state.guessedCards[3] + this.state.guessedCards[4] + this.state.guessedCards[5] + this.state.guessedCards[6]}
+                            </GuessedCards>
+                            <Deck style={{position: "absolute", bottom: "1%", left: "20%"}}/>
+                            <Deck style={{position: "absolute", bottom: "2%", left: "19%"}}/>
+                            <Deck style={{position: "absolute", bottom: "3.5%", left: "18%"}}>
+                                {this.state.remainingCards}
+                            </Deck>
+                            {this.state.activePlayer !== localStorage.getItem('username') || this.state.phaseNumber === 4 ? (
                                 <ActiveCard id={"activeCard"}>
-                                        <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
-                                        <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.currentCard[0]} </Word>
-                                        <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
-                                        <Word id={"word2"} style={{borderColor:"#42c202", top:"35px"}}> {this.state.currentCard[1]} </Word>
-                                        <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
-                                        <Word id={"word3"} style={{borderColor:"#db3d3d", top:"52.5px"}}> {this.state.currentCard[2]} </Word>
-                                        <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
-                                        <Word id={"word4"} style={{borderColor:"#fc9229", top:"70px"}}> {this.state.currentCard[3]} </Word>
-                                        <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
-                                        <Word id={"word5"} style={{borderColor:"#ffe203", top:"87.5px"}}> {this.state.currentCard[4]} </Word>
-                                    </ActiveCard>
-                                ): (
-                                    <ActiveCard id={"activeCard"}>
-                                        {/* The words are only placeholders, as are the numbers */}
-                                        <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
-                                        <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> ??? </Word>
-                                        <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
-                                        <Word id={"word2"} style={{borderColor:"#42c202", top:"35px"}}> ??? </Word>
-                                        <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
-                                        <Word id={"word3"} style={{borderColor:"#db3d3d", top:"52.5px"}}> ??? </Word>
-                                        <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
-                                        <Word id={"word4"} style={{borderColor:"#fc9229", top:"70px"}}> ??? </Word>
-                                        <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
-                                        <Word id={"word5"} style={{borderColor:"#ffe203", top:"87.5px"}}> ??? </Word>
-                                    </ActiveCard>
-                                )}
-                            </BoardContainer>
-                        </Table>
-                    </TableContainer>
-                    {/*Third Player Row*/}
-                    <PlayerContainer>
-                        {/*Player 6*/}
-                        {this.state.players.length>=6 ? (
-                        <Player style={{marginTop:"2%", marginLeft:"2%"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[5]}</GuessedCardsField>
+                                    <Number style={{color: "#00CDCD", top: "17.5px"}}> 1. </Number>
+                                    <Word id={"word1"} style={{
+                                        borderColor: "#00CDCD",
+                                        top: "17.5px"
+                                    }}> {this.state.currentCard[0]} </Word>
+                                    <Number style={{color: "#42c202", top: "65px"}}> 2. </Number>
+                                    <Word id={"word2"} style={{
+                                        borderColor: "#42c202",
+                                        top: "35px"
+                                    }}> {this.state.currentCard[1]} </Word>
+                                    <Number style={{color: "#db3d3d", top: "112.5px"}}> 3. </Number>
+                                    <Word id={"word3"} style={{
+                                        borderColor: "#db3d3d",
+                                        top: "52.5px"
+                                    }}> {this.state.currentCard[2]} </Word>
+                                    <Number style={{color: "#fc9229", top: "160px"}}> 4. </Number>
+                                    <Word id={"word4"} style={{
+                                        borderColor: "#fc9229",
+                                        top: "70px"
+                                    }}> {this.state.currentCard[3]} </Word>
+                                    <Number style={{color: "#ffe203", top: "207.5px"}}> 5. </Number>
+                                    <Word id={"word5"} style={{
+                                        borderColor: "#ffe203",
+                                        top: "87.5px"
+                                    }}> {this.state.currentCard[4]} </Word>
+                                </ActiveCard>
+                            ) : (
+                                <ActiveCard id={"activeCard"}>
+                                    {/* The words are only placeholders, as are the numbers */}
+                                    <Number style={{color: "#00CDCD", top: "17.5px"}}> 1. </Number>
+                                    <Word id={"word1"} style={{borderColor: "#00CDCD", top: "17.5px"}}> ??? </Word>
+                                    <Number style={{color: "#42c202", top: "65px"}}> 2. </Number>
+                                    <Word id={"word2"} style={{borderColor: "#42c202", top: "35px"}}> ??? </Word>
+                                    <Number style={{color: "#db3d3d", top: "112.5px"}}> 3. </Number>
+                                    <Word id={"word3"} style={{borderColor: "#db3d3d", top: "52.5px"}}> ??? </Word>
+                                    <Number style={{color: "#fc9229", top: "160px"}}> 4. </Number>
+                                    <Word id={"word4"} style={{borderColor: "#fc9229", top: "70px"}}> ??? </Word>
+                                    <Number style={{color: "#ffe203", top: "207.5px"}}> 5. </Number>
+                                    <Word id={"word5"} style={{borderColor: "#ffe203", top: "87.5px"}}> ??? </Word>
+                                </ActiveCard>
+                            )}
+                        </BoardContainer>
+                    </Table>
+                </TableContainer>
+                {/*Third Player Row*/}
+                <PlayerContainer>
+                    {/*Player 6*/}
+                    {this.state.players.length >= 6 ? (
+                        <Player style={{marginTop: "2%", marginLeft: "2%"}}>
+                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
+                            <GuessedCardsField
+                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[5]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[5]}</ScoreField>
                             {this.state.clonePlayers[4] !== this.state.activePlayer ?
                                 <NameField>6. {this.state.clonePlayers[4]}</NameField> :
@@ -1085,12 +1136,13 @@ class InGame extends React.Component {
                             </InputField>
                             <SignalField id={"field6"}/>
                         </Player>
-                        ): (<Player/>)}
-                        {/*Player 7*/}
-                        {this.state.players.length>=7 ? (
-                        <Player style={{marginTop:"2%", marginRight:"2%", float:"right"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[6]}</GuessedCardsField>
+                    ) : (<Player/>)}
+                    {/*Player 7*/}
+                    {this.state.players.length >= 7 ? (
+                        <Player style={{marginTop: "2%", marginRight: "2%", float: "right"}}>
+                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
+                            <GuessedCardsField
+                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[6]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[6]}</ScoreField>
                             {this.state.clonePlayers[5] !== this.state.activePlayer ?
                                 <NameField>7. {this.state.clonePlayers[5]}</NameField> :
@@ -1100,14 +1152,15 @@ class InGame extends React.Component {
                             </InputField>
                             <SignalField id={"field7"}/>
                         </Player>
-                        ): (<Player/>)}
-                    </PlayerContainer>
-                    <PlayerContainer>
-                        {/*Player 1*/}
-                        {this.state.players.length>=1 ? (
-                        <Player style={{marginTop:"1%", marginLeft:"38%"}}>
-                            <GuessedCardsField style={{top:"10%", left:"8%"}}/>
-                            <GuessedCardsField style={{top:"5%", left:"12%"}}>{this.state.guessedCards[0]}</GuessedCardsField>
+                    ) : (<Player/>)}
+                </PlayerContainer>
+                <PlayerContainer>
+                    {/*Player 1*/}
+                    {this.state.players.length >= 1 ? (
+                        <Player style={{marginTop: "1%", marginLeft: "38%"}}>
+                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
+                            <GuessedCardsField
+                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[0]}</GuessedCardsField>
                             <ScoreField>{this.state.scores[0]}</ScoreField>
                             {localStorage.getItem('username') !== this.state.activePlayer ?
                                 <NameField>1. {localStorage.getItem('username')} </NameField> :
@@ -1128,16 +1181,17 @@ class InGame extends React.Component {
                                             <Output> Wait for phase 3! </Output>))
                                 )}
                             </InputField>
-                            <SignalFieldPlayer id={"field1"} disabled={!this.state.player1Input}
+                            <SignalFieldPlayer id={"field1"}
+                                               disabled={!this.state.player1Input || ((this.state.phaseNumber === 1 || this.state.phaseNumber === 3 || this.state.phaseNumber === 4) && localStorage.getItem('username') !== this.state.activePlayer) || ((this.state.phaseNumber === 2 || this.state.phaseNumber === 4) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer && this.state.passivePlayersCluesGiven.includes(localStorage.getItem('username')))}
                                                onClick={() => {
                                                    this.handleInput(localStorage.getItem('username'), this.state.player1Input);
                                                }}>
                                 <img src={ClickIcon} alt={"ClickIcon"}/>
                             </SignalFieldPlayer>
                         </Player>
-                        ): (<Player/>)}
-                    </PlayerContainer>
-                </Game>
+                    ) : (<Player/>)}
+                </PlayerContainer>
+            </Game>
         );
     }
 }
