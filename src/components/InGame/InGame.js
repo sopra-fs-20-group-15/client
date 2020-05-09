@@ -705,7 +705,7 @@ class InGame extends React.Component {
         /** Only Phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
-            if (this.state.phaseNumber === 3) {
+            if (this.state.phaseNumber !== 4) {
                 // console.log('gets in phase 4', this.state);
                 this.setState({
                     timer: nextTimer[3],
@@ -715,7 +715,7 @@ class InGame extends React.Component {
             }
         }
         else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
-            if (this.state.phaseNumber === 2) {
+            if (this.state.phaseNumber !== 3) {
                 // console.log('gets in phase 3', this.state);
                 this.setState({
                     timer: nextTimer[2],
@@ -728,7 +728,7 @@ class InGame extends React.Component {
 
         /** Only Phase 2 has always a chosen Mystery Word */
         else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
-            if (this.state.phaseNumber === 1) {
+            if (this.state.phaseNumber !== 2) {
                 // console.log('gets in phase 2', this.state);
                 this.setState({
                     timer: nextTimer[1],
@@ -739,7 +739,7 @@ class InGame extends React.Component {
         }
         /** Only Phase 1 has always none of these above*/
         else if (this.state.currentCard !== []) {
-            if (this.state.phaseNumber === 4) {
+            if (this.state.phaseNumber !== 1) {
                 // console.log('gets in phase 1', this.state);
                 this.setState({
                     timer: nextTimer[0],
@@ -1115,13 +1115,23 @@ class InGame extends React.Component {
                             <InputField>
                                 {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(localStorage.getItem('username'))) || this.state.phaseNumber === 4 ? (
                                     <Output id={"clue1"}></Output>
-                                ):(
-                                    <Input placeholder="Enter here.." onChange=
-                                        {e => {this.handleInputChange('player1Input', e.target.value);}}/>)
-                                }
+                                ) : (
+                                    (((this.state.phaseNumber === 1 || this.state.phaseNumber === 3) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer)) ? (
+                                        <Input placeholder="Enter here.." onChange=
+                                            {e => {
+                                                this.handleInputChange('player1Input', e.target.value);
+                                            }}/>
+                                    ) : (
+                                        (this.state.phaseNumber === 1 && localStorage.getItem('username') !== this.state.activePlayer) ? (
+                                            <Output> Wait for phase 2! </Output>
+                                        ) : (
+                                            <Output> Wait for phase 3! </Output>))
+                                )}
                             </InputField>
                             <SignalFieldPlayer id={"field1"} disabled={!this.state.player1Input}
-                                        onClick={() => {this.handleInput(localStorage.getItem('username'), this.state.player1Input);}}>
+                                               onClick={() => {
+                                                   this.handleInput(localStorage.getItem('username'), this.state.player1Input);
+                                               }}>
                                 <img src={ClickIcon} alt={"ClickIcon"}/>
                             </SignalFieldPlayer>
                         </Player>
