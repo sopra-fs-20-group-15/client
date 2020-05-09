@@ -44,16 +44,23 @@ class Register extends React.Component {
         try {
             // eslint-disable-next-line
             if (this.state.password === this.state.password.trim()) {
-                const requestBody = JSON.stringify({
-                    username: this.state.username,
-                    password: this.state.password,
-                });
+                if (this.state.username === this.state.username.trim()) {
+                    const requestBody = JSON.stringify({
+                        username: this.state.username,
+                        password: this.state.password,
+                    });
 
-                // eslint-disable-next-line
-                const response = await api.post('/players', requestBody);
+                    await api.post('/players', requestBody);
 
-                // registration successfully worked --> navigate to the route /login
-                this.props.history.push(`/login`);
+                    // registration successfully worked --> navigate to the route /login
+                    this.props.history.push(`/login`);
+                } else {
+                    if (this.state.username.trim().length === 0) {
+                        alert('Your username cannot be an empty string!')
+                    } else {
+                        alert('Whitespaces are not allowed in the beginning and end of your username!')
+                    }
+                }
             } else {
                 if (this.state.password.trim().length === 0) {
                     alert('Your password cannot be an empty string!')
@@ -67,7 +74,7 @@ class Register extends React.Component {
         }
     }
 
-    async login() {
+    async goToLogin() {
         try {
             this.props.history.push(`/login`);
         } catch (error) {
@@ -151,7 +158,7 @@ class Register extends React.Component {
                         <Button
                             width="50%"
                             onClick={() => {
-                                this.login();
+                                this.goToLogin();
                             }}
                         >
                             Login with Account
