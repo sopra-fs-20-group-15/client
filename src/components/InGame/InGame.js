@@ -382,6 +382,13 @@ class InGame extends React.Component {
         }
     }
 
+    async undisplayClues() {
+        for (let i=0; i < this.state.clonePlayers.length; i++) {
+            let output = document.getElementById("clue"+(2+i));
+            output.textContent = "";
+        }
+    }
+
     async setGuess(guess) {
         try {
             if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -426,11 +433,15 @@ class InGame extends React.Component {
                 let scoreList = [0,0,0,0,0,0,0];
                 let guessedCardsList = [0,0,0,0,0,0,0];
 
-                for (let i=0 ; i<this.state.players.length ; i++) {
+                for (let i=0 ; i<this.state.clonePlayers.length ; i++) {
                     for (let k=0 ; k<response.data.length ; k++) {
-                        if (this.state.players[i] === response.data[k].playerName) {
-                        scoreList[i] = response.data[k].score;
-                        guessedCardsList[i] = response.data[k].numberOfCorrectlyGuessedMysteryWords;
+                        if (this.state.clonePlayers[i] === response.data[k].playerName) {
+                        scoreList[i+1] = response.data[k].score;
+                        guessedCardsList[i+1] = response.data[k].numberOfCorrectlyGuessedMysteryWords;
+                        }
+                        if (localStorage.getItem('username') === response.data[k].playerName) {
+                            scoreList[0] = response.data[k].score;
+                            guessedCardsList[0] = response.data[k].numberOfCorrectlyGuessedMysteryWords;
                         }
                     }
                 }
@@ -694,7 +705,7 @@ class InGame extends React.Component {
         /** Only Phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
-            if (this.state.phaseNumber !== 4) {
+            if (this.state.phaseNumber === 3) {
                 // console.log('gets in phase 4', this.state);
                 this.setState({
                     timer: nextTimer[3],
@@ -704,7 +715,7 @@ class InGame extends React.Component {
             }
         }
         else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
-            if (this.state.phaseNumber !== 3) {
+            if (this.state.phaseNumber === 2) {
                 // console.log('gets in phase 3', this.state);
                 this.setState({
                     timer: nextTimer[2],
@@ -717,7 +728,7 @@ class InGame extends React.Component {
 
         /** Only Phase 2 has always a chosen Mystery Word */
         else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
-            if (this.state.phaseNumber !== 2) {
+            if (this.state.phaseNumber === 1) {
                 // console.log('gets in phase 2', this.state);
                 this.setState({
                     timer: nextTimer[1],
@@ -728,7 +739,7 @@ class InGame extends React.Component {
         }
         /** Only Phase 1 has always none of these above*/
         else if (this.state.currentCard !== []) {
-            if (this.state.phaseNumber !== 1) {
+            if (this.state.phaseNumber === 4) {
                 // console.log('gets in phase 1', this.state);
                 this.setState({
                     timer: nextTimer[0],
@@ -738,6 +749,7 @@ class InGame extends React.Component {
                 this.updatePhaseHUD(1);
                 this.unsignalSubmission();
                 this.unsignalMysteryWord();
+                this.undisplayClues();
             }
         }
     }
@@ -957,12 +969,7 @@ class InGame extends React.Component {
                                 <NameField>2. {this.state.clonePlayers[0]}</NameField> :
                                 <NameFieldActivePlayer>2. {this.state.clonePlayers[0]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[0])) || this.state.phaseNumber === 4 ? (
-                                    <Output id={"clue2"}></Output>
-                                ):(
-                                    <Input placeholder="Enter here.." onChange=
-                                        {e => {this.handleInputChange('player2Input', e.target.value);}}/>)
-                                }
+                                <Output id={"clue2"}></Output>
                             </InputField>
                             <SignalField id={"field2"}/>
                         </Player>
@@ -977,12 +984,7 @@ class InGame extends React.Component {
                                 <NameField>3. {this.state.clonePlayers[1]}</NameField> :
                                 <NameFieldActivePlayer>3. {this.state.clonePlayers[1]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[1])) || this.state.phaseNumber === 4 ? (
-                                    <Output id={"clue3"}></Output>
-                                ):(
-                                    <Input placeholder="Enter here.." onChange=
-                                        {e => {this.handleInputChange('player3Input', e.target.value);}}/>)
-                                }
+                                <Output id={"clue3"}></Output>
                             </InputField>
                             <SignalField id={"field3"}/>
                         </Player>
@@ -1000,12 +1002,7 @@ class InGame extends React.Component {
                                 <NameField>4. {this.state.clonePlayers[2]}</NameField> :
                                 <NameFieldActivePlayer>4. {this.state.clonePlayers[2]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[2])) || this.state.phaseNumber === 4 ? (
-                                    <Output id={"clue4"}></Output>
-                                ):(
-                                    <Input placeholder="Enter here.." onChange=
-                                        {e => {this.handleInputChange('player4Input', e.target.value);}}/>)
-                                }
+                                <Output id={"clue4"}></Output>
                             </InputField>
                             <SignalField id={"field4"}/>
                         </Player>
@@ -1020,12 +1017,7 @@ class InGame extends React.Component {
                                     <NameField>5. {this.state.clonePlayers[3]}</NameField> :
                                     <NameFieldActivePlayer>5. {this.state.clonePlayers[3]}</NameFieldActivePlayer>}
                                 <InputField>
-                                    {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[3])) || this.state.phaseNumber === 4 ? (
-                                        <Output id={"clue5"}></Output>
-                                    ):(
-                                        <Input placeholder="Enter here.." onChange=
-                                            {e => {this.handleInputChange('player5Input', e.target.value);}}/>)
-                                    }
+                                    <Output id={"clue5"}></Output>
                                 </InputField>
                                 <SignalField id={"field5"}/>
                             </Player>
@@ -1089,12 +1081,7 @@ class InGame extends React.Component {
                                 <NameField>6. {this.state.clonePlayers[4]}</NameField> :
                                 <NameFieldActivePlayer>6. {this.state.clonePlayers[4]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[4])) || this.state.phaseNumber === 4 ? (
-                                    <Output id={"clue6"}></Output>
-                                ):(
-                                    <Input placeholder="Enter here.." onChange=
-                                        {e => {this.handleInputChange('player6Input', e.target.value);}}/>)
-                                }
+                                <Output id={"clue6"}></Output>
                             </InputField>
                             <SignalField id={"field6"}/>
                         </Player>
@@ -1109,12 +1096,7 @@ class InGame extends React.Component {
                                 <NameField>7. {this.state.clonePlayers[5]}</NameField> :
                                 <NameFieldActivePlayer>7. {this.state.clonePlayers[5]}</NameFieldActivePlayer>}
                             <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(this.state.clonePlayers[5])) || this.state.phaseNumber === 4 ? (
-                                    <Output id={"clue7"}></Output>
-                                ):(
-                                    <Input placeholder="Enter here.." onChange=
-                                        {e => {this.handleInputChange('player7Input', e.target.value);}}/>)
-                                }
+                                <Output id={"clue7"}></Output>
                             </InputField>
                             <SignalField id={"field7"}/>
                         </Player>

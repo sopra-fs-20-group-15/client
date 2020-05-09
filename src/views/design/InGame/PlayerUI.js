@@ -86,7 +86,7 @@ export const InputField = styled.div`
 
 export const Input = styled.input`
 &::placeholder {
-    color: rgba(0, 0, 0, 1.0);
+    color: rgba(0, 0, 0, 1);
   }
   height: 55px;
   width: 240px;
