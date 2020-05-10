@@ -21,7 +21,6 @@ import {Phase, PhaseCircle, PhaseMessage} from "../../views/design/InGame/PhaseU
 import {
     Player,
     PlayerContainer,
-    SignalField,
     SignalFieldPlayer,
     Input,
     InputField,
@@ -32,6 +31,7 @@ import {
     ScoreField
 } from "../../views/design/InGame/PlayerUI";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
+import PlayerComponent from "../../views/PlayerComponent";
 
 
 const DrawCard = styled.div`
@@ -993,33 +993,17 @@ class InGame extends React.Component {
                     {/*Player 2*/}
                     {this.state.players.length >= 2 ? (
                         <Player style={{marginTop: "-8%", marginLeft: "20%"}}>
-                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
-                            <GuessedCardsField
-                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[1]}</GuessedCardsField>
-                            <ScoreField>{this.state.scores[1]}</ScoreField>
-                            {this.state.clonePlayers[0] !== this.state.activePlayer ?
-                                <NameField>2. {this.state.clonePlayers[0]}</NameField> :
-                                <NameFieldActivePlayer>2. {this.state.clonePlayers[0]}</NameFieldActivePlayer>}
-                            <InputField>
-                                <Output id={"clue2"}></Output>
-                            </InputField>
-                            <SignalField id={"field2"}/>
+                            <PlayerComponent scores={this.state.scores} guessedCards={this.state.guessedCards}
+                                             clonePlayers={this.state.clonePlayers} activePlayer={this.state.activePlayer}
+                                             number={2}/>
                         </Player>
                     ) : (<Player/>)}
                     {/*Player 3*/}
                     {this.state.players.length >= 3 ? (
                         <Player style={{marginTop: "-8%", marginRight: "20%", float: "right"}}>
-                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
-                            <GuessedCardsField
-                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[2]}</GuessedCardsField>
-                            <ScoreField>{this.state.scores[2]}</ScoreField>
-                            {this.state.clonePlayers[1] !== this.state.activePlayer ?
-                                <NameField>3. {this.state.clonePlayers[1]}</NameField> :
-                                <NameFieldActivePlayer>3. {this.state.clonePlayers[1]}</NameFieldActivePlayer>}
-                            <InputField>
-                                <Output id={"clue3"}></Output>
-                            </InputField>
-                            <SignalField id={"field3"}/>
+                            <PlayerComponent scores={this.state.scores} guessedCards={this.state.guessedCards}
+                                             clonePlayers={this.state.clonePlayers} activePlayer={this.state.activePlayer}
+                                             number={3}/>
                         </Player>
                     ) : (<Player/>)}
                 </PlayerContainer>
@@ -1028,33 +1012,17 @@ class InGame extends React.Component {
                     {/*Player 4*/}
                     {this.state.players.length >= 4 ? (
                         <Player style={{marginTop: "2%", marginLeft: "0%"}}>
-                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
-                            <GuessedCardsField
-                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[3]}</GuessedCardsField>
-                            <ScoreField>{this.state.scores[3]}</ScoreField>
-                            {this.state.clonePlayers[2] !== this.state.activePlayer ?
-                                <NameField>4. {this.state.clonePlayers[2]}</NameField> :
-                                <NameFieldActivePlayer>4. {this.state.clonePlayers[2]}</NameFieldActivePlayer>}
-                            <InputField>
-                                <Output id={"clue4"}></Output>
-                            </InputField>
-                            <SignalField id={"field4"}/>
+                            <PlayerComponent scores={this.state.scores} guessedCards={this.state.guessedCards}
+                                             clonePlayers={this.state.clonePlayers} activePlayer={this.state.activePlayer}
+                                             number={4}/>
                         </Player>
                     ) : (<Player/>)}
                     {/*Player 5*/}
                     {this.state.players.length >= 5 ? (
                         <Player style={{marginTop: "2%", marginRight: "0%", float: "right"}}>
-                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
-                            <GuessedCardsField
-                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[4]}</GuessedCardsField>
-                            <ScoreField>{this.state.scores[4]}</ScoreField>
-                            {this.state.clonePlayers[3] !== this.state.activePlayer ?
-                                <NameField>5. {this.state.clonePlayers[3]}</NameField> :
-                                <NameFieldActivePlayer>5. {this.state.clonePlayers[3]}</NameFieldActivePlayer>}
-                            <InputField>
-                                <Output id={"clue5"}></Output>
-                            </InputField>
-                            <SignalField id={"field5"}/>
+                            <PlayerComponent scores={this.state.scores} guessedCards={this.state.guessedCards}
+                                             clonePlayers={this.state.clonePlayers} activePlayer={this.state.activePlayer}
+                                             number={5}/>
                         </Player>
                     ) : (<Player/>)}
                 </PlayerContainer>
@@ -1124,33 +1092,17 @@ class InGame extends React.Component {
                     {/*Player 6*/}
                     {this.state.players.length >= 6 ? (
                         <Player style={{marginTop: "2%", marginLeft: "2%"}}>
-                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
-                            <GuessedCardsField
-                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[5]}</GuessedCardsField>
-                            <ScoreField>{this.state.scores[5]}</ScoreField>
-                            {this.state.clonePlayers[4] !== this.state.activePlayer ?
-                                <NameField>6. {this.state.clonePlayers[4]}</NameField> :
-                                <NameFieldActivePlayer>6. {this.state.clonePlayers[4]}</NameFieldActivePlayer>}
-                            <InputField>
-                                <Output id={"clue6"}></Output>
-                            </InputField>
-                            <SignalField id={"field6"}/>
+                            <PlayerComponent scores={this.state.scores} guessedCards={this.state.guessedCards}
+                                             clonePlayers={this.state.clonePlayers} activePlayer={this.state.activePlayer}
+                                             number={6}/>
                         </Player>
                     ) : (<Player/>)}
                     {/*Player 7*/}
                     {this.state.players.length >= 7 ? (
                         <Player style={{marginTop: "2%", marginRight: "2%", float: "right"}}>
-                            <GuessedCardsField style={{top: "10%", left: "8%"}}/>
-                            <GuessedCardsField
-                                style={{top: "5%", left: "12%"}}>{this.state.guessedCards[6]}</GuessedCardsField>
-                            <ScoreField>{this.state.scores[6]}</ScoreField>
-                            {this.state.clonePlayers[5] !== this.state.activePlayer ?
-                                <NameField>7. {this.state.clonePlayers[5]}</NameField> :
-                                <NameFieldActivePlayer>7. {this.state.clonePlayers[5]}</NameFieldActivePlayer>}
-                            <InputField>
-                                <Output id={"clue7"}></Output>
-                            </InputField>
-                            <SignalField id={"field7"}/>
+                            <PlayerComponent scores={this.state.scores} guessedCards={this.state.guessedCards}
+                                             clonePlayers={this.state.clonePlayers} activePlayer={this.state.activePlayer}
+                                             number={7}/>
                         </Player>
                     ) : (<Player/>)}
                 </PlayerContainer>
