@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import TriangleBackground from '../../views/pictures/TriangleBackground.png'
-import JustOneLogo from '../../views/pictures/JustOneLogo.png'
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import {Button, LogoutButton} from '../../views/design/Button';
+import {Button} from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
+import PregameHeaderComponent from "../../views/PregameHeaderComponent";
 
 
 // "text-decoration-skip-ink: none" is used to make sure that the brackets are underlined too
@@ -125,13 +125,6 @@ const ButtonGroup = styled.div`
   right: 30%;
 `;
 
-const LogoutButtonContainer = styled.div`
-  position: absolute;
-  top: 20px;
-  left: 15px;
-  justify-content: center;
-`;
-
 const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
 };
@@ -249,43 +242,10 @@ class CreateGame extends Component{
         }
     };
 
-    async logout() {
-        try {
-
-            const requestBody = JSON.stringify({
-                token: localStorage.getItem('token'),
-                id: localStorage.getItem('id'),
-            });
-
-            await api.put('/logout', requestBody);
-            // token shows that user is logged in -> removing it shows that he has logged out
-            localStorage.removeItem('token');
-            localStorage.removeItem('id');
-            localStorage.removeItem('username');
-
-
-            // Logout successfully worked --> navigate to the route /login
-            this.props.history.push(`/login`);
-        } catch (error) {
-            alert(`Something went wrong during the logout: \n${handleError(error)}`)
-        }
-
-    }
-
     render() {
         return (
             <BaseContainer style={background}>
-                <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
-                <LogoutButtonContainer>
-                    <LogoutButton
-                        width="255px"
-                        onClick={() => {
-                            this.logout();
-                        }}
-                    >
-                        Logout
-                    </LogoutButton>
-                </LogoutButtonContainer>
+                <PregameHeaderComponent from={"createGame"} history={this.props.history} loggedIn={true}/>
                 <GridContainer>
                     <GridItemTitle> Game Name </GridItemTitle>
                     <GridItemInput>

@@ -2,10 +2,10 @@ import React from 'react';
 import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
 import {withRouter} from 'react-router-dom';
-import {Button, LogoutButton} from '../../views/design/Button';
+import {Button} from '../../views/design/Button';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
-import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 import {ButtonContainer, ButtonGroup, Form, FormContainer, RulesButtonContainer, UsernameInputField, PasswordInputField} from "../../views/design/RegisterAndLogin/RegisterAndLoginUI";
+import PregameHeaderComponent from "../../views/PregameHeaderComponent";
 
 const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
@@ -106,18 +106,7 @@ class Register extends React.Component {
     render() {
         return (
             <BaseContainer style={background}>
-                <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
-                <RulesButtonContainer>
-                    <LogoutButton
-                        width="255px"
-                        onClick={() => {
-                            localStorage.setItem('QA', "register");
-                            this.props.history.push("/tutorial");
-                        }}
-                    >
-                        Rules & Tutorial
-                    </LogoutButton>
-                </RulesButtonContainer>
+                <PregameHeaderComponent from={"register"} history={this.props.history} loggedIn={false}/>
                 <FormContainer>
                     <Form>
                         <UsernameInputField

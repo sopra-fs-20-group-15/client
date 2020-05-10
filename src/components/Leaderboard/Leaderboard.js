@@ -2,10 +2,10 @@ import React, {Component, Fragment} from 'react';
 import styled from 'styled-components';
 import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
-import {Button, LogoutButton} from '../../views/design/Button';
+import {Button} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
-import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 import TriangleBackground from '../../views/pictures/TriangleBackground.png';
+import PregameHeaderComponent from "../../views/PregameHeaderComponent";
 
 
 const GridItemTitle = styled.div`
@@ -80,13 +80,6 @@ const ButtonGroup = styled.div`
   right: 30%;
 `;
 
-const LogoutButtonContainer = styled.div`
-  position: absolute;
-  top: 20px;
-  // left: 15px;
-  justify-content: center;
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -104,31 +97,6 @@ class Leaderboard extends Component {
         this.interval = setInterval(this.getPlayers, 5000);
         this.getPlayers = this.getPlayers.bind(this);
     }
-
-
-    async logout() {
-        try {
-
-            const requestBody = JSON.stringify({
-                token: localStorage.getItem('token'),
-                id: localStorage.getItem('id'),
-            });
-
-            await api.put('/logout', requestBody);
-            // token shows that user is logged in -> removing it shows that he has logged out
-            localStorage.removeItem('token');
-            localStorage.removeItem('id');
-            localStorage.removeItem('username');
-
-
-            // Logout successfully worked --> navigate to the route /login
-            this.props.history.push(`/login`);
-        } catch (error) {
-            alert(`Something went wrong during the logout: \n${handleError(error)}`)
-        }
-
-    }
-
 
     getPlayers = async () => {
         const response = await api.get('/leaderBoards');
@@ -162,28 +130,7 @@ class Leaderboard extends Component {
     render() {
         return (
             <BaseContainer style={background}>
-                <LogoutButtonContainer style={{left:"15px"}}>
-                    <LogoutButton
-                        width="255px"
-                        onClick={() => {
-                            this.logout();
-                        }}
-                    >
-                        Logout
-                    </LogoutButton>
-                </LogoutButtonContainer>
-                <LogoutButtonContainer style={{right:"15px"}}>
-                    <LogoutButton
-                        width="255px"
-                        onClick={() => {
-                            localStorage.setItem('QA', "leaderboard");
-                            this.props.history.push('/tutorial');
-                        }}
-                    >
-                        Rules & Tutorial
-                    </LogoutButton>
-                </LogoutButtonContainer>
-                <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
+                <PregameHeaderComponent from={"leaderboard"} history={this.props.history} loggedIn={true}/>
                 {/** The first condition is needed if no game has been created yet. Before the GET request for the available
                  lobbies has been processed (takes a few milliseconds), this.state.lobbies equals null. After the request
                  has finished processing, this.state.lobbies now equals an empty array. Without the first condition an error

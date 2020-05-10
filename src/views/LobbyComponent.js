@@ -35,7 +35,7 @@ const BotCell = styled.li`
 
 
 /** Might be needed for refactoring in the future! */
-function Lobby(lobby) {
+function LobbyComponent(lobby) {
   return (
     <Fragment>
         <GridNormalItem> {lobby.gameName} </GridNormalItem>
@@ -49,4 +49,4 @@ function Lobby(lobby) {
   );
 }
 
-export default Lobby;
+export default LobbyComponent;

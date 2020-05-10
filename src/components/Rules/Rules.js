@@ -63,7 +63,7 @@ class Rules extends React.Component {
     render() {
         return (
             <BaseContainer  style={background}>
-                <TopButtonContainer style={{left:"15px"}}>
+                <TopButtonContainer style={{left:"12px"}}>
                     <LogoutButton
                         width="255px"
                         onClick={() => {
@@ -73,7 +73,7 @@ class Rules extends React.Component {
                         Go Back
                     </LogoutButton>
                 </TopButtonContainer>
-                <TopButtonContainer style={{right:"15px"}}>
+                <TopButtonContainer style={{right:"12px"}}>
                     <LogoutButton
                         width="255px"
                         onClick={() => {
