@@ -20,7 +20,9 @@ textarea {
   outline: none;
 }
 
+roundButton{
 
+}
 
 select {
   width: 30%;
@@ -46,7 +48,7 @@ button {
 }
 
 /* This code makes sure that the JustOneLogo is in the center horizontally. */
-.center{
+.center {
   position: absolute;
   left: 50%;
   top: 10px;

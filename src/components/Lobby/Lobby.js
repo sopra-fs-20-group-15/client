@@ -214,7 +214,7 @@ class Lobby extends React.Component {
 
     keyPressed(event) {
         if (event.key === "Enter") {
-            this.submitMessage()
+            this.sendMessage()
         }
     }
 
@@ -241,7 +241,7 @@ class Lobby extends React.Component {
                         <GridItemTitle> {this.state.gameName} ({this.state.players.length}/{this.state.desiredPlayers})</GridItemTitle>
                         {this.state.players.map(user => {
                             return (
-                                <Fragment>
+                                <Fragment key={user}>
                                     <GridNormalItem> {user} </GridNormalItem>
                                 </Fragment>
                             )})}

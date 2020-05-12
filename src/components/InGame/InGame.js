@@ -1,7 +1,7 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {api, handleError} from '../../helpers/api';
-import {StaticRouter, withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
 import {GuessedCards, Deck, ActiveCard, Number, Word} from "../../views/design/InGame/CardsUI";
 import {
@@ -55,20 +55,6 @@ const DrawCard = styled.div`
     transition: all 0.3s ease;
 `;
 
-const GridContainerScores = styled.div`
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-gap: 3px 3px;
-  background-color: #817857;
-  border-radius: 25px;
-  border-style: solid;
-  position: absolute;
-  grid-auto-rows: 74px;
-  
-  top: 100px;
-  overflow-y: scroll;
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -78,15 +64,7 @@ const ButtonContainer = styled.div`
   top: 250px;
 `;
 
-/**
- * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
- * You should have a class (instead of a functional component) when:
- * - You need an internal state that cannot be achieved via props from other parent components
- * - You fetch data from the server (e.g., in componentDidMount())
- * - You want to access the DOM via Refs
- * https://reactjs.org/docs/react-component.html
- * @Class
- */
+
 class InGame extends React.Component {
     /**
      * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
@@ -168,14 +146,12 @@ class InGame extends React.Component {
 
             if (!this.state.gameHasEnded) {
                 const response = await api.get('/games/' + this.state.gameId + '/ends/' + localStorage.getItem('token'));
-                console.log('gets in has ended', response);
                 this.setState({
                     gameHasEnded: response.data.hasGameEnded
                 });
             }
 
             if (this.state.gameHasEnded) {
-                console.log('has ended');
                 this.getHighestNumberOfGuesses();
                 this.getLowestNumberOfGuesses();
                 this.getTotalNumberOfGuesses();
@@ -183,13 +159,11 @@ class InGame extends React.Component {
                 this.overlayOn();
                 setTimeout(() => this.deleteGame(), 15000)
             } else {
-                console.log('has not ended');
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.initializeTurn();
                 }
             }
         } catch (error) {
-            console.log('errrrrrroooooooor')
             this.props.history.push('/lobbyOverview');
             alert(`Something went wrong while checking whether the game has ended!`);
             console.log('error', handleError(error))
@@ -201,7 +175,6 @@ class InGame extends React.Component {
         if (localStorage.getItem('username') === this.state.activePlayer) {
             this.deleteGameSetUp();
             await api.delete('/activeGames/' + this.state.gameId);
-            console.log('deletes game');
         }
 
         this.props.history.push('/lobbyOverview');
@@ -218,8 +191,6 @@ class InGame extends React.Component {
 
     async getCard() {
         try {
-            /** The active card is fetch (already set by POST request in first round and later initializeTurn()),
-             * it's words are saved and displayed (for the passive players). The stack of remaining cards is updated. */
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
 
             if (response.status === 200 && response.data.words !== this.state.currentCard) {
@@ -227,12 +198,8 @@ class InGame extends React.Component {
                     currentCard: response.data.words
                 })
             }
-
-            /** Button disappears and card is displayed after card is drawn. We use an if-statement to make sure
-             * that these actions are only executed if the currentCard variable has actually been given a list of
-             * five words. This is needed because the passive players will call this method on a regular interval
-             * (polling) and often the card has not been drawn yet. */
         } catch (error) {
+            console.log('error', handleError(error))
         }
     }
 
@@ -251,7 +218,7 @@ class InGame extends React.Component {
                         mysteryWordId: wordId
                     });
 
-                    const response = await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
+                    await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
                     /** All words except for the mystery word on the card are crossed out. */
                     for (let i = 0; i < this.state.currentCard.length; i++) {
@@ -352,16 +319,6 @@ class InGame extends React.Component {
                     clues: response.data
                 });
             }
-
-            // for (let i=0; i < this.state.players.length; i++) {
-            //     for (let j=0; j < this.state.clues.length; j++) {
-            //         if (this.state.clues[j].playerName === this.state.players[i]) {
-            //             this.setState({
-            //                 clues: this.state.clues[i].clue
-            //             })
-            //         }
-            //     }
-            // }
 
             /** Making sure that the clue of the person who plays is also being displayed. This has
              * to be done separately since the player itself is not in the clonePlayers list. */
@@ -624,15 +581,6 @@ class InGame extends React.Component {
                     passivePlayersCluesGiven: []
                 });
             }
-
-            // tried to mark ready boxes of players who gave clue black (emphasis on tried)
-            /*if (this.state.passivePlayersCluesGiven.length > 0) {
-                for (let i = 0; i < this.state.passivePlayersCluesGiven.length; i++) {
-                    let markBox = document.getElementById("field" + (i + 1));
-                    markBox.style.background = "black";
-                }
-            }*/
-
         } catch (error) {
             alert(`Something went wrong while trying to get the players and their clues!`);
             console.log('error', handleError(error))
@@ -652,8 +600,6 @@ class InGame extends React.Component {
         this.playersWithoutUser(response.data.playerNames).then(result => this.setState({
             clonePlayers: result
         }));
-
-        console.log('state', this.state);
     }
 
     displayGuess() {
@@ -693,21 +639,16 @@ class InGame extends React.Component {
      * no input is taken). */
     handleInput(playerName, input) {
         if (playerName === localStorage.getItem('username')) {
-            //actions of active player
             if (playerName === this.state.activePlayer) {
                 if (this.state.phaseNumber === 1) {
-                    //determine mystery Word
                     this.determineMysteryWord(input);
                 }
                 if (this.state.phaseNumber === 3) {
-                    //guess mystery word
                     this.setGuess(input);
                 }
             }
-            //actions of passive players
             if (this.state.passivePlayers.includes(playerName)) {
                 if (this.state.phaseNumber === 2) {
-                    //gives clue
                     this.giveClue(input);
                 }
             }
@@ -733,7 +674,7 @@ class InGame extends React.Component {
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
             if (this.state.phaseNumber !== 4) {
-                // console.log('gets in phase 4', this.state);
+                console.log('gets in phase 4');
                 this.setState({
                     timer: nextTimer[3],
                     phaseNumber: 4
@@ -742,7 +683,7 @@ class InGame extends React.Component {
             }
         } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
-                // console.log('gets in phase 3', this.state);
+                console.log('gets in phase 3');
                 this.setState({
                     timer: nextTimer[2],
                     phaseNumber: 3
@@ -755,7 +696,7 @@ class InGame extends React.Component {
         /** Only Phase 2 has always a chosen Mystery Word */
         else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
             if (this.state.phaseNumber !== 2) {
-                // console.log('gets in phase 2', this.state);
+                console.log('gets in phase 2');
                 this.setState({
                     timer: nextTimer[1],
                     phaseNumber: 2
@@ -766,7 +707,7 @@ class InGame extends React.Component {
         /** Only Phase 1 has always none of these above*/
         else if (this.state.currentCard !== []) {
             if (this.state.phaseNumber !== 1) {
-                // console.log('gets in phase 1', this.state);
+                console.log('gets in phase 1');
                 this.setState({
                     timer: nextTimer[0],
                     phaseNumber: 1,
@@ -897,11 +838,6 @@ class InGame extends React.Component {
                 }
             }
         } catch (error) {
-            /*if (this.state.deleted) {
-                console.log('gets at that weird place');
-                this.props.history.push('/lobbyOverview/')
-            } else {
-                */
             alert(`Something went wrong during the polling process!`);
             console.log('error', handleError(error))
         }
@@ -932,29 +868,14 @@ class InGame extends React.Component {
 
     async playersWithoutUser(players) {
         let clonePlayers = [...players];
-        console.log('...', clonePlayers);
         let index = clonePlayers.indexOf(localStorage.getItem('username'));
         if (index > -1) {
             clonePlayers.splice(index, 1);
-        } else {
-            console.log('There is some error, the user is not in the list of players!')
         }
-        console.log('clones', clonePlayers);
         return clonePlayers;
     }
 
     render() {
-        // this construction of the variable name for the different timer seconds helps us to render the timer dynamically
-        // let t = {};
-        // let a = 1;
-        // let b = 2;
-        // let c = 3;
-        // let d = 4;
-        // t['timer' + a] = 15;
-        // t['timer' + b] = 25;
-        // t['timer' + c] = 30;
-        // t['timer' + d] = 10;
-        // -> maybe needed later
         return (
             <Game>
                 <EndGameContainer id={"end"}>

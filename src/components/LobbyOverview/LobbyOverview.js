@@ -350,8 +350,8 @@ class LobbyOverview extends Component {
                         <GridItemTitle> Choose Game </GridItemTitle>
                         {this.state.lobbies.map(lobby => {
                             return (
-                                // using "Fragment" allows use to render multiple components in this function
-                                <Fragment>
+                                /** "Fragment" allows use to render multiple div components as "one". */
+                                <Fragment key={lobby.gameName}>
                                     <GridNormalItem> {lobby.gameName} </GridNormalItem>
                                     <GridNormalItem> {lobby.gameType} </GridNormalItem>
                                     <GridNormalItem> {lobby.numOfHumanPlayers+lobby.numOfAngels+lobby.numOfDevils}/{lobby.numOfDesiredPlayers} </GridNormalItem>
@@ -360,7 +360,6 @@ class LobbyOverview extends Component {
                                         <BotCell> Devils: {lobby.numOfDevils}</BotCell>
                                     </BotContainer>
                                     <ChooseGameContainer>
-                                        {/** this.state.games.indexOf(game) identifies each game using its (unique) index in this.state.games */}
                                         <input type="radio" name="game" value={this.state.chosenLobby} onClick={() => {
                                             this.setState({chosenLobby: lobby});
                                         }}/>
