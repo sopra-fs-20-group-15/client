@@ -96,6 +96,24 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+const InputField = styled.input`
+  &::placeholder {
+    font-family: Happy Monkey;
+    color: rgba(0, 0, 0, 0.5);
+  }
+  position: absolute;
+  width: 96%;
+  height: 40px;
+  background: rgba(203, 189, 140, 0.54);
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  border-color: rgba(203, 189, 140, 0.54);
+  font-family: Happy Monkey;
+  position: absolute;
+  bottom: 8px;
+  left: 2%;
+`;
+
 const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
 };
@@ -113,6 +131,7 @@ class Lobby extends React.Component {
             actualPlayers: null,
             angels: null,
             devils: null,
+            chatMessage: null
         };
 
         this.interval = setInterval(this.getInfos, 500);
@@ -189,6 +208,16 @@ class Lobby extends React.Component {
         }
     }
 
+    async sendMessage() {
+
+    }
+
+    keyPressed(event) {
+        if (event.key === "Enter") {
+            this.submitMessage()
+        }
+    }
+
     //needs to gather info about the lobby!!!
     async componentDidMount() {
         try {
@@ -217,7 +246,13 @@ class Lobby extends React.Component {
                                 </Fragment>
                             )})}
                     </GridContainer>
-                    <ChatContainer></ChatContainer>
+                    <ChatContainer>
+                        <InputField
+                            placeholder="Enter here.."
+                            onChange={e => {this.handleInputChange('chatMessage', e.target.value)}}
+                            onKeyPress={this.keyPressed}
+                        />
+                    </ChatContainer>
                 </UIContainer>
 
                 <ButtonGroup>
