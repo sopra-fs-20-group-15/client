@@ -355,11 +355,7 @@ class LobbyOverview extends Component {
                             return (
                                 // using "Fragment" allows use to render multiple components in this function
                                 <Fragment>
-                                    {lobby.gameName.length >= 10 ? (
-                                        <GridNormalItem style={{paddingLeft:"10px",paddingTop:"22px"}}> {lobby.gameName} </GridNormalItem>
-                                    ):(
-                                        <GridNormalItem style={{display:"flex"}}> {lobby.gameName} </GridNormalItem>
-                                    )}
+                                    <GridNormalItem style={{paddingLeft:"10px",paddingTop:"22px"}}> {lobby.gameName} </GridNormalItem>
                                     <GridNormalItem style={{display:"flex"}}> {lobby.gameType} </GridNormalItem>
                                     <GridNormalItem style={{display:"flex"}}> {lobby.numOfHumanPlayers+lobby.numOfAngels+lobby.numOfDevils}/{lobby.numOfDesiredPlayers} </GridNormalItem>
                                     <BotContainer>

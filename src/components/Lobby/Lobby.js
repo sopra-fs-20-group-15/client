@@ -18,21 +18,32 @@ const GridItemTitle = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
-  display: flex;
+  // display: flex;
   text-decoration-skip-ink: none;
   border-bottom: 3px solid;
   height: 65px;
+  
+  padding-top: 2px;
+  padding-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const GridNormalItem = styled.div`
   background: #ECDD8F;
   justify-content: center;
   align-items: center;
-  display: flex;
+  // display: flex;
   font-family: Happy Monkey;
   font-size: 22px;
   border-bottom: 2.50px solid;
   height: 55px;
+  
+  padding-top: 13px;
+  padding-left: 10px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const UIContainer = styled.div`
