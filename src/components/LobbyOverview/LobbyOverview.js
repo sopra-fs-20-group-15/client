@@ -27,11 +27,14 @@ const GridNormalItem = styled.div`
   background: #ECDD8F;
   justify-content: center;
   align-items: center;
-  display: flex;
+  // display: flex;
   font-family: Happy Monkey;
   font-size: 24px;
   outline-style: solid;
 
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const GridContainer = styled.div`
@@ -351,10 +354,11 @@ class LobbyOverview extends Component {
                         {this.state.lobbies.map(lobby => {
                             return (
                                 /** "Fragment" allows use to render multiple div components as "one". */
-                                <Fragment key={lobby.gameName}>
-                                    <GridNormalItem> {lobby.gameName} </GridNormalItem>
-                                    <GridNormalItem> {lobby.gameType} </GridNormalItem>
-                                    <GridNormalItem> {lobby.numOfHumanPlayers+lobby.numOfAngels+lobby.numOfDevils}/{lobby.numOfDesiredPlayers} </GridNormalItem>
+                                // using "Fragment" allows use to render multiple components in this function
+                                <Fragment>
+                                    <GridNormalItem style={{paddingLeft:"10px",paddingTop:"22px"}}> {lobby.gameName} </GridNormalItem>
+                                    <GridNormalItem style={{display:"flex"}}> {lobby.gameType} </GridNormalItem>
+                                    <GridNormalItem style={{display:"flex"}}> {lobby.numOfHumanPlayers+lobby.numOfAngels+lobby.numOfDevils}/{lobby.numOfDesiredPlayers} </GridNormalItem>
                                     <BotContainer>
                                         <BotCell> Angels: {lobby.numOfAngels} </BotCell>
                                         <BotCell> Devils: {lobby.numOfDevils}</BotCell>

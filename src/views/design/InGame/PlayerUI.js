@@ -92,7 +92,7 @@ export const Input = styled.input`
   width: 240px;
   
   padding-bottom: 10%;
-  padding-left: 5%;
+  padding-left: 5px;
   
   background: #CBBD8C;
   border:none;
@@ -109,10 +109,10 @@ export const Output = styled.div`
   width: 240px;
   
   padding-bottom: 10%;
-  padding-left: 5%;
+  padding-left: 5px;
   
   background: #CBBD8C;
-  border:none;
+  // border:none;
   font-family: Happy Monkey;
   font-style: normal;
   font-weight: normal;
@@ -135,6 +135,7 @@ export const NameField = styled.div`
 
   padding-top: 1.25%;
   padding-left: 1.5%;
+  white-space: nowrap;
   
   font-family: Happy Monkey;
   font-style: normal;
@@ -158,6 +159,7 @@ export const NameFieldActivePlayer = styled.div`
 
   padding-top: 1.25%;
   padding-left: 1.5%;
+  white-space: nowrap;
   
   font-family: Happy Monkey;
   font-style: normal;

@@ -27,11 +27,14 @@ const GridNormalItem = styled.div`
   background: #ECDD8F;
   justify-content: center;
   align-items: center;
-  display: flex;
+  // display: flex;
   font-family: Happy Monkey;
   font-size: 20px;
   outline-style: solid;
 
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const GridContainer = styled.div`
@@ -156,10 +159,10 @@ class Leaderboard extends Component {
                             return (
                                 // using "Fragment" allows use to render multiple components in this function
                                 <Fragment>
-                                    <GridNormalItem> {player.rank} </GridNormalItem>
-                                    <GridNormalItem> {player.playerName} </GridNormalItem>
-                                    <GridNormalItem> {player.gamesPlayed} </GridNormalItem>
-                                    <GridNormalItem> {player.score} </GridNormalItem>
+                                    <GridNormalItem style={{display:"flex"}}> {player.rank} </GridNormalItem>
+                                    <GridNormalItem style={{paddingLeft:"10px"}}> {player.playerName} </GridNormalItem>
+                                    <GridNormalItem style={{display:"flex"}}> {player.gamesPlayed} </GridNormalItem>
+                                    <GridNormalItem style={{display:"flex"}}> {player.score} </GridNormalItem>
 
                                 </Fragment>
                             )

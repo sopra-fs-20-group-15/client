@@ -35,7 +35,14 @@ class PregameHeaderComponent extends Component {
             // Logout successfully worked --> navigate to the route /login
             this.props.history.push(`/login`);
         } catch (error) {
-            alert(`Something went wrong during the logout: \n${handleError(error)}`)
+            alert(`Something went wrong during the logout: \n${handleError(error)}`);
+            localStorage.removeItem('token');
+            localStorage.removeItem('id');
+            localStorage.removeItem('username');
+
+
+            // Logout successfully worked --> navigate to the route /login
+            this.props.history.push(`/login`);
         }
     }
 

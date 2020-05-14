@@ -157,7 +157,8 @@ class InGame extends React.Component {
                 this.getTotalNumberOfGuesses();
                 this.getHighestScore();
                 this.overlayOn();
-                setTimeout(() => this.deleteGame(), 15000)
+                setTimeout(() => this.deleteGame(), 15000);
+                setTimeout(() => localStorage.removeItem('GameGuard'), 15000);
             } else {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.initializeTurn();

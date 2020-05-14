@@ -12,7 +12,10 @@ import { Redirect } from "react-router-dom";
  */
 export const InGameGuard = props => {
     if (localStorage.getItem("token")) {
-        return props.children;
+        if (localStorage.getItem("GameGuard")){
+            return props.children;
+        }
+        return <Redirect to={"/lobbyOverview"} />;
     }
     return <Redirect to={"/login"} />;
 };

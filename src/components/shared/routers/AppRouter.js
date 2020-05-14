@@ -1,6 +1,6 @@
 import React from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
-import {RegisterGuard} from "../routeProtectors/RegisterGuard";
+import {GuardRegister} from "../routeProtectors/GuardRegister";
 import Register from "../../register/Register";
 import {LoginGuard} from "../routeProtectors/LoginGuard";
 import Login from "../../login/Login";
@@ -46,9 +46,9 @@ class AppRouter extends React.Component {
                         <Route
                             path="/register"
                             render={() => (
-                                <RegisterGuard>
+                                <GuardRegister>
                                     <Register/>
-                                </RegisterGuard>
+                                </GuardRegister>
                             )}
                         />
                         <Route

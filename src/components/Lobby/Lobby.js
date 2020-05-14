@@ -1,12 +1,11 @@
-import React, {Component, Fragment} from 'react';
+import React, {Fragment} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import { Button, LogoutButton } from '../../views/design/Button';
+import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 import TriangleBackground from '../../views/pictures/TriangleBackground.png'
-import axios from 'axios';
 
 
 const GridItemTitle = styled.div`
@@ -19,21 +18,32 @@ const GridItemTitle = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
-  display: flex;
+  // display: flex;
   text-decoration-skip-ink: none;
   border-bottom: 3px solid;
   height: 65px;
+  
+  padding-top: 2px;
+  padding-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const GridNormalItem = styled.div`
   background: #ECDD8F;
   justify-content: center;
   align-items: center;
-  display: flex;
+  // display: flex;
   font-family: Happy Monkey;
   font-size: 22px;
   border-bottom: 2.50px solid;
   height: 55px;
+  
+  padding-top: 13px;
+  padding-left: 10px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const UIContainer = styled.div`
@@ -45,7 +55,6 @@ const UIContainer = styled.div`
   top: 33%;
   bottom: 20%;
   
-  // border: 1px solid #000000;
 `;
 
 const ChatContainer = styled.div`
@@ -76,10 +85,9 @@ const GridContainer = styled.div`
   width: 400px;
   display: inline-block;
   
-  overflow-y: hidden;
+  overflow-y: auto;
   
   border: 3px solid;
-  // box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -158,6 +166,7 @@ class Lobby extends React.Component {
                  * The token gameId makes sure that only the players from the lobby can join the game. */
                 if (this.state.activeGameId) {
                     localStorage.setItem('gameId', this.state.activeGameId);
+                    localStorage.setItem('GameGuard', this.state.activeGameId);
                     this.props.history.push('/gameLobby/' + this.state.activeGameId);
                 }
             }
@@ -173,8 +182,10 @@ class Lobby extends React.Component {
             });
 
             const response = await api.post('/games/'+this.props.match.params.id, requestBody);
-            //temporary "gamelobby"
+
+            localStorage.setItem('GameGuard',response.data.id);
             this.props.history.push('/gameLobby/'+response.data.id);
+
         } catch (error) {
             alert(`Something went wrong while starting the Game: \n${handleError(error)}`);
         }
