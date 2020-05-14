@@ -1,12 +1,11 @@
-import React, {Component, Fragment} from 'react';
+import React, {Fragment} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import { Button, LogoutButton } from '../../views/design/Button';
+import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import JustOneLogo from "../../views/pictures/JustOneLogo.png";
 import TriangleBackground from '../../views/pictures/TriangleBackground.png'
-import axios from 'axios';
 
 
 const GridItemTitle = styled.div`
@@ -45,7 +44,6 @@ const UIContainer = styled.div`
   top: 33%;
   bottom: 20%;
   
-  // border: 1px solid #000000;
 `;
 
 const ChatContainer = styled.div`
@@ -79,7 +77,6 @@ const GridContainer = styled.div`
   overflow-y: hidden;
   
   border: 3px solid;
-  // box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -158,6 +155,7 @@ class Lobby extends React.Component {
                  * The token gameId makes sure that only the players from the lobby can join the game. */
                 if (this.state.activeGameId) {
                     localStorage.setItem('gameId', this.state.activeGameId);
+                    localStorage.setItem('GameGuard', this.state.activeGameId);
                     this.props.history.push('/gameLobby/' + this.state.activeGameId);
                 }
             }
@@ -173,8 +171,10 @@ class Lobby extends React.Component {
             });
 
             const response = await api.post('/games/'+this.props.match.params.id, requestBody);
-            //temporary "gamelobby"
+
+            localStorage.setItem('GameGuard',response.data.id);
             this.props.history.push('/gameLobby/'+response.data.id);
+
         } catch (error) {
             alert(`Something went wrong while starting the Game: \n${handleError(error)}`);
         }
