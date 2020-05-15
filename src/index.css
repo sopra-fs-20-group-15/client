@@ -20,8 +20,22 @@ textarea {
   outline: none;
 }
 
-roundButton{
+.blob {
+  animation: pulse-red 2s infinite;
+}
 
+@keyframes pulse-red {
+  0% {
+    transform: scale(0.9);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0.9);
+  }
 }
 
 select {

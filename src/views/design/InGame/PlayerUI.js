@@ -1,6 +1,24 @@
-import styled from "styled-components";
+import styled, {css, keyframes} from "styled-components";
 
 /**everything based on Player Interface*/
+
+export const pulse = keyframes`
+  0% {
+    transform: scale(0.9);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0.9);
+  }
+`;
+
+const pulseAnimation = css`
+    ${pulse} 2s infinite;
+`;
 
 export const Player = styled.div`
   width: 350px;
@@ -40,7 +58,7 @@ export const SignalFieldPlayer = styled.button`
   }
   cursor: ${props => (props.disabled ? "default" : "pointer")};
   // opacity: ${props => (props.disabled ? 0.8 : 1)};
-  
+    
   height: 70px;
   width: 70px;
   
@@ -64,7 +82,32 @@ export const SignalFieldPlayer = styled.button`
 export const InputField = styled.div`
   height: 55px;
   width: 240px;
+      
+  position: absolute;
+  bottom: 0%;
   
+  background: #CBBD8C;
+  border: 3px solid #000000;
+  border-radius: 20px;
+  
+  padding-top: 3%;
+  padding-left: 2%;
+  
+  font-family: Happy Monkey;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
+`;
+
+export const InputFieldPlayer = styled.div`
+  height: 55px;
+  width: 240px;
+  
+  animation: ${props => (!props.disabled ? pulseAnimation : "default")}
+    
   position: absolute;
   bottom: 0%;
   

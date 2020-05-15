@@ -28,11 +28,10 @@ import {
     NameField,
     NameFieldActivePlayer,
     GuessedCardsField,
-    ScoreField
+    ScoreField, InputFieldPlayer
 } from "../../views/design/InGame/PlayerUI";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
 import PlayerComponent from "../../views/PlayerComponent";
-
 
 const DrawCard = styled.div`
     position: absolute;
@@ -87,7 +86,7 @@ class InGame extends React.Component {
             clues: [],
             guess: "",
             validGuess: false,
-            timer: 30,
+            timer: 3000,
             remainingCards: 13,
             guessedCards: [0, 0, 0, 0, 0, 0, 0],
             scores: [0, 0, 0, 0, 0, 0, 0],
@@ -1043,22 +1042,22 @@ class InGame extends React.Component {
                             {localStorage.getItem('username') !== this.state.activePlayer ?
                                 <NameField>1. {localStorage.getItem('username')} </NameField> :
                                 <NameFieldActivePlayer>1. {localStorage.getItem('username')} </NameFieldActivePlayer>}
-                            <InputField>
-                                {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(localStorage.getItem('username'))) || this.state.phaseNumber === 4 ? (
-                                    <Output id={"clue1"}></Output>
-                                ) : (
-                                    (((this.state.phaseNumber === 1 || this.state.phaseNumber === 3) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer)) ? (
-                                        <Input placeholder="Enter here.." onChange=
-                                            {e => {
-                                                this.handleInputChange('player1Input', e.target.value);
-                                            }}/>
+                                <InputFieldPlayer disabled={((this.state.phaseNumber === 1 || this.state.phaseNumber === 3 || this.state.phaseNumber === 4) && localStorage.getItem('username') !== this.state.activePlayer) || ((this.state.phaseNumber === 2 || this.state.phaseNumber === 4) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer && this.state.passivePlayersCluesGiven.includes(localStorage.getItem('username')))}>
+                                    {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(localStorage.getItem('username'))) || this.state.phaseNumber === 4 ? (
+                                        <Output id={"clue1"}></Output>
                                     ) : (
-                                        (this.state.phaseNumber === 1 && localStorage.getItem('username') !== this.state.activePlayer) ? (
-                                            <Output> Wait for phase 2! </Output>
+                                        (((this.state.phaseNumber === 1 || this.state.phaseNumber === 3) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer)) ? (
+                                            <Input placeholder="Enter here.." onChange=
+                                                {e => {
+                                                    this.handleInputChange('player1Input', e.target.value);
+                                                }}/>
                                         ) : (
-                                            <Output> Wait for phase 3! </Output>))
-                                )}
-                            </InputField>
+                                            (this.state.phaseNumber === 1 && localStorage.getItem('username') !== this.state.activePlayer) ? (
+                                                <Output> Wait for phase 2! </Output>
+                                            ) : (
+                                                <Output> Wait for phase 3! </Output>))
+                                    )}
+                                </InputFieldPlayer>
                             <SignalFieldPlayer id={"field1"}
                                                disabled={!this.state.player1Input || ((this.state.phaseNumber === 1 || this.state.phaseNumber === 3 || this.state.phaseNumber === 4) && localStorage.getItem('username') !== this.state.activePlayer) || ((this.state.phaseNumber === 2 || this.state.phaseNumber === 4) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer && this.state.passivePlayersCluesGiven.includes(localStorage.getItem('username')))}
                                                onClick={() => {
