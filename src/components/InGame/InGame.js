@@ -86,7 +86,7 @@ class InGame extends React.Component {
             clues: [],
             guess: "",
             validGuess: false,
-            timer: 3000,
+            timer: 30,
             remainingCards: 13,
             guessedCards: [0, 0, 0, 0, 0, 0, 0],
             scores: [0, 0, 0, 0, 0, 0, 0],
