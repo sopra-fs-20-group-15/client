@@ -557,7 +557,9 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while getting the current Deck Size!`);
+            if (error.response.status !== 204) {
+                alert(`Something went wrong while getting the current Deck Size!`);
+            }
             console.log('error', handleError(error))
         }
     }
@@ -583,7 +585,9 @@ class InGame extends React.Component {
                 });
             }
         } catch (error) {
-            alert(`Something went wrong while trying to get the players and their clues!`);
+            if (error.response.status !== 204) {
+                alert(`Something went wrong while trying to get the players and their clues!`);
+            }
             console.log('error', handleError(error))
         }
     }

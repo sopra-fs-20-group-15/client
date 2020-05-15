@@ -46,6 +46,19 @@ const GridNormalItem = styled.div`
   text-overflow: ellipsis;
 `;
 
+const ChatMessageContainer = styled.div`
+  left: 2%;
+  width: 98%;
+  position: relative;
+`;
+
+const ChatMessage = styled.div`
+  font-size: 16px;
+  font-family: Happy Monkey;
+  position: relative;
+  display: inline-block;
+`;
+
 const UIContainer = styled.div`
   height: 350px;
   width: 800px;
@@ -139,7 +152,8 @@ class Lobby extends React.Component {
             actualPlayers: null,
             angels: null,
             devils: null,
-            chatMessage: null
+            chatMessages: [{playerName: "SlyLooter", message: "Suck my balls! You fucking twat! Lick my hairy balls!"}, {playerName: "Slatki", message: "No you!"}, {playerName: "Meridia", message: "Let's just have fun!"}],
+            colors: ["#0A7E00", "#0C3BE8", "#FF1201", "#E8750C", "#9B03DD", "#00b9b8", "#FF01A1"]
         };
 
         this.interval = setInterval(this.getInfos, 500);
@@ -258,6 +272,15 @@ class Lobby extends React.Component {
                             )})}
                     </GridContainer>
                     <ChatContainer>
+                        <div style={{position: "absolute", bottom: "60px"}}>
+                            {this.state.chatMessages.map(chatMessage => {
+                                return (
+                                    <ChatMessageContainer>
+                                        <ChatMessage> <span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>{chatMessage.playerName}:</span> {chatMessage.message}</ChatMessage>
+                                    </ChatMessageContainer>
+                                )
+                            })}
+                        </div>
                         <InputField
                             placeholder="Enter here.."
                             onChange={e => {this.handleInputChange('chatMessage', e.target.value)}}

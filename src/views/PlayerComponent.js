@@ -10,8 +10,8 @@ const PlayerComponent = ({ scores, guessedCards, clonePlayers, activePlayer, num
             style={{top: "5%", left: "12%"}}>{guessedCards[number-1]}</GuessedCardsField>
         <ScoreField>{scores[number-1]}</ScoreField>
         {clonePlayers[number-2] !== activePlayer ?
-            <NameField>6. {clonePlayers[number-2]}</NameField> :
-            <NameFieldActivePlayer>6. {clonePlayers[number-2]}</NameFieldActivePlayer>}
+            <NameField>{number}. {clonePlayers[number-2]}</NameField> :
+            <NameFieldActivePlayer>{number}. {clonePlayers[number-2]}</NameFieldActivePlayer>}
         <InputField>
             <Output id={"clue" + number}/>
         </InputField>
