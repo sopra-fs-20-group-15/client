@@ -152,12 +152,15 @@ class Lobby extends React.Component {
             actualPlayers: null,
             angels: null,
             devils: null,
+            chatMessage: null,
             chatMessages: [{playerName: "SlyLooter", message: "Suck my balls! You fucking twat! Lick my hairy balls!"}, {playerName: "Slatki", message: "No you!"}, {playerName: "Meridia", message: "Let's just have fun!"}],
             colors: ["#0A7E00", "#0C3BE8", "#FF1201", "#E8750C", "#9B03DD", "#00b9b8", "#FF01A1"]
         };
 
-        this.interval = setInterval(this.getInfos, 500);
+        this.intervalInfos = setInterval(this.getInfos, 500);
+        this.intervalChat = setInterval(this.getChatMessages, 500);
         this.getInfos = this.getInfos.bind(this);
+        this.getChatMessages = this.getChatMessages.bind(this);
     }
 
     getInfos = async () => {
@@ -186,6 +189,25 @@ class Lobby extends React.Component {
             }
         } catch (error) {
             this.props.history.push('/lobbyOverview/')
+        }
+    };
+
+    getChatMessages = async () => {
+        try {
+
+            const response = await api.get('/gameSetUps/'+ this.props.match.params.id +'/chatMessages/' + localStorage.getItem('token'));
+
+            if (response.status === 200) {
+                if (!this.state.chatMessages.length !== (response.data.length)) {
+                    this.setState({
+                        chatMessages: response.data
+                    });
+                }
+            }
+
+        } catch (error) {
+            alert(`Something went wrong while retrieving the chat messages!`);
+            console.log('error', handleError(error))
         }
     };
 
@@ -243,7 +265,10 @@ class Lobby extends React.Component {
         }
     }
 
-    //needs to gather info about the lobby!!!
+    handleInputChange(key, value) {
+        this.setState({[key]: value});
+    }
+
     async componentDidMount() {
         try {
             this.getInfos();
@@ -253,14 +278,14 @@ class Lobby extends React.Component {
     }
 
     componentWillUnmount() {
-        clearInterval(this.interval);
+        clearInterval(this.intervalInfos);
+        clearInterval(this.intervalChat);
     }
 
     render() {
         return (
             <BaseContainer style={background}>
                 <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
-
                 <UIContainer>
                     <GridContainer>
                         <GridItemTitle> {this.state.gameName} ({this.state.players.length}/{this.state.desiredPlayers})</GridItemTitle>
@@ -275,7 +300,7 @@ class Lobby extends React.Component {
                         <div style={{position: "absolute", bottom: "60px"}}>
                             {this.state.chatMessages.map(chatMessage => {
                                 return (
-                                    <ChatMessageContainer>
+                                    <ChatMessageContainer id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}>
                                         <ChatMessage> <span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>{chatMessage.playerName}:</span> {chatMessage.message}</ChatMessage>
                                     </ChatMessageContainer>
                                 )
