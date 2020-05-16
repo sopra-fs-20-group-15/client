@@ -32,6 +32,14 @@ import {
 } from "../../views/design/InGame/PlayerUI";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
 import PlayerComponent from "../../views/PlayerComponent";
+import {Button} from "../../views/design/Button";
+
+const SoundButton = styled.div`
+  position: absolute;
+  top: 650px;
+  display: flex;
+  margin-top: 20px;
+`;
 
 const DrawCard = styled.div`
     position: absolute;
@@ -74,6 +82,7 @@ class InGame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            sound: true,
             gameId: null,
             currentCard: [],
             mysteryWordId: null,
@@ -606,6 +615,24 @@ class InGame extends React.Component {
         }));
     }
 
+    turnOffandOnSound() {
+        if (this.state.sound) {
+        this.setState({sound: false});
+        }
+        else {this.setState({sound: true}) ;
+        }
+    }
+
+    playWrightGuessAudio() {
+        let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/cheering.wav');
+        audio.play();
+    }
+
+    playWrongGuessAudio() {
+        let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/mario_06.wav');
+        audio.play();
+    }
+
     displayGuess() {
         /**displays guess in phase 4*/
         if (this.state.phaseNumber === 4 && (this.state.guess !== null || this.state.guess !== "")) {
@@ -683,6 +710,11 @@ class InGame extends React.Component {
                     timer: nextTimer[3],
                     phaseNumber: 4
                 });
+                if (this.state.validGuess && this.state.sound) {
+                    this.playWrightGuessAudio();
+                } else if (this.state.sound) {
+                    this.playWrongGuessAudio();
+                }
                 this.updatePhaseHUD(4);
             }
         } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
@@ -882,6 +914,16 @@ class InGame extends React.Component {
     render() {
         return (
             <Game>
+                    <SoundButton>
+                        <Button
+                            width="50%"
+                            onClick={() => {
+                                this.turnOffandOnSound();
+                            }}
+                        >
+                            (This a a sound icon)
+                        </Button>
+                    </SoundButton>
                 <EndGameContainer id={"end"}>
                     <GameOver> Well played! </GameOver>
                     <StatisticsContainer>

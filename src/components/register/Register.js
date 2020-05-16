@@ -74,6 +74,7 @@ class Register extends React.Component {
         }
     }
 
+
     async goToLogin() {
         try {
             this.props.history.push(`/login`);
