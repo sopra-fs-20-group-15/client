@@ -95,7 +95,7 @@ class InGame extends React.Component {
             clues: [],
             guess: "",
             validGuess: false,
-            timer: 30,
+            timer: 3000,
             remainingCards: 13,
             guessedCards: [0, 0, 0, 0, 0, 0, 0],
             scores: [0, 0, 0, 0, 0, 0, 0],
@@ -623,7 +623,7 @@ class InGame extends React.Component {
         }
     }
 
-    playWrightGuessAudio() {
+    playCorrectGuessAudio() {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/cheering.wav');
         audio.play();
     }
@@ -711,7 +711,7 @@ class InGame extends React.Component {
                     phaseNumber: 4
                 });
                 if (this.state.validGuess && this.state.sound) {
-                    this.playWrightGuessAudio();
+                    this.playCorrectGuessAudio();
                 } else if (this.state.sound) {
                     this.playWrongGuessAudio();
                 }
@@ -914,16 +914,16 @@ class InGame extends React.Component {
     render() {
         return (
             <Game>
-                    <SoundButton>
-                        <Button
-                            width="50%"
-                            onClick={() => {
-                                this.turnOffandOnSound();
-                            }}
-                        >
-                            (This a a sound icon)
-                        </Button>
-                    </SoundButton>
+                <SoundButton>
+                    <Button
+                        width="50%"
+                        onClick={() => {
+                            this.turnOffandOnSound();
+                        }}
+                    >
+                        (This a a sound icon)
+                    </Button>
+                </SoundButton>
                 <EndGameContainer id={"end"}>
                     <GameOver> Well played! </GameOver>
                     <StatisticsContainer>
@@ -939,13 +939,10 @@ class InGame extends React.Component {
                 </EndGameContainer>
                 {/*Timer and Phase*/}
                 <HUDContainer>
-                    <TimerContainer>
-                        <Round> Round {this.state.round} </Round>
-                        <Timer seconds={this.state.timer} phaseNumber={this.state.phaseNumber}
-                               determineMysteryWord={this.determineMysteryWord}
-                               giveClue={this.giveClue} setGuess={this.setGuess} gameHasEnded={this.gameHasEnded}
-                               gameId={this.state.gameId} mysteryWord={this.state.mysteryWord}/>
-                    </TimerContainer>
+                    <Timer seconds={this.state.timer} phaseNumber={this.state.phaseNumber}
+                           determineMysteryWord={this.determineMysteryWord} round={this.state.round}
+                           giveClue={this.giveClue} setGuess={this.setGuess} gameHasEnded={this.gameHasEnded}
+                           gameId={this.state.gameId} mysteryWord={this.state.mysteryWord}/>
                     <Phase>
                         <PhaseCircle id={"phase1"} style={{left: "26px", backgroundColor: "#FF0000"}}/>
                         <PhaseCircle id={"phase2"} style={{left: "82px"}}/>

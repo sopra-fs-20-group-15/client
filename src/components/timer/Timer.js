@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from "styled-components";
+import {Round, TimerContainer, pulseAnimation} from "../../views/design/InGame/TimerUI";
 
 
 const Seconds = styled.div`
@@ -35,6 +36,7 @@ class Timer extends Component{
         super(props);
         this.state = {
             seconds: this.props.seconds,
+            countdown: false
         };
     }
 
@@ -59,6 +61,12 @@ class Timer extends Component{
             if (seconds > 0) {
                 this.setState(({seconds}) => ({
                     seconds: seconds - 1
+                }))
+            }
+
+            if (seconds === 10) {
+                this.setState(({seconds}) => ({
+                    countdown: true
                 }))
             }
 
@@ -94,12 +102,13 @@ class Timer extends Component{
     render() {
         const {seconds} = this.state;
         return (
-            <div>
+            <TimerContainer countdown={this.state.countdown}>
+                <Round> Round {this.props.round} </Round>
                 {seconds === 0
                     ? <Message> Times up! </Message>
                     : <Seconds> {seconds < 10 ? `0${seconds}` : `${seconds}`} </Seconds>
                 }
-            </div>
+            </TimerContainer>
         );
     }
 }

@@ -4,19 +4,19 @@ import styled, {css, keyframes} from "styled-components";
 
 export const pulse = keyframes`
   0% {
-    transform: scale(0.95);
-  }
-
-  50% {
     transform: scale(1);
   }
 
-  100% {
+  50% {
     transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1);
   }
 `;
 
-const pulseAnimation = css`
+export const pulseAnimation = css`
     ${pulse} 2s infinite;
 `;
 
