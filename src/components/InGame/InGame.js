@@ -888,7 +888,7 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            await api.put('/games/'+ this.state.activeGameId +'/phases', requestBody);
+            await api.put('/games/'+ this.state.gameId +'/phases', requestBody);
         } catch (error) {
 
         }
