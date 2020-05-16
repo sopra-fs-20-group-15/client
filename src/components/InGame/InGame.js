@@ -883,7 +883,12 @@ class InGame extends React.Component {
 
     stillAlive = async () => {
         try {
-            await api.put('/games/'+ this.state.activeGameId +'/phases', localStorage.getItem('token'));
+
+            const requestBody = JSON.stringify({
+                playerToken: localStorage.getItem('token')
+            });
+
+            await api.put('/games/'+ this.state.activeGameId +'/phases', requestBody);
         } catch (error) {
 
         }
