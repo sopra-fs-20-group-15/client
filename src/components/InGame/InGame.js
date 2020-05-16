@@ -712,6 +712,10 @@ class InGame extends React.Component {
             this.showEasterEgg(value);
             setTimeout(() => this.hideEasterEgg(value), 2800)
         }
+        if (value === "rachid") {
+            this.showEasterEgg(value);
+            setTimeout(() => this.hideEasterEgg(value), 2500)
+        }
         this.setState({[key]: value});
     }
 
@@ -933,7 +937,7 @@ class InGame extends React.Component {
                 <EasterEgg id={"wow"} src={easterEgg1} alt={"easter egg"}/>
                 <EasterEgg id={"pure beauty"} src={easterEgg2} alt={"easter egg"}/>
                 <EasterEgg id={"rachid"} src={easterEgg3} alt={"easter egg"}/>
-                <EasterEgg id={"mexicans"} src={easterEgg4} alt={"easter egg"}/>
+                <EasterEgg id={"mexicans"} src={easterEgg4} alt={"easter egg"} style={{width: "50%", left: "30%"}}/>
                 <EasterEgg id={"milestone 4 abgabe"} src={easterEgg5} alt={"easter egg"}/>
                 <EasterEgg id={"hate crime"} src={easterEgg6} alt={"easter egg"} style={{width: "50%", left: "30%"}}/>
                 <SoundButton>
