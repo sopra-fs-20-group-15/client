@@ -1061,6 +1061,7 @@ class InGame extends React.Component {
                             <SignalFieldPlayer id={"field1"}
                                                disabled={!this.state.player1Input || ((this.state.phaseNumber === 1 || this.state.phaseNumber === 3 || this.state.phaseNumber === 4) && localStorage.getItem('username') !== this.state.activePlayer) || ((this.state.phaseNumber === 2 || this.state.phaseNumber === 4) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer && this.state.passivePlayersCluesGiven.includes(localStorage.getItem('username')))}
                                                onClick={() => {
+                                                   window.open("https://www.youtube.com/watch?v=oHg5SJYRHA0");
                                                    this.handleInput(localStorage.getItem('username'), this.state.player1Input);
                                                }}>
                                 <img src={ClickIcon} alt={"ClickIcon"}/>
