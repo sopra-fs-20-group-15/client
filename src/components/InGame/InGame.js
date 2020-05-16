@@ -1,4 +1,10 @@
 import React from 'react';
+import easterEgg1 from "../../views/pictures/easter eggs/wow.gif"
+import easterEgg2 from "../../views/pictures/easter eggs/beautiful_squidward.gif"
+import easterEgg3 from "../../views/pictures/easter eggs/chicken_dance.gif"
+import easterEgg4 from "../../views/pictures/easter eggs/trump.gif"
+import easterEgg5 from "../../views/pictures/easter eggs/simpsons.gif"
+import easterEgg6 from "../../views/pictures/easter eggs/pepe.gif"
 import styled from 'styled-components';
 import {api, handleError} from '../../helpers/api';
 import {withRouter} from 'react-router-dom';
@@ -14,7 +20,7 @@ import {
     GameOver,
     Statistics,
     StatisticsContainer,
-    Waiting
+    Waiting, EasterEgg
 } from "../../views/design/InGame/InGameUI";
 import {TimerContainer, Round} from "../../views/design/InGame/TimerUI";
 import {Phase, PhaseCircle, PhaseMessage} from "../../views/design/InGame/PhaseUI";
@@ -688,14 +694,24 @@ class InGame extends React.Component {
         }
     }
 
-    /**
-     *  Every time the user enters something in the input field, the state gets updated.
-     * @param key (the key of the state for identifying the field that needs to be updated)
-     * @param value (the value that gets assigned to the identified state key)
-     */
+    showEasterEgg(value) {
+        document.getElementById(value).style.display = "block";
+    }
+
+    hideEasterEgg(value) {
+        document.getElementById(value).style.display = "none";
+
+    }
+
     handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
+        if (value === "wow" || value === "pure beauty" || value === "rachid" || value === "mexicans" || value === "hate crime") {
+            this.showEasterEgg(value);
+            setTimeout(() => this.hideEasterEgg(value), 3000)
+        }
+        if (value === "milestone 4 abgabe") {
+            this.showEasterEgg(value);
+            setTimeout(() => this.hideEasterEgg(value), 2800)
+        }
         this.setState({[key]: value});
     }
 
@@ -914,6 +930,12 @@ class InGame extends React.Component {
     render() {
         return (
             <Game>
+                <EasterEgg id={"wow"} src={easterEgg1} alt={"easter egg"}/>
+                <EasterEgg id={"pure beauty"} src={easterEgg2} alt={"easter egg"}/>
+                <EasterEgg id={"rachid"} src={easterEgg3} alt={"easter egg"}/>
+                <EasterEgg id={"mexicans"} src={easterEgg4} alt={"easter egg"}/>
+                <EasterEgg id={"milestone 4 abgabe"} src={easterEgg5} alt={"easter egg"}/>
+                <EasterEgg id={"hate crime"} src={easterEgg6} alt={"easter egg"} style={{width: "50%", left: "30%"}}/>
                 <SoundButton>
                     <Button
                         width="50%"

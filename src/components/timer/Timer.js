@@ -54,6 +54,11 @@ class Timer extends Component{
         }
     }
 
+    playCountdownAudio() {
+        let audio = new Audio('http://soundbible.com/mp3/Countdown-Me-728881159.mp3');
+        audio.play();
+    }
+
     async componentDidMount() {
         this.myInterval = setInterval(() => {
             const{seconds} = this.state;
@@ -65,6 +70,7 @@ class Timer extends Component{
             }
 
             if (seconds === 10) {
+                this.playCountdownAudio();
                 this.setState(({seconds}) => ({
                     countdown: true
                 }))
