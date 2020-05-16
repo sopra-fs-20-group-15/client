@@ -20,24 +20,6 @@ textarea {
   outline: none;
 }
 
-.blob {
-  animation: pulse-red 2s infinite;
-}
-
-@keyframes pulse-red {
-  0% {
-    transform: scale(0.9);
-  }
-
-  50% {
-    transform: scale(1);
-  }
-
-  100% {
-    transform: scale(0.9);
-  }
-}
-
 select {
   width: 30%;
   height: 80%;

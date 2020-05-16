@@ -46,13 +46,19 @@ const GridNormalItem = styled.div`
   text-overflow: ellipsis;
 `;
 
-const ChatMessageContainer = styled.div`
-  left: 2%;
-  width: 98%;
-  position: relative;
+const ChatMessagesContainer = styled.div`
+  position: absolute;
+  bottom: 60px;
+  height: 290px;
+  overflow: scroll;
+  padding-top: 12px;
 `;
 
 const ChatMessage = styled.div`
+  left: 2%;
+  width: 98%;
+  position: relative;
+  
   font-size: 16px;
   font-family: Happy Monkey;
   position: relative;
@@ -153,7 +159,8 @@ class Lobby extends React.Component {
             angels: null,
             devils: null,
             chatMessage: null,
-            chatMessages: [{playerName: "SlyLooter", message: "Suck my balls! You fucking twat! Lick my hairy balls!"}, {playerName: "Slatki", message: "No you!"}, {playerName: "Meridia", message: "Let's just have fun!"}],
+            chatMessages: [],
+            newMessages: true,
             colors: ["#0A7E00", "#0C3BE8", "#FF1201", "#E8750C", "#9B03DD", "#00b9b8", "#FF01A1"]
         };
 
@@ -161,6 +168,8 @@ class Lobby extends React.Component {
         this.intervalChat = setInterval(this.getChatMessages, 500);
         this.getInfos = this.getInfos.bind(this);
         this.getChatMessages = this.getChatMessages.bind(this);
+
+        this.messagesEndRef = React.createRef();
     }
 
     getInfos = async () => {
@@ -198,9 +207,15 @@ class Lobby extends React.Component {
             const response = await api.get('/gameSetUps/'+ this.props.match.params.id +'/chatMessages/' + localStorage.getItem('token'));
 
             if (response.status === 200) {
-                if (!this.state.chatMessages.length !== (response.data.length)) {
+                if (this.state.chatMessages.length !== (response.data.length)) {
                     this.setState({
-                        chatMessages: response.data
+                        chatMessages: response.data,
+                        newMessages: true
+                    });
+                    this.scrollToBottom();
+                } else {
+                    this.setState({
+                        newMessages: false
                     });
                 }
             }
@@ -269,9 +284,15 @@ class Lobby extends React.Component {
         this.setState({[key]: value});
     }
 
+    scrollToBottom = () => {
+        this.messagesEndRef.current.scrollIntoView({ behavior: 'auto' })
+    };
+
     async componentDidMount() {
         try {
             this.getInfos();
+            this.getChatMessages();
+            this.scrollToBottom();
         } catch(error) {
             alert(`Something went wrong while fetching the lobby's data: \n${handleError(error)}`);
         }
@@ -297,15 +318,16 @@ class Lobby extends React.Component {
                             )})}
                     </GridContainer>
                     <ChatContainer>
-                        <div style={{position: "absolute", bottom: "60px"}}>
+                        <ChatMessagesContainer>
                             {this.state.chatMessages.map(chatMessage => {
                                 return (
-                                    <ChatMessageContainer id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}>
-                                        <ChatMessage> <span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>{chatMessage.playerName}:</span> {chatMessage.message}</ChatMessage>
-                                    </ChatMessageContainer>
+                                    <ChatMessage id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}> <span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>{chatMessage.playerName}:</span> {chatMessage.message}</ChatMessage>
                                 )
                             })}
-                        </div>
+                            <div style={{ float:"left", clear: "both" }}
+                                 ref={this.messagesEndRef}>
+                            </div>
+                        </ChatMessagesContainer>
                         <InputField
                             placeholder="Enter here.."
                             onChange={e => {this.handleInputChange('chatMessage', e.target.value)}}

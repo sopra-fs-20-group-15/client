@@ -4,7 +4,7 @@ import styled, {css, keyframes} from "styled-components";
 
 export const pulse = keyframes`
   0% {
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
 
   50% {
@@ -12,7 +12,7 @@ export const pulse = keyframes`
   }
 
   100% {
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
 `;
 
