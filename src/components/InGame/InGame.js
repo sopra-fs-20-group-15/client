@@ -30,6 +30,7 @@ import {
     GuessedCardsField,
     ScoreField, InputFieldPlayer
 } from "../../views/design/InGame/PlayerUI";
+import {LogoutButton} from "../../views/design/Button";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
 import PlayerComponent from "../../views/PlayerComponent";
 import {Button} from "../../views/design/Button";
@@ -71,7 +72,21 @@ const ButtonContainer = styled.div`
   top: 250px;
 `;
 
+const LeaveGameButtonContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  justify-content: center;
+`;
 
+/**
+ * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
+ * You should have a class (instead of a functional component) when:
+ * - You need an internal state that cannot be achieved via props from other parent components
+ * - You fetch data from the server (e.g., in componentDidMount())
+ * - You want to access the DOM via Refs
+ * https://reactjs.org/docs/react-component.html
+ * @Class
+ */
 class InGame extends React.Component {
     /**
      * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
@@ -1110,6 +1125,15 @@ class InGame extends React.Component {
                         </Player>
                     ) : (<Player/>)}
                 </PlayerContainer>
+                <LeaveGameButtonContainer>
+                <LogoutButton style={{width:"255px", border:"3px solid #000000", boxShadow:"7px 7px 10px rgba(0, 0, 0, 0.25)"}}
+                              onClick={() => {
+                                  localStorage.removeItem("GameGuard");
+                                  this.props.history.push('/lobbyOverview');
+                              }}>
+                    Leave Game
+                </LogoutButton>
+                </LeaveGameButtonContainer>
             </Game>
         );
     }
