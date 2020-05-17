@@ -15,6 +15,9 @@ export const InGameGuard = props => {
         if (localStorage.getItem("GameGuard")){
             return props.children;
         }
+        if (localStorage.getItem('LobbyGuard')){
+            return <Redirect to={'/lobby/'+localStorage.getItem('LobbyGuard')}/>
+        }
         return <Redirect to={"/lobbyOverview"} />;
     }
     return <Redirect to={"/login"} />;

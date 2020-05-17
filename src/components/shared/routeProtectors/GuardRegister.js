@@ -10,6 +10,9 @@ export const GuardRegister = props => {
         if (localStorage.getItem("GameGuard")){
             return <Redirect to={'/gameLobby/'+localStorage.getItem("GameGuard")}/>
         }
+        if (localStorage.getItem('LobbyGuard')){
+            return <Redirect to={'/lobby/'+localStorage.getItem('LobbyGuard')}/>
+        }
         return  <Redirect to={'/lobbyOverview'}/>
     }
     return props.children

@@ -9,5 +9,8 @@ export const TutorialGuard = props => {
     if (localStorage.getItem("GameGuard")){
         return <Redirect to={'/gameLobby/'+localStorage.getItem("GameGuard")}/>
     }
+    if (localStorage.getItem('LobbyGuard')){
+        return <Redirect to={'/lobby/'+localStorage.getItem('LobbyGuard')}/>
+    }
     return props.children
 };

@@ -192,12 +192,14 @@ class Lobby extends React.Component {
                  * The token gameId makes sure that only the players from the lobby can join the game. */
                 if (this.state.activeGameId) {
                     localStorage.setItem('gameId', this.state.activeGameId);
+                    localStorage.removeItem('LobbyGuard');
                     localStorage.setItem('GameGuard', this.state.activeGameId);
                     this.props.history.push('/gameLobby/' + this.state.activeGameId);
                 }
             }
         } catch (error) {
-            this.props.history.push('/lobbyOverview/')
+            localStorage.removeItem('LobbyGuard');
+            this.props.history.push('/lobbyOverview/');
         }
     };
 
@@ -235,6 +237,7 @@ class Lobby extends React.Component {
             const response = await api.post('/games/'+this.props.match.params.id, requestBody);
 
             localStorage.setItem('GameGuard',response.data.id);
+            localStorage.removeItem('LobbyGuard');
             this.props.history.push('/gameLobby/'+response.data.id);
 
         } catch (error) {
@@ -250,6 +253,7 @@ class Lobby extends React.Component {
 
             const response = await api.put('/games/'+this.props.match.params.id+'/lobbies/players', requestBody);
 
+            localStorage.removeItem('LobbyGuard');
             this.props.history.push('/lobbyOverview');
         } catch (error) {
             alert(`Something went wrong while leaving the Lobby: \n${handleError(error)}`);
@@ -264,6 +268,7 @@ class Lobby extends React.Component {
 
             await api.delete('/gameSetUps/'+this.props.match.params.id, {data: requestBody});
 
+            localStorage.removeItem('LobbyGuard');
             this.props.history.push('/lobbyOverview');
         } catch (error) {
             alert(`Something went wrong while terminating the game: \n${handleError(error)}`);

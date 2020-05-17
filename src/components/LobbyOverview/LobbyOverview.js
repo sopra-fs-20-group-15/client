@@ -232,7 +232,9 @@ class LobbyOverview extends Component {
 
             await api.put('/games/' + this.state.chosenLobby.id + '/players', requestBody);
 
-            this.props.history.push('/lobby/' + this.state.chosenLobby.id)
+            localStorage.setItem('LobbyGuard',this.state.chosenLobby.id);
+            this.props.history.push('/lobby/' + this.state.chosenLobby.id);
+
         } catch (error) {
             alert(`Something went wrong while trying to join the lobby: \n${handleError(error)}`);
             this.props.history.push("/lobbyOverview")
@@ -258,7 +260,8 @@ class LobbyOverview extends Component {
 
                 await api.put('/games/' + this.state.chosenLobby.id + '/players', requestBody);
 
-                this.props.history.push('/lobby/' + this.state.chosenLobby.id)
+                localStorage.setItem('LobbyGuard',this.state.chosenLobby.id);
+                this.props.history.push('/lobby/' + this.state.chosenLobby.id);
 
             } else if (this.state.chosenLobby.gameType === "PRIVATE") {
                 this.overlayOn();
