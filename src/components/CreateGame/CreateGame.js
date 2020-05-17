@@ -8,8 +8,8 @@ import { withRouter } from 'react-router-dom';
 import PregameHeaderComponent from "../../views/PregameHeaderComponent";
 
 
-// "text-decoration-skip-ink: none" is used to make sure that the brackets are underlined too
-// needs "text-align: center" because some titles span over two lines
+/** "text-decoration-skip-ink: none" is used to make sure that the brackets are underlined too */
+/** needs "text-align: center" additionally because some titles span over two lines */
 const GridItemTitle = styled.div`
   background: #FCC812;
   font-family: Happy Monkey;
@@ -46,13 +46,14 @@ const GridItemInput = styled.div`
   display: flex;
 `;
 
-const Minus = styled.div`
+const PlusMinus = styled.div`
     position: absolute;
     height: 50px;
     width: 50px;
     border-radius: 50%;
     background: rgba(203, 189, 140, 0.54);
-    left: 330px;
+    right: ${props => (props.plus ? "30px" : "default")};
+    left: ${props => (props.plus ? "default" : "330px")};
     font-size: 50px;
     display: flex;
     justify-content: center;
@@ -61,34 +62,12 @@ const Minus = styled.div`
     &:hover {
     transform: translateY(-2px);
     }
-    width: ${props => props.width || null};
     border: none;
     cursor: ${props => (props.disabled ? "default" : "pointer")};
     opacity: ${props => (props.disabled ? 0.4 : 1)};
     transition: all 0.3s ease;
 `;
 
-const Plus = styled.div`
-    position: absolute;
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    background: rgba(203, 189, 140, 0.54);
-    right: 30px;
-    font-size: 50px;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    &:hover {
-    transform: translateY(-2px);
-    }
-    width: ${props => props.width || null};
-    border: none;
-    cursor: ${props => (props.disabled ? "default" : "pointer")};
-    opacity: ${props => (props.disabled ? 0.4 : 1)};
-    transition: all 0.3s ease;
-`;
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -174,7 +153,6 @@ class CreateGame extends Component{
             localStorage.setItem('gameId', response.data.gameId);
             localStorage.setItem('LobbyGuard',response.data.gameId);
 
-            // registration successfully worked --> navigate to the route /login
             this.props.history.push(`/lobby/${response.data.gameId}`);
         } catch (error) {
             alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
@@ -191,9 +169,6 @@ class CreateGame extends Component{
     }
 
     handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
-        // making sure that the new number of players does not violate the constraints imposed by the game rules
         this.setState({[key]: value});
     }
 
@@ -203,7 +178,7 @@ class CreateGame extends Component{
         } else if (this.state.numberOfDevils + this.state.numberOfAngels === value) {
             alert("You have to leave room for yourself!")
         } else {
-            alert("The maximum number of players is lower than the number of bots!")
+            alert("The maximum number of players is lower than the number of bots you want to play with!")
         }
     }
 
@@ -255,8 +230,6 @@ class CreateGame extends Component{
                             onChange={e => {this.handleInputChange('gameName', e.target.value)}}
                         />
                     </GridItemInput>
-
-
                     <GridItemTitle> Max. Number of Players </GridItemTitle>
                     <GridItemInput>
                         <select value={this.state.maxNumberOfPlayers} onChange={e => {this.handleMaxNrOfPlayersInput('maxNumberOfPlayers', parseInt(e.target.value))}}>
@@ -267,21 +240,18 @@ class CreateGame extends Component{
                             <option value="7">7</option>
                         </select>
                     </GridItemInput>
-
                     <GridItemTitle> Add Angels </GridItemTitle>
                     <GridItemInput>
-                        <Minus onClick={this.handleDecreaseAngels.bind(this)}> - </Minus>
+                        <PlusMinus onClick={this.handleDecreaseAngels.bind(this)} plus={false}> - </PlusMinus>
                         <Number> {this.state.numberOfAngels} </Number>
-                        <Plus onClick={this.handleIncreaseAngels.bind(this)}> + </Plus>
+                        <PlusMinus onClick={this.handleIncreaseAngels.bind(this)} plus={true}> + </PlusMinus>
                     </GridItemInput>
-
                     <GridItemTitle> Add Devils </GridItemTitle>
                     <GridItemInput>
-                        <Minus onClick={this.handleDecreaseDevils.bind(this)}> - </Minus>
+                        <PlusMinus onClick={this.handleDecreaseDevils.bind(this)} plus={false}> - </PlusMinus>
                         <Number> {this.state.numberOfDevils} </Number>
-                        <Plus onClick={this.handleIncreaseDevils.bind(this)}> + </Plus>
+                        <PlusMinus onClick={this.handleIncreaseDevils.bind(this)} plus={true}> + </PlusMinus>
                     </GridItemInput>
-
                     <GridItemTitle> Password (Optional) </GridItemTitle>
                     <GridItemInput>
                         <InputField

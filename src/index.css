@@ -51,6 +51,11 @@ button {
   margin-left: -135px;
 }
 
+.easterEggGIF {
+  z-index: 2;
+  width: 100%;
+}
+
 title {
   margin: 0;
   padding: 0;

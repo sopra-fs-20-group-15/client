@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import { withRouter } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import styled from "styled-components";
+import {Round, TimerContainer} from "../../views/design/InGame/TimerUI";
 
 
 const Seconds = styled.div`
@@ -30,11 +31,12 @@ const Message = styled.div`
     display: flex;
 `;
 
-class Timer extends Component{
+class Timer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             seconds: this.props.seconds,
+            countdown: false
         };
     }
 
@@ -52,14 +54,34 @@ class Timer extends Component{
         }
     }
 
+    playCountdownAudio() {
+        let audio = new Audio('http://soundbible.com/mp3/Countdown-Me-728881159.mp3');
+        audio.load();
+        audio.play();
+        setTimeout(() => audio.pause(), 5000)
+    }
+
     async componentDidMount() {
         this.myInterval = setInterval(() => {
-            const{seconds} = this.state;
+            const {seconds} = this.state;
 
             if (seconds > 0) {
                 this.setState(({seconds}) => ({
                     seconds: seconds - 1
                 }))
+            }
+
+            if (seconds > 5) {
+                this.setState({
+                    countdown: false
+                });
+            }
+
+            if (seconds === 6 && this.props.phaseNumber !== 4) {
+                this.playCountdownAudio();
+                this.setState({
+                    countdown: true
+                });
             }
 
             if (seconds === 0) {
@@ -74,7 +96,10 @@ class Timer extends Component{
     componentDidUpdate(prevProps) {
         // conditional statement prevents infinite loop
         if (this.props.seconds !== prevProps.seconds) {
-            this.setState({ seconds: this.props.seconds });
+            this.setState({seconds: this.props.seconds});
+        }
+        if (this.props.round !== prevProps.round) {
+            this.setState({round: this.props.round});
         }
     }
 
@@ -94,12 +119,13 @@ class Timer extends Component{
     render() {
         const {seconds} = this.state;
         return (
-            <div>
+            <TimerContainer countdown={this.state.countdown}>
+                <Round> Round {this.props.round} </Round>
                 {seconds === 0
                     ? <Message> Times up! </Message>
                     : <Seconds> {seconds < 10 ? `0${seconds}` : `${seconds}`} </Seconds>
                 }
-            </div>
+            </TimerContainer>
         );
     }
 }

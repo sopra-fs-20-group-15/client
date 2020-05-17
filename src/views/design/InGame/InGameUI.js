@@ -2,6 +2,13 @@ import styled from "styled-components";
 
 /**everything based on InGame Background*/
 
+export const EasterEgg = styled.img`
+  position: fixed;
+  z-index: 2;
+  display: none;
+  width: 100%;
+`;
+
 export const BoardContainer = styled.div`
   width: 550px;
   height: 300px;

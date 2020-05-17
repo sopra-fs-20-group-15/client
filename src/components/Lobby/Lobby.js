@@ -21,9 +21,10 @@ const GridItemTitle = styled.div`
   // display: flex;
   text-decoration-skip-ink: none;
   border-bottom: 3px solid;
-  height: 65px;
+  height: 58.3px;
   
-  padding-top: 2px;
+  
+  padding-top: 13px;
   padding-left: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -37,7 +38,7 @@ const GridNormalItem = styled.div`
   font-family: Happy Monkey;
   font-size: 22px;
   border-bottom: 2.50px solid;
-  height: 55px;
+  height: 58.3px;
   
   padding-top: 13px;
   padding-left: 10px;
@@ -73,7 +74,7 @@ const UIContainer = styled.div`
   left: 21%
   top: 33%;
   bottom: 20%;
-  
+  overflow-y: auto;
 `;
 
 const ChatContainer = styled.div`
@@ -161,7 +162,8 @@ class Lobby extends React.Component {
             chatMessage: null,
             chatMessages: [],
             newMessages: true,
-            colors: ["#0A7E00", "#0C3BE8", "#FF1201", "#E8750C", "#9B03DD", "#00b9b8", "#FF01A1"]
+            colors: ["#0A7E00", "#0C3BE8", "#FF1201", "#E8750C", "#9B03DD", "#00b9b8", "#FF01A1"],
+            deleted: false
         };
 
         this.intervalInfos = setInterval(this.getInfos, 500);
@@ -198,8 +200,15 @@ class Lobby extends React.Component {
                 }
             }
         } catch (error) {
-            localStorage.removeItem('LobbyGuard');
-            this.props.history.push('/lobbyOverview/');
+
+            if (!this.state.deleted) {
+                this.setState({
+                    deleted: true
+                });
+                localStorage.removeItem('LobbyGuard');
+                this.props.history.push('/lobbyOverview/');
+
+            }
         }
     };
 
@@ -251,7 +260,7 @@ class Lobby extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            const response = await api.put('/games/'+this.props.match.params.id+'/lobbies/players', requestBody);
+            await api.put('/games/'+this.props.match.params.id+'/lobbies/players', requestBody);
 
             localStorage.removeItem('LobbyGuard');
             this.props.history.push('/lobbyOverview');

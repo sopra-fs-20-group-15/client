@@ -1,6 +1,24 @@
-import styled from "styled-components";
+import styled, {css, keyframes} from "styled-components";
 
 /**everything based on Timer Interface*/
+
+export const pulse = keyframes`
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+`;
+
+export const pulseAnimation = css`
+    ${pulse} 1s infinite;
+`;
 
 export const TimerContainer = styled.div`
   position: relative;
@@ -8,6 +26,8 @@ export const TimerContainer = styled.div`
   height: 175px;
   display: inline-block;
   border-radius: 50%;
+  
+  animation: ${props => (props.countdown ? pulseAnimation : "default")}
   
   margin-left: 10px;
 
