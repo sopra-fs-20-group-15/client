@@ -74,7 +74,8 @@ const ButtonContainer = styled.div`
 
 const LeaveGameButtonContainer = styled.div`
   position: absolute;
-  top: 20px;
+  bottom: 40px;
+  right: 50px;
   justify-content: center;
 `;
 
