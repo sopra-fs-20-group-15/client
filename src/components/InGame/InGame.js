@@ -30,6 +30,7 @@ import {
     GuessedCardsField,
     ScoreField
 } from "../../views/design/InGame/PlayerUI";
+import {LogoutButton} from "../../views/design/Button";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
 import PlayerComponent from "../../views/PlayerComponent";
 
@@ -76,6 +77,12 @@ const ButtonContainer = styled.div`
   margin: auto;
   width: 500px;
   top: 250px;
+`;
+
+const LeaveGameButtonContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  justify-content: center;
 `;
 
 /**
@@ -1144,6 +1151,15 @@ class InGame extends React.Component {
                         </Player>
                     ) : (<Player/>)}
                 </PlayerContainer>
+                <LeaveGameButtonContainer>
+                <LogoutButton style={{width:"255px", border:"3px solid #000000", boxShadow:"7px 7px 10px rgba(0, 0, 0, 0.25)"}}
+                              onClick={() => {
+                                  localStorage.removeItem("GameGuard");
+                                  this.props.history.push('/lobbyOverview');
+                              }}>
+                    Leave Game
+                </LogoutButton>
+                </LeaveGameButtonContainer>
             </Game>
         );
     }
