@@ -33,7 +33,7 @@ export const Deck = styled.div`
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
 `;
 
-export const ActiveCard = styled.div`
+export const ActiveCardContainer = styled.div`
   width: 180px;
   height: 255px;
   

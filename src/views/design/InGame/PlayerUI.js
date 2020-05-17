@@ -8,7 +8,7 @@ export const pulse = keyframes`
   }
 
   50% {
-    transform: scale(0.95);
+    transform: scale(0.90);
   }
 
   100% {

@@ -17,7 +17,7 @@ export const pulse = keyframes`
 `;
 
 export const pulseAnimation = css`
-    ${pulse} 2s infinite;
+    ${pulse} 1s infinite;
 `;
 
 export const TimerContainer = styled.div`

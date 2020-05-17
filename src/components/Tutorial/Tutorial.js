@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
 import {Button, LogoutButton} from '../../views/design/Button';
-import {GuessedCards,Deck,ActiveCard,Number,Word} from "../../views/design/InGame/CardsUI";
+import {GuessedCards,Deck,ActiveCardContainer,Number,Word} from "../../views/design/InGame/CardsUI";
 import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/InGame/PhaseUI";
 import {
     Player,
@@ -304,7 +304,7 @@ class Tutorial extends React.Component {
                             <PhaseCircle id={"phase4"} style={{left:"194px"}}/>
                             <PhaseMessage> {this.state.phases[this.state.phaseNumber-1]} </PhaseMessage>
                         </Phase>
-                        <ActiveCard id={"activeCard"} style={{position:"absolute", left:"35%", bottom:"15%"}}>
+                        <ActiveCardContainer id={"activeCard"} style={{position:"absolute", left:"35%", bottom:"15%"}}>
                             <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
                             <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.mysteryWords[0]} </Word>
                             <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
@@ -315,7 +315,7 @@ class Tutorial extends React.Component {
                             <Word id={"word4"} style={{borderColor:"#fc9229", top:"70px"}}> {this.state.mysteryWords[3]} </Word>
                             <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
                             <Word id={"word5"} style={{borderColor:"#ffe203", top:"87.5px"}}> {this.state.mysteryWords[4]} </Word>
-                        </ActiveCard>
+                        </ActiveCardContainer>
                         <CommentField>{this.state.comment}</CommentField>
                     </Form>
                 </TopButtonContainer>
