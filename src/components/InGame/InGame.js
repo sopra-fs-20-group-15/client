@@ -80,8 +80,22 @@ const LeaveGameButtonContainer = styled.div`
 `;
 
 
+/**
+ * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
+ * You should have a class (instead of a functional component) when:
+ * - You need an internal state that cannot be achieved via props from other parent components
+ * - You fetch data from the server (e.g., in componentDidMount())
+ * - You want to access the DOM via Refs
+ * https://reactjs.org/docs/react-component.html
+ * @Class
+ */
 class InGame extends React.Component {
-
+    /**
+     * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
+     * The constructor for a React component is called before it is mounted (rendered).
+     * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
+     * These fields are then handled in the onChange() methods in the resp. InputFields
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -147,6 +161,8 @@ class InGame extends React.Component {
                     phaseNumber: response.data.phaseNumber
                 });
             }
+
+            console.log('DATA',response.data);
 
         } catch(error) {
             alert('Something went wrong while fetching the Game Phase!');
@@ -256,6 +272,11 @@ class InGame extends React.Component {
                         wordId: wordId,
                         playerToken: localStorage.getItem('token')
                     });
+
+                    // this.setState({
+                    //     mysteryWord: this.state.currentCard[wordId - 1],
+                    //     mysteryWordId: wordId
+                    // });
 
                     await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
@@ -383,16 +404,14 @@ class InGame extends React.Component {
 
     async displayOwnClue() {
         if (localStorage.getItem('username') !== this.state.activePlayer) {
-            if (this.state.phaseNumber !== 1 && this.state.phaseNumber !== 10) {
-                for (let i = 0; i < this.state.clues.length; i++) {
-                    if (this.state.clues[i].playerName === localStorage.getItem('username')) {
-                        let output = document.getElementById("clue1");
-                        output.textContent = this.state.clues[i].clue;
-                        break;
-                    }
+            for (let i = 0; i < this.state.clues.length; i++) {
+                if (this.state.clues[i].playerName === localStorage.getItem('username')) {
                     let output = document.getElementById("clue1");
-                    output.textContent = "'invalid clue'";
+                    output.textContent = this.state.clues[i].clue;
+                    break;
                 }
+                let output = document.getElementById("clue1");
+                output.textContent = "'invalid clue'";
             }
         }
     }
@@ -769,6 +788,7 @@ class InGame extends React.Component {
         }
         if (value === "kawaii" || value === "hentai" || value === "harem" || value === "sugoi" ||
             value === "yaoi" || value === "yuri" || value === "ahegao" || value === "rule34") {
+
             this.showEasterEgg("weeb");
             setTimeout(() => this.hideEasterEgg("weeb"), 6000);
         }
@@ -779,8 +799,66 @@ class InGame extends React.Component {
         this.setState({[key]: value});
     }
 
+    // updatePhase() {
+    //     let nextTimer = [30, 50, 60, 10];
+    //     /** Only Phase 4 has always a guess that's not empty */
+    //     if (this.state.guess !== "") {
+    //         /** if it is not Phase 4, change to 4 and reset Timer */
+    //         if (this.state.phaseNumber !== 4) {
+    //             console.log('gets in phase 4');
+    //             this.setState({
+    //                 timer: nextTimer[3],
+    //                 phaseNumber: 4
+    //             });
+    //             if (this.state.validGuess && this.state.sound) {
+    //                 this.playCorrectGuessAudio();
+    //             } else if (this.state.sound) {
+    //                 this.playWrongGuessAudio();
+    //             }
+    //             this.updatePhaseHUD(4);
+    //         }
+    //     } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
+    //         if (this.state.phaseNumber !== 3) {
+    //             console.log('gets in phase 3');
+    //             this.setState({
+    //                 timer: nextTimer[2],
+    //                 phaseNumber: 3
+    //             });
+    //             this.updatePhaseHUD(3);
+    //             this.unsignalSubmission();
+    //         }
+    //     }
+    //
+    //     /** Only Phase 2 has always a chosen Mystery Word */
+    //     else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
+    //         if (this.state.phaseNumber !== 2) {
+    //             console.log('gets in phase 2');
+    //             this.setState({
+    //                 timer: nextTimer[1],
+    //                 phaseNumber: 2
+    //             });
+    //             this.updatePhaseHUD(2);
+    //         }
+    //     }
+    //     /** Only Phase 1 has always none of these above*/
+    //     else if (this.state.currentCard !== []) {
+    //         if (this.state.phaseNumber !== 1) {
+    //             console.log('gets in phase 1');
+    //             this.setState({
+    //                 timer: nextTimer[0],
+    //                 phaseNumber: 1,
+    //                 round: this.state.round + 1
+    //             });
+    //             this.updatePhaseHUD(1);
+    //             this.unsignalSubmission();
+    //             this.undoCrossingOut();
+    //             this.undoClueDisplay();
+    //         }
+    //     }
+    // }
+
     updatePhase() {
-        let nextTimer = [120, 200, 300, 5];
+        let nextTimer = [120, 200, 300, 30];
         if (this.state.phaseNumber === 4) {
             if (this.state.checkPhase !== 4) {
                 this.setState({
@@ -819,11 +897,11 @@ class InGame extends React.Component {
                     checkPhase: 1,
                     round: this.state.round + 1
                 });
-                this.updatePhaseHUD(1);
-                this.unsignalSubmission();
-                this.undoCrossingOut();
-                this.undoClueDisplay();
             }
+            this.updatePhaseHUD(1);
+            this.unsignalSubmission();
+            this.undoCrossingOut();
+            this.undoClueDisplay();
         }
     }
 
@@ -876,10 +954,10 @@ class InGame extends React.Component {
     handlePolling = async () => {
         try {
             if (!this.state.gameHasEnded) {
+                this.getPhase();
                 this.updatePhase();
                 if (this.state.phaseNumber === 1) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
-                        this.getPhase();
                         this.getPlayers();
                         this.getCard();
                         this.getCluePlayers();
@@ -887,7 +965,6 @@ class InGame extends React.Component {
                         this.getScores();
                     }
                     if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                        this.getPhase();
                         this.getPlayers();
                         this.getCard();
                         this.getMysteryWord();
@@ -897,7 +974,6 @@ class InGame extends React.Component {
                     }
                 } else if (this.state.phaseNumber === 2) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
-                        this.getPhase();
                         this.getPlayers();
                         this.getCard();
                         this.getCluePlayers();
@@ -905,7 +981,6 @@ class InGame extends React.Component {
                         this.getScores();
                     }
                     if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                        this.getPhase();
                         this.getPlayers();
                         this.getCard();
                         this.getMysteryWord();
@@ -915,7 +990,6 @@ class InGame extends React.Component {
                     }
                 } else if (this.state.phaseNumber === 3) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
-                        this.getPhase();
                         this.getPlayers();
                         this.getValidClues();
                         this.getCluePlayers();
@@ -924,7 +998,6 @@ class InGame extends React.Component {
                         this.getScores();
                     }
                     if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                        this.getPhase();
                         this.getMysteryWord();
                         this.getPlayers();
                         this.getValidClues();
@@ -934,7 +1007,6 @@ class InGame extends React.Component {
                         this.getScores();
                     }
                 } else if (this.state.phaseNumber === 4) {
-                    this.getPhase();
                     this.getMysteryWord();
                     this.getGuess();
                     this.getPlayers();
@@ -942,15 +1014,26 @@ class InGame extends React.Component {
                     this.getValidClues();
                     this.getCardAmount();
                     this.getScores();
-                } else if (this.state.phaseNumber === 10) {
-                    this.gameHasEnded();
+                } else if (this.state.phaseNumber === 0) {
+                //    insert lulz
                 }
+                // else {
+                //     alert("The phase number is not in the range from 1 to 4!")
+                // }
             }
         } catch (error) {
             alert(`Something went wrong during the polling process!`);
             console.log('Error in handlePolling()', handleError(error))
         }
     };
+
+    /**
+     * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
+     * Initialization that requires DOM nodes should go here.
+     * If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+     * You may call setState() immediately in componentDidMount().
+     * It will trigger an extra rendering, but it will happen before the browser updates the screen.
+     */
 
     async componentDidMount() {
         try {
