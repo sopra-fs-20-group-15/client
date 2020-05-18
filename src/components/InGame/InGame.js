@@ -118,6 +118,7 @@ class InGame extends React.Component {
             scores: [0, 0, 0, 0, 0, 0, 0],
             round: 1,
             phaseNumber: 1,
+            tempPhase: 1,
             phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
             player1Input: null,
             player2Input: null,
@@ -148,6 +149,24 @@ class InGame extends React.Component {
         this.gameHasEnded = this.gameHasEnded.bind(this);
         this.initializeTurn = this.initializeTurn.bind(this);
         this.deleteGame = this.deleteGame.bind(this);
+    }
+
+    async getPhase(){
+        try {
+
+            const response = await api.get('/games/' + this.state.gameId + '/phases');
+
+            if (response.status === 200) {
+                this.setState({
+                    tempPhase: response.data.phaseNumber
+                });
+            }
+
+            console.log('DATA',response.data);
+
+        } catch(error) {
+            alert('Something went wrong while fetching the Game Phase!');
+        }
     }
 
     async initializeTurn() {
@@ -878,6 +897,7 @@ class InGame extends React.Component {
         try {
             if (!this.state.gameHasEnded) {
                 this.updatePhase();
+                this.getPhase();
                 if (this.state.phaseNumber === 1) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
                         this.getPlayers();
