@@ -118,7 +118,7 @@ class InGame extends React.Component {
             scores: [0, 0, 0, 0, 0, 0, 0],
             round: 1,
             phaseNumber: 1,
-            tempPhase: 1,
+            checkPhase: 0,
             phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
             player1Input: null,
             player2Input: null,
@@ -158,7 +158,7 @@ class InGame extends React.Component {
 
             if (response.status === 200) {
                 this.setState({
-                    tempPhase: response.data.phaseNumber
+                    phaseNumber: response.data.phaseNumber
                 });
             }
 
@@ -273,10 +273,10 @@ class InGame extends React.Component {
                         playerToken: localStorage.getItem('token')
                     });
 
-                    this.setState({
-                        mysteryWord: this.state.currentCard[wordId - 1],
-                        mysteryWordId: wordId
-                    });
+                    // this.setState({
+                    //     mysteryWord: this.state.currentCard[wordId - 1],
+                    //     mysteryWordId: wordId
+                    // });
 
                     await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
@@ -789,16 +789,71 @@ class InGame extends React.Component {
         this.setState({[key]: value});
     }
 
+    // updatePhase() {
+    //     let nextTimer = [30, 50, 60, 10];
+    //     /** Only Phase 4 has always a guess that's not empty */
+    //     if (this.state.guess !== "") {
+    //         /** if it is not Phase 4, change to 4 and reset Timer */
+    //         if (this.state.phaseNumber !== 4) {
+    //             console.log('gets in phase 4');
+    //             this.setState({
+    //                 timer: nextTimer[3],
+    //                 phaseNumber: 4
+    //             });
+    //             if (this.state.validGuess && this.state.sound) {
+    //                 this.playCorrectGuessAudio();
+    //             } else if (this.state.sound) {
+    //                 this.playWrongGuessAudio();
+    //             }
+    //             this.updatePhaseHUD(4);
+    //         }
+    //     } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
+    //         if (this.state.phaseNumber !== 3) {
+    //             console.log('gets in phase 3');
+    //             this.setState({
+    //                 timer: nextTimer[2],
+    //                 phaseNumber: 3
+    //             });
+    //             this.updatePhaseHUD(3);
+    //             this.unsignalSubmission();
+    //         }
+    //     }
+    //
+    //     /** Only Phase 2 has always a chosen Mystery Word */
+    //     else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
+    //         if (this.state.phaseNumber !== 2) {
+    //             console.log('gets in phase 2');
+    //             this.setState({
+    //                 timer: nextTimer[1],
+    //                 phaseNumber: 2
+    //             });
+    //             this.updatePhaseHUD(2);
+    //         }
+    //     }
+    //     /** Only Phase 1 has always none of these above*/
+    //     else if (this.state.currentCard !== []) {
+    //         if (this.state.phaseNumber !== 1) {
+    //             console.log('gets in phase 1');
+    //             this.setState({
+    //                 timer: nextTimer[0],
+    //                 phaseNumber: 1,
+    //                 round: this.state.round + 1
+    //             });
+    //             this.updatePhaseHUD(1);
+    //             this.unsignalSubmission();
+    //             this.undoCrossingOut();
+    //             this.undoClueDisplay();
+    //         }
+    //     }
+    // }
+
     updatePhase() {
         let nextTimer = [30, 50, 60, 10];
-        /** Only Phase 4 has always a guess that's not empty */
-        if (this.state.guess !== "") {
-            /** if it is not Phase 4, change to 4 and reset Timer */
-            if (this.state.phaseNumber !== 4) {
-                console.log('gets in phase 4');
+        if (this.state.phaseNumber === 4) {
+            if (this.state.checkPhase !== 4) {
                 this.setState({
                     timer: nextTimer[3],
-                    phaseNumber: 4
+                    checkPhase: 4
                 });
                 if (this.state.validGuess && this.state.sound) {
                     this.playCorrectGuessAudio();
@@ -807,43 +862,36 @@ class InGame extends React.Component {
                 }
                 this.updatePhaseHUD(4);
             }
-        } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
-            if (this.state.phaseNumber !== 3) {
-                console.log('gets in phase 3');
+        } else if (this.state.phaseNumber === 3) {
+            if (this.state.checkPhase !== 3) {
                 this.setState({
                     timer: nextTimer[2],
-                    phaseNumber: 3
+                    checkPhase: 3
                 });
                 this.updatePhaseHUD(3);
                 this.unsignalSubmission();
             }
-        }
-
-        /** Only Phase 2 has always a chosen Mystery Word */
-        else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
-            if (this.state.phaseNumber !== 2) {
-                console.log('gets in phase 2');
+        } else if (this.state.phaseNumber === 2) {
+            if (this.state.checkPhase !== 2) {
                 this.setState({
                     timer: nextTimer[1],
-                    phaseNumber: 2
+                    checkPhase: 2
                 });
                 this.updatePhaseHUD(2);
             }
-        }
-        /** Only Phase 1 has always none of these above*/
-        else if (this.state.currentCard !== []) {
-            if (this.state.phaseNumber !== 1) {
-                console.log('gets in phase 1');
+
+        } else if (this.state.phaseNumber === 1) {
+            if (this.state.checkPhase !== 1) {
                 this.setState({
                     timer: nextTimer[0],
-                    phaseNumber: 1,
+                    checkPhase: 1,
                     round: this.state.round + 1
                 });
-                this.updatePhaseHUD(1);
-                this.unsignalSubmission();
-                this.undoCrossingOut();
-                this.undoClueDisplay();
             }
+            this.updatePhaseHUD(1);
+            this.unsignalSubmission();
+            this.undoCrossingOut();
+            this.undoClueDisplay();
         }
     }
 
@@ -896,8 +944,8 @@ class InGame extends React.Component {
     handlePolling = async () => {
         try {
             if (!this.state.gameHasEnded) {
-                this.updatePhase();
                 this.getPhase();
+                this.updatePhase();
                 if (this.state.phaseNumber === 1) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
                         this.getPlayers();
@@ -956,9 +1004,12 @@ class InGame extends React.Component {
                     this.getValidClues();
                     this.getCardAmount();
                     this.getScores();
-                } else {
-                    alert("The phase number is not in the range from 1 to 4!")
+                } else if (this.state.phaseNumber === 0) {
+                //    insert lulz
                 }
+                // else {
+                //     alert("The phase number is not in the range from 1 to 4!")
+                // }
             }
         } catch (error) {
             alert(`Something went wrong during the polling process!`);
