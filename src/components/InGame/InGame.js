@@ -767,8 +767,7 @@ class InGame extends React.Component {
             this.showEasterEgg(value);
             setTimeout(() => this.hideEasterEgg(value), 2500);
         }
-        if (value === "weeb" || value === "anime" || value === "manga" ||
-            value === "kawaii" || value === "hentai" || value === "harem" || value === "sugoi" ||
+        if (value === "kawaii" || value === "hentai" || value === "harem" || value === "sugoi" ||
             value === "yaoi" || value === "yuri" || value === "ahegao" || value === "rule34") {
             this.showEasterEgg("weeb");
             setTimeout(() => this.hideEasterEgg("weeb"), 6000);
