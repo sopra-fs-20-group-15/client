@@ -118,7 +118,6 @@ class InGame extends React.Component {
             scores: [0, 0, 0, 0, 0, 0, 0],
             round: 1,
             phaseNumber: 1,
-            tempPhase: 1,
             phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
             player1Input: null,
             player2Input: null,
@@ -907,7 +906,6 @@ class InGame extends React.Component {
         try {
             if (!this.state.gameHasEnded) {
                 this.updatePhase();
-                this.getPhase();
                 if (this.state.phaseNumber === 1) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
                         this.getPlayers();
@@ -987,6 +985,7 @@ class InGame extends React.Component {
     async componentDidMount() {
         try {
 
+            this.getPhase();
             this.getPlayers();
 
         } catch (error) {
