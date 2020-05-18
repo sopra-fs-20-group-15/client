@@ -780,7 +780,7 @@ class InGame extends React.Component {
     }
 
     updatePhase() {
-        let nextTimer = [30, 50, 60, 10];
+        let nextTimer = [120, 200, 300, 5];
         if (this.state.phaseNumber === 4) {
             if (this.state.checkPhase !== 4) {
                 this.setState({
