@@ -776,15 +776,25 @@ class InGame extends React.Component {
     handleInputChange(key, value) {
         if (value === "wow" || value === "pure beauty" || value === "rachid" || value === "mexicans" || value === "hate crime") {
             this.showEasterEgg(value);
-            setTimeout(() => this.hideEasterEgg(value), 3000)
+            setTimeout(() => this.hideEasterEgg(value), 3000);
         }
         if (value === "milestone 4 abgabe") {
             this.showEasterEgg(value);
-            setTimeout(() => this.hideEasterEgg(value), 2800)
+            setTimeout(() => this.hideEasterEgg(value), 2800);
         }
         if (value === "rachid") {
             this.showEasterEgg(value);
-            setTimeout(() => this.hideEasterEgg(value), 2500)
+            setTimeout(() => this.hideEasterEgg(value), 2500);
+        }
+        if (value === "weeb" || value === "anime" || value === "manga" ||
+            value === "kawaii" || value === "hentai" || value === "harem" || value === "sugoi" ||
+            value === "naruto" || value === "yugioh" || value === "conan" || value === "dragonball") {
+            this.showEasterEgg("weeb");
+            setTimeout(() => this.hideEasterEgg("weeb"), 6000);
+        }
+        if (value === "cute") {
+            this.showEasterEgg(value);
+            setTimeout(() => this.hideEasterEgg(value), 4000);
         }
         this.setState({[key]: value});
     }
