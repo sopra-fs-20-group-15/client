@@ -367,7 +367,7 @@ class Lobby extends React.Component {
                         <ChatMessagesContainer>
                             {this.state.chatMessages.map(chatMessage => {
                                 return (
-                                    <ChatMessage id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}><span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>({msToTime(chatMessage.time)}) {chatMessage.playerName}: </span>{chatMessage.message}</ChatMessage>
+                                    <ChatMessage id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}><span style={{color: this.state.colors[this.state.players.indexOf(chatMessage.playerName)]}}>({msToTime(chatMessage.time)}) {chatMessage.playerName}: </span>{chatMessage.message}</ChatMessage>
                                 )
                             })}
                             <div style={{ float:"left", clear: "both" }}
