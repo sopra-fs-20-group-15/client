@@ -51,19 +51,23 @@ const ChatMessagesContainer = styled.div`
   position: absolute;
   bottom: 60px;
   height: 290px;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   padding-top: 12px;
 `;
 
 const ChatMessage = styled.div`
-  left: 2%;
-  width: 98%;
+  left: 5px;
+  right: 5px;
+  width: 384px;
   position: relative;
-  
+  margin-bottom: 3.6px;
+  margin-top: 3.6px;
   font-size: 16px;
   font-family: Happy Monkey;
   position: relative;
   display: inline-block;
+  overflow-wrap: break-word;
 `;
 
 const UIContainer = styled.div`
@@ -315,8 +319,10 @@ class Lobby extends React.Component {
 
     keyPressed(e) {
         if (e.keyCode === 13) {
-            console.log('message', this.state.chatMessage);
-            this.sendMessage()
+            this.sendMessage();
+            this.setState({
+                chatMessage: ""
+            })
         }
     }
 
@@ -346,7 +352,6 @@ class Lobby extends React.Component {
     render() {
         return (
             <BaseContainer style={background}>
-                {console.log('chattten', this.state.chatMessage)}
                 <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
                 <UIContainer>
                     <GridContainer>
@@ -362,9 +367,7 @@ class Lobby extends React.Component {
                         <ChatMessagesContainer>
                             {this.state.chatMessages.map(chatMessage => {
                                 return (
-                                    <ChatMessage id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}>
-                                        <span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>({msToTime(chatMessage.time)}) {chatMessage.playerName}: </span>
-                                        {chatMessage.message}</ChatMessage>
+                                    <ChatMessage id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}><span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>({msToTime(chatMessage.time)}) {chatMessage.playerName}: </span>{chatMessage.message}</ChatMessage>
                                 )
                             })}
                             <div style={{ float:"left", clear: "both" }}
@@ -373,6 +376,7 @@ class Lobby extends React.Component {
                         </ChatMessagesContainer>
                         <InputField
                             placeholder="Enter here.."
+                            value={this.state.chatMessage}
                             onChange={e => {this.handleInputChange('chatMessage', e.target.value)}}
                             onKeyDown={this.keyPressed}
                         />
