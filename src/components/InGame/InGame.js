@@ -150,15 +150,30 @@ class InGame extends React.Component {
         this.deleteGame = this.deleteGame.bind(this);
     }
 
+    async isStillAlive() {
+        try {
+            const requestBody = JSON.stringify({
+                playerToken: localStorage.getItem('token')
+            });
+
+            const response = await api.put('/games/'+ this.state.gameId +'/phases',requestBody);
+
+            console.log('ALIVE',response);
+
+        } catch(error) {
+            alert("Something is wrong with your Life. UwU")
+        }
+    }
+
     async getPhase(){
         try {
 
             const response = await api.get('/games/' + this.state.gameId + '/phases');
 
             if (response.status === 200) {
-                this.setState({
-                    tempPhase: response.data.phaseNumber
-                });
+                // this.setState({
+                //     phaseNumber: response.data.phaseNumber
+                // });
             }
 
             console.log('DATA',response.data);
@@ -691,20 +706,24 @@ class InGame extends React.Component {
     }
 
     async leaveGame() {
-        if (this.state.phaseNumber === 4){
+        try {
+            if (this.state.phaseNumber === 4){
 
-            const requestBody = JSON.stringify({
-                playerToken: localStorage.getItem('token')
-            });
+                const requestBody = JSON.stringify({
+                    playerToken: localStorage.getItem('token')
+                });
 
-            const response = await api.put('/activeGames/'+ this.state.gameId + '/players', requestBody);
-            if (response.status === 200) {
-                localStorage.removeItem('GameGuard');
-                this.props.history.push('/lobbyOverview');
+                const response = await api.put('/activeGames/'+ this.state.gameId + '/players', requestBody);
+                if (response.status === 200) {
+                    localStorage.removeItem('GameGuard');
+                    this.props.history.push('/lobbyOverview');
+                }
+
+            } else {
+                alert("You can only leave the Game in the forth Phase (Word Reveal)!");
             }
-
-        } else {
-            alert("You can only leave the Game in the forth Phase (Word Reveal)!");
+        } catch(error) {
+            alert("Something went wrong while leaving the Game");
         }
     }
 
@@ -926,62 +945,92 @@ class InGame extends React.Component {
                 this.updatePhase();
                 if (this.state.phaseNumber === 1) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
-                        this.getPlayers();
-                        this.getCard();
-                        this.getCluePlayers();
-                        this.getCardAmount();
-                        this.getScores();
-                    }
-                    if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                        this.getPlayers();
-                        this.getCard();
                         this.getMysteryWord();
                         this.getCluePlayers();
+                        this.getPlayers();
                         this.getCardAmount();
                         this.getScores();
+                        this.getCard();
+                        this.isStillAlive();
+
+                        this.getPhase();
+                    }
+                    if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
+                        this.getMysteryWord();
+                        this.getCluePlayers();
+
+                        this.getPlayers();
+                        this.getCardAmount();
+                        this.getScores();
+                        this.getCard();
+                        this.isStillAlive();
+
+                        this.getPhase();
                     }
                 } else if (this.state.phaseNumber === 2) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
+                        this.getCluePlayers();
+                        this,this.getMysteryWord();
+
                         this.getPlayers();
                         this.getCard();
-                        this.getCluePlayers();
                         this.getCardAmount();
                         this.getScores();
+                        // this.isStillAlive();
+
+                        this.getPhase();
                     }
                     if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
+                        this.getCluePlayers();
+                        this.getMysteryWord();
+
                         this.getPlayers();
                         this.getCard();
-                        this.getMysteryWord();
-                        this.getCluePlayers();
                         this.getCardAmount();
                         this.getScores();
+                        // this.isStillAlive();
+
+                        this.getPhase();
                     }
                 } else if (this.state.phaseNumber === 3) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
-                        this.getPlayers();
                         this.getValidClues();
                         this.getCluePlayers();
                         this.getGuess();
+                        this.getMysteryWord();
+
+                        this.getPlayers();
                         this.getCardAmount();
                         this.getScores();
+                        // this.isStillAlive();
+
+                        this.getPhase();
                     }
                     if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
                         this.getMysteryWord();
-                        this.getPlayers();
                         this.getValidClues();
                         this.getCluePlayers();
                         this.getGuess();
+
+                        this.getPlayers();
                         this.getCardAmount();
                         this.getScores();
+                        // this.isStillAlive();
+
+                        this.getPhase();
                     }
                 } else if (this.state.phaseNumber === 4) {
                     this.getMysteryWord();
                     this.getGuess();
-                    this.getPlayers();
                     this.getCluePlayers();
                     this.getValidClues();
+
+                    this.getPlayers();
                     this.getCardAmount();
                     this.getScores();
+                    this.isStillAlive();
+
+                    this.getPhase();
                 } else {
                     alert("The phase number is not in the range from 1 to 4!")
                 }
@@ -1003,7 +1052,7 @@ class InGame extends React.Component {
     async componentDidMount() {
         try {
 
-            this.getPhase();
+            // this.getPhase();
             this.getPlayers();
 
         } catch (error) {
