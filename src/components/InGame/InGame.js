@@ -141,6 +141,7 @@ class InGame extends React.Component {
         };
 
         this.interval = setInterval(this.handlePolling, 500);
+        this.intervalStillAlive = setInterval(this.stillAlive, 2000);
         this.handlePolling = this.handlePolling.bind(this);
         this.determineMysteryWord = this.determineMysteryWord.bind(this);
         this.giveClue = this.giveClue.bind(this);
@@ -995,8 +996,18 @@ class InGame extends React.Component {
     }
 
     async componentWillUnmount() {
-        clearInterval(this.interval)
+        clearInterval(this.interval);
+        clearInterval(this.intervalStillAlive);
     }
+
+    stillAlive = async () => {
+        try {
+            await api.put('/games/' + this.state.activeGameId + '/phases', localStorage.getItem('token'));
+        } catch (error) {
+            console.log(console.log('Error in stillAlive()', handleError(error)))
+        }
+    };
+
 
     async playersWithoutUser(players) {
         let clonePlayers = [...players];
