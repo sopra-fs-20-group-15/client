@@ -690,6 +690,24 @@ class InGame extends React.Component {
         }
     }
 
+    async leaveGame() {
+        if (this.state.phaseNumber === 4){
+
+            const requestBody = JSON.stringify({
+                playerToken: localStorage.getItem('token')
+            });
+
+            const response = await api.put('/activeGames/'+ this.state.gameId + '/players', requestBody);
+            if (response.status === 200) {
+                localStorage.removeItem('GameGuard');
+                this.props.history.push('/lobbyOverview');
+            }
+
+        } else {
+            alert("You can only leave the Game in the forth Phase (Word Reveal)!");
+        }
+    }
+
     turnOffandOnSound() {
         if (this.state.sound) {
         this.setState({sound: false});
@@ -1209,8 +1227,7 @@ class InGame extends React.Component {
                 <LeaveGameButtonContainer>
                 <LogoutButton style={{width:"255px", border:"3px solid #000000", boxShadow:"7px 7px 10px rgba(0, 0, 0, 0.25)"}}
                               onClick={() => {
-                                  localStorage.removeItem("GameGuard");
-                                  this.props.history.push('/lobbyOverview');
+                                  this.leaveGame();
                               }}>
                     Leave Game
                 </LogoutButton>
