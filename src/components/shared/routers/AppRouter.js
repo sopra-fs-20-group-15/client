@@ -38,76 +38,76 @@ class AppRouter extends React.Component {
                         <Route
                             path="/lobbyOverview"
                             render={() => (
-                                <LobbyOverviewGuard>
+                                // <LobbyOverviewGuard>
                                     <LobbyOverview base={'/lobbyOverview'}/>
-                                </LobbyOverviewGuard>
+                                // </LobbyOverviewGuard>
                             )}
                         />
                         <Route
                             path="/register"
                             render={() => (
-                                <GuardRegister>
+                                // <GuardRegister>
                                     <Register/>
-                                </GuardRegister>
+                                // </GuardRegister>
                             )}
                         />
                         <Route
                             path="/login"
                             exact
                             render={() => (
-                                <LoginGuard>
+                                // <LoginGuard>
                                     <Login/>
-                                </LoginGuard>
+                                // </LoginGuard>
                             )}
                         />
                         <Route
                             path="/rules"
                             exact
                             render={() => (
-                                <RulesGuard>
+                                // <RulesGuard>
                                     <Rules/>
-                                </RulesGuard>
+                                // </RulesGuard>
                             )}
                         />
                         <Route
                             path="/tutorial"
                             exact
                             render={() => (
-                                <TutorialGuard>
+                                // <TutorialGuard>
                                     <Tutorial/>
-                                </TutorialGuard>
+                                // </TutorialGuard>
                             )}
                         />
                         <Route
                             path="/gameLobby/:id"
                             render={() => (
-                                <InGameGuard>
+                                // <InGameGuard>
                                     <InGame/>
-                                </InGameGuard>
+                                // </InGameGuard>
                             )}
                         />
                         <Route
                             path="/lobby/:id"
                             render={() => (
-                                <LobbyGuard>
+                                // <LobbyGuard>
                                     <Lobby/>
-                                </LobbyGuard>
+                                // </LobbyGuard>
                             )}
                         />
                         <Route
                             path="/leaderboard"
                             render={() => (
-                                <LeaderboardGuard>
+                                // <LeaderboardGuard>
                                     <Leaderboard/>
-                                </LeaderboardGuard>
+                                // </LeaderboardGuard>
                             )}
                         />
                         <Route
                             path="/createGame"
                             render={() => (
-                                <CreateGameGuard>
+                                // <CreateGameGuard>
                                     <CreateGame/>
-                                </CreateGameGuard>
+                                // </CreateGameGuard>
                             )}
                         />
                         <Route path="/" exact render={() => <Redirect to={"/register"}/>}/>
