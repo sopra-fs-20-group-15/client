@@ -147,8 +147,8 @@ const background = {
 };
 
 class Lobby extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             activeGameId: null,
             gameSetUpId: null,
@@ -159,7 +159,7 @@ class Lobby extends React.Component {
             actualPlayers: null,
             angels: null,
             devils: null,
-            chatMessage: null,
+            chatMessage: "",
             chatMessages: [],
             newMessages: true,
             colors: ["#0A7E00", "#0C3BE8", "#FF1201", "#E8750C", "#9B03DD", "#00b9b8", "#FF01A1"],
@@ -170,6 +170,7 @@ class Lobby extends React.Component {
         this.intervalChat = setInterval(this.getChatMessages, 500);
         this.getInfos = this.getInfos.bind(this);
         this.getChatMessages = this.getChatMessages.bind(this);
+        this.keyPressed = this.keyPressed.bind(this);
 
         this.messagesEndRef = React.createRef();
     }
@@ -285,11 +286,23 @@ class Lobby extends React.Component {
     }
 
     async sendMessage() {
+        try {
+            const requestBody = JSON.stringify({
+                playerToken: localStorage.getItem('token'),
+                gameId: this.state.gameSetUpId,
+                message: this.state.chatMessage
+            });
 
+            await api.post('/gameSetUps/chatMessages', requestBody);
+
+        } catch (error) {
+
+        }
     }
 
-    keyPressed(event) {
-        if (event.key === "Enter") {
+    keyPressed(e) {
+        if (e.keyCode === 13) {
+            console.log('message', this.state.chatMessage);
             this.sendMessage()
         }
     }
@@ -320,6 +333,7 @@ class Lobby extends React.Component {
     render() {
         return (
             <BaseContainer style={background}>
+                {console.log('chattten', this.state.chatMessage)}
                 <img className={"center"} src={JustOneLogo} alt={"JustOneLogo"}/>
                 <UIContainer>
                     <GridContainer>
@@ -345,7 +359,7 @@ class Lobby extends React.Component {
                         <InputField
                             placeholder="Enter here.."
                             onChange={e => {this.handleInputChange('chatMessage', e.target.value)}}
-                            onKeyPress={this.keyPressed}
+                            onKeyDown={this.keyPressed}
                         />
                     </ChatContainer>
                 </UIContainer>
