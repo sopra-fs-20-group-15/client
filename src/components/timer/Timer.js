@@ -54,12 +54,12 @@ class Timer extends Component {
         }
     }
 
-    playCountdownAudio() {
+/*    playCountdownAudio() {
         let audio = new Audio('http://soundbible.com/mp3/Countdown-Me-728881159.mp3');
         audio.load();
         audio.play();
         setTimeout(() => audio.pause(), 5000)
-    }
+    }*/
 
     async componentDidMount() {
         this.myInterval = setInterval(() => {
@@ -78,7 +78,7 @@ class Timer extends Component {
             }
 
             if (seconds === 6 && this.props.phaseNumber !== 4) {
-                this.playCountdownAudio();
+                // this.playCountdownAudio();
                 this.setState({
                     countdown: true
                 });
