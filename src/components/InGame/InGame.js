@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 import {api, handleError} from '../../helpers/api';
 import {withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
@@ -14,7 +14,7 @@ import {
     GameOver,
     Statistics,
     StatisticsContainer,
-    Waiting
+    Waiting, RoundMessage
 } from "../../views/design/InGame/InGameUI";
 import {Phase, PhaseCircle, PhaseMessage} from "../../views/design/InGame/PhaseUI";
 import {
@@ -33,6 +33,7 @@ import ClickIcon from '../../views/pictures/ClickIcon.png'
 import PlayerComponent from "../../views/PlayerComponent";
 import {Button} from "../../views/design/Button";
 import EasterEggs from "../../views/EasterEggs";
+import RoundMessageComponent from "../../roundMessage/RoundMessageComponent";
 
 
 const SoundButton = styled.div`
@@ -79,6 +80,12 @@ const LeaveGameButtonContainer = styled.div`
   justify-content: center;
 `;
 
+function array_move(array, oldIndex, newIndex) {
+    let elementToMove = array.splice(oldIndex, 1)[0];
+    array.splice(newIndex, 0, elementToMove);
+    return array;
+}
+
 
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
@@ -112,7 +119,7 @@ class InGame extends React.Component {
             clues: [],
             guess: "",
             validGuess: false,
-            timer: 30,
+            timer: 3000,
             remainingCards: 13,
             guessedCards: [0, 0, 0, 0, 0, 0, 0],
             scores: [0, 0, 0, 0, 0, 0, 0],
@@ -199,7 +206,7 @@ class InGame extends React.Component {
                 this.getHighestScore();
                 this.overlayOn();
                 setTimeout(() => this.deleteGame(), 16000);
-                setTimeout(() => localStorage.removeItem('GameGuard'), 15000);
+                setTimeout(() => localStorage.removeItem('GameGuard'), 16000);
             } else {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
                     this.initializeTurn();
@@ -216,16 +223,17 @@ class InGame extends React.Component {
     async deleteGame() {
         try {
             if (localStorage.getItem('username') === this.state.activePlayer && !this.state.deleted) {
-                console.log('gets in', this.state);
+                this.props.history.push('/lobbyOverview');
                 this.setState({
                     deleted: true
                 });
                 this.deleteGameSetUp();
                 const response = await api.delete('/activeGames/' + this.state.gameId);
-                console.log('active', response)
             }
 
-            this.props.history.push('/lobbyOverview');
+            if (!this.state.deleted) {
+                this.props.history.push('/lobbyOverview');
+            }
 
         } catch (error) {
             alert(`Something went wrong while trying to delete the game!`);
@@ -241,7 +249,6 @@ class InGame extends React.Component {
 
             const response = await api.delete('/gameSetUps/' + this.state.gameId, {data: requestBody});
 
-            console.log('active', response)
 
         } catch (error) {
             alert(`Something went wrong while trying to delete the game!`);
@@ -682,6 +689,7 @@ class InGame extends React.Component {
                 passivePlayers: response.data.passivePlayerNames
             });
 
+
             this.playersWithoutUser(response.data.playerNames).then(result => this.setState({
                 clonePlayers: result
             }));
@@ -691,6 +699,7 @@ class InGame extends React.Component {
         }
     }
 
+
     turnOffandOnSound() {
         if (this.state.sound) {
         this.setState({sound: false});
@@ -699,6 +708,7 @@ class InGame extends React.Component {
         }
     }
 
+/*
     playCorrectGuessAudio() {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/cheering.wav');
         audio.play();
@@ -708,6 +718,7 @@ class InGame extends React.Component {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/mario_06.wav');
         audio.play();
     }
+*/
 
     displayGuess() {
         /**displays guess in phase 4*/
@@ -800,26 +811,24 @@ class InGame extends React.Component {
     }
 
     updatePhase() {
-        let nextTimer = [30, 50, 60, 10];
+        let nextTimer = [3000, 5000, 6000, 10];
         /** Only Phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
             if (this.state.phaseNumber !== 4) {
-                console.log('gets in phase 4');
                 this.setState({
                     timer: nextTimer[3],
                     phaseNumber: 4
                 });
-                if (this.state.validGuess && this.state.sound) {
+                /*if (this.state.validGuess && this.state.sound) {
                     this.playCorrectGuessAudio();
                 } else if (this.state.sound) {
                     this.playWrongGuessAudio();
-                }
+                }*/
                 this.updatePhaseHUD(4);
             }
         } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
-                console.log('gets in phase 3');
                 this.setState({
                     timer: nextTimer[2],
                     phaseNumber: 3
@@ -832,7 +841,6 @@ class InGame extends React.Component {
         /** Only Phase 2 has always a chosen Mystery Word */
         else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
             if (this.state.phaseNumber !== 2) {
-                console.log('gets in phase 2');
                 this.setState({
                     timer: nextTimer[1],
                     phaseNumber: 2
@@ -843,7 +851,6 @@ class InGame extends React.Component {
         /** Only Phase 1 has always none of these above*/
         else if (this.state.currentCard !== []) {
             if (this.state.phaseNumber !== 1) {
-                console.log('gets in phase 1');
                 this.setState({
                     timer: nextTimer[0],
                     phaseNumber: 1,
@@ -982,7 +989,6 @@ class InGame extends React.Component {
      * You may call setState() immediately in componentDidMount().
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
-
     async componentDidMount() {
         try {
 
@@ -1008,19 +1014,37 @@ class InGame extends React.Component {
         }
     };
 
+    async playerOrder(players) {
+        let clonePlayers = [];
+        if (players.length >= 3) {
+            clonePlayers = array_move(players, 2, 0);
+        }
+        if (players.length >= 5) {
+            array_move(clonePlayers, 4, 0)
+        }
+        return players
+    }
 
     async playersWithoutUser(players) {
-        let clonePlayers = [...players];
-        let index = clonePlayers.indexOf(localStorage.getItem('username'));
-        if (index > -1) {
-            clonePlayers.splice(index, 1);
+        let clonePlayers = [];
+        for (let i = (players.indexOf(localStorage.getItem('username'))+1); i<players.length; i++) {
+            clonePlayers.push(players[i])
         }
+
+        for (let i = 0; i<players.indexOf(localStorage.getItem('username')); i++) {
+            clonePlayers.push(players[i])
+        }
+
+        this.playerOrder(clonePlayers);
+
         return clonePlayers;
     }
 
     render() {
         return (
             <Game>
+                <RoundMessageComponent activePlayer={this.state.activePlayer} passivePlayers={this.state.passivePlayers}
+                phaseNumber={this.state.phaseNumber} remainingCards={this.state.remainingCards}/>
                 <EasterEggs/>
                 <SoundButton>
                     <Button
