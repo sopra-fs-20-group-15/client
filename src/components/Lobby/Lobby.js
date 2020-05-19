@@ -146,6 +146,19 @@ const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
 };
 
+export function msToTime(duration) {
+    let offset = new Date().getTimezoneOffset(),
+        offsetMinutes = offset % 60,
+        offsetHours = (offset/60) % 24;
+    let minutes = Math.floor((duration / (1000 * 60)) % 60) - offsetMinutes,
+        hours = Math.floor((duration / (1000 * 60 * 60)) % 24) - offsetHours;
+
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+
+    return hours + ":" + minutes;
+}
+
 class Lobby extends React.Component {
     constructor(props) {
         super(props);
@@ -349,7 +362,9 @@ class Lobby extends React.Component {
                         <ChatMessagesContainer>
                             {this.state.chatMessages.map(chatMessage => {
                                 return (
-                                    <ChatMessage id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}> <span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>{chatMessage.playerName}:</span> {chatMessage.message}</ChatMessage>
+                                    <ChatMessage id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}>
+                                        <span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>({msToTime(chatMessage.time)}) {chatMessage.playerName}: </span>
+                                        {chatMessage.message}</ChatMessage>
                                 )
                             })}
                             <div style={{ float:"left", clear: "both" }}
