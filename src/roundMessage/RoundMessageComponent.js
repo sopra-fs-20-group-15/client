@@ -51,6 +51,8 @@ export const roundAnimation = css`
 
 export const RoundMessage1 = styled.div`
     position: absolute;
+    border: 3px solid black;
+    border-radius: 20px;
     right: 100%;
     padding-right: 9px;
     top: 302px
@@ -70,6 +72,8 @@ export const RoundMessage1 = styled.div`
 
 export const RoundMessage2 = styled.div`
     position: absolute;
+    border: 3px solid black;
+    border-radius: 20px;
     right: 100%;
     padding-right: 9px;
     top: 302px
@@ -81,7 +85,7 @@ export const RoundMessage2 = styled.div`
     width: 40%;
 
     
-    background: linear-gradient(180deg, #005C0F 0%, rgba(0, 147, 23, 0) 100%), #05F400;
+    background: linear-gradient(#FF0000, #FCC812);
     font-weight: bold;
     
     text-align: center;
@@ -89,6 +93,8 @@ export const RoundMessage2 = styled.div`
 
 export const RoundMessage3 = styled.div`
     position: absolute;
+    border: 3px solid black;
+    border-radius: 20px;
     right: 100%;
     padding-right: 9px;
     top: 302px
@@ -108,6 +114,8 @@ export const RoundMessage3 = styled.div`
 
 export const RoundMessage4 = styled.div`
     position: absolute;
+    border: 3px solid black;
+    border-radius: 20px;
     right: 100%;
     padding-right: 9px;
     top: 302px
