@@ -713,7 +713,7 @@ class InGame extends React.Component {
             console.log('Error in getPlayers()', handleError(error))
         }
     }
-    
+
     async leaveGame() {
         try {
             if (this.state.phaseNumber === 4){
@@ -1059,8 +1059,8 @@ class InGame extends React.Component {
     async componentDidMount() {
         try {
 
-            // this.getPhase();
             this.getPlayers();
+            this.getPhase();
 
         } catch (error) {
             alert(`Something went wrong while fetching the players!`);
