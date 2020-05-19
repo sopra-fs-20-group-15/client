@@ -161,7 +161,7 @@ class InGame extends React.Component {
             console.log('ALIVE',response);
 
         } catch(error) {
-            alert("Something is wrong with your Life. UwU")
+            console.log("something wrong with life");
         }
     }
 
@@ -383,7 +383,7 @@ class InGame extends React.Component {
                     alert('You have already given a clue!')
                 }
             } else {
-                alert('Only passive players can give clues!')
+                // alert('Only passive players can give clues!')
             }
         } catch (error) {
             if (error.response.status !== 500 && error.response.status !== 401) {
@@ -472,7 +472,7 @@ class InGame extends React.Component {
 
                 await api.post('/games/' + this.state.gameId + "/guesses", requestBody);
             } else {
-                alert('Only the active player can give a guess!')
+                // alert('Only the active player can give a guess!')
             }
 
         } catch (error) {
@@ -836,7 +836,7 @@ class InGame extends React.Component {
     }
 
     updatePhase() {
-        let nextTimer = [3000, 5000, 6000, 15];
+        let nextTimer = [30, 50, 60, 10];
         /** Only Phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
@@ -947,6 +947,7 @@ class InGame extends React.Component {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
                         this.getMysteryWord();
                         this.getCluePlayers();
+
                         this.getPlayers();
                         this.getCardAmount();
                         this.getScores();
@@ -970,13 +971,13 @@ class InGame extends React.Component {
                 } else if (this.state.phaseNumber === 2) {
                     if (localStorage.getItem('username') === this.state.activePlayer) {
                         this.getCluePlayers();
-                        this,this.getMysteryWord();
+                        this.getMysteryWord();
 
                         this.getPlayers();
                         this.getCard();
                         this.getCardAmount();
                         this.getScores();
-                        // this.isStillAlive();
+                        this.isStillAlive();
 
                         this.getPhase();
                     }
@@ -988,7 +989,7 @@ class InGame extends React.Component {
                         this.getCard();
                         this.getCardAmount();
                         this.getScores();
-                        // this.isStillAlive();
+                        this.isStillAlive();
 
                         this.getPhase();
                     }
@@ -1002,7 +1003,7 @@ class InGame extends React.Component {
                         this.getPlayers();
                         this.getCardAmount();
                         this.getScores();
-                        // this.isStillAlive();
+                        this.isStillAlive();
 
                         this.getPhase();
                     }
@@ -1015,7 +1016,7 @@ class InGame extends React.Component {
                         this.getPlayers();
                         this.getCardAmount();
                         this.getScores();
-                        // this.isStillAlive();
+                        this.isStillAlive();
 
                         this.getPhase();
                     }
