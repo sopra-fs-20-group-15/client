@@ -126,6 +126,7 @@ class InGame extends React.Component {
             round: 1,
             phaseNumber: 1,
             phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
+            pageRefreshed: true,
             player1Input: null,
             player2Input: null,
             player3Input: null,
@@ -177,7 +178,7 @@ class InGame extends React.Component {
     async getPhase(){
         try {
 
-            const response = await api.get('/games/' + this.state.gameId + '/phases');
+            const response = await api.get('/games/' + this.props.match.params.id + '/phases');
 
             if (response.status === 200) {
                 // this.setState({
@@ -188,7 +189,7 @@ class InGame extends React.Component {
             console.log('DATA',response.data);
 
         } catch(error) {
-            alert('Something went wrong while fetching the Game Phase!');
+            alert('Something went wrong while fetching the Game Phase!'+error);
         }
     }
 
@@ -1046,7 +1047,15 @@ class InGame extends React.Component {
     handlePolling = async () => {
         try {
             if (!this.state.gameHasEnded) {
-                this.updatePhase();
+                if(this.state.pageRefreshed){
+
+                    this.setState({
+                        pageRefreshed: false
+                    });
+                    this.setState()
+                } else {
+                    this.updatePhase();
+                }
                 if (this.state.phaseNumber === 1) {
                     this.getMysteryWord();
                     this.getCluePlayers();
@@ -1056,7 +1065,6 @@ class InGame extends React.Component {
                     this.getScores();
                     this.getCard();
 
-                    this.getPhase();
                 } else if (this.state.phaseNumber === 2) {
                     this.getCluePlayers();
                     this.getMysteryWord();
@@ -1066,7 +1074,6 @@ class InGame extends React.Component {
                     this.getCardAmount();
                     this.getScores();
 
-                    this.getPhase();
                 } else if (this.state.phaseNumber === 3) {
                     this.getValidClues();
                     this.getCluePlayers();
@@ -1077,7 +1084,6 @@ class InGame extends React.Component {
                     this.getCardAmount();
                     this.getScores();
 
-                    this.getPhase();
                 } else if (this.state.phaseNumber === 4) {
                     this.getMysteryWord();
                     this.getGuess();
@@ -1088,7 +1094,6 @@ class InGame extends React.Component {
                     this.getCardAmount();
                     this.getScores();
 
-                    this.getPhase();
                 } else {
                     alert("The phase number is not in the range from 1 to 4!")
                 }
@@ -1110,7 +1115,10 @@ class InGame extends React.Component {
         try {
 
             this.getPlayers();
-            // this.getPhase();
+            console.log("lol",this.state.players);
+            console.log("lol",this.state.passivePlayers);
+            console.log("lol",this.state.activePlayer);
+            this.getPhase();
 
         } catch (error) {
             alert(`Something went wrong while fetching the players!`);
