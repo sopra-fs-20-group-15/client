@@ -51,19 +51,23 @@ const ChatMessagesContainer = styled.div`
   position: absolute;
   bottom: 60px;
   height: 290px;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   padding-top: 12px;
 `;
 
 const ChatMessage = styled.div`
-  left: 2%;
-  width: 98%;
+  left: 5px;
+  right: 5px;
+  width: 384px;
   position: relative;
-  
+  margin-bottom: 3.6px;
+  margin-top: 3.6px;
   font-size: 16px;
   font-family: Happy Monkey;
   position: relative;
   display: inline-block;
+  overflow-wrap: break-word;
 `;
 
 const UIContainer = styled.div`
@@ -146,9 +150,22 @@ const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
 };
 
+export function msToTime(duration) {
+    let offset = new Date().getTimezoneOffset(),
+        offsetMinutes = offset % 60,
+        offsetHours = (offset/60) % 24;
+    let minutes = Math.floor((duration / (1000 * 60)) % 60) - offsetMinutes,
+        hours = Math.floor((duration / (1000 * 60 * 60)) % 24) - offsetHours;
+
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+
+    return hours + ":" + minutes;
+}
+
 class Lobby extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             activeGameId: null,
             gameSetUpId: null,
@@ -159,7 +176,7 @@ class Lobby extends React.Component {
             actualPlayers: null,
             angels: null,
             devils: null,
-            chatMessage: null,
+            chatMessage: "",
             chatMessages: [],
             newMessages: true,
             colors: ["#0A7E00", "#0C3BE8", "#FF1201", "#E8750C", "#9B03DD", "#00b9b8", "#FF01A1"],
@@ -170,6 +187,7 @@ class Lobby extends React.Component {
         this.intervalChat = setInterval(this.getChatMessages, 500);
         this.getInfos = this.getInfos.bind(this);
         this.getChatMessages = this.getChatMessages.bind(this);
+        this.keyPressed = this.keyPressed.bind(this);
 
         this.messagesEndRef = React.createRef();
     }
@@ -285,12 +303,26 @@ class Lobby extends React.Component {
     }
 
     async sendMessage() {
+        try {
+            const requestBody = JSON.stringify({
+                playerToken: localStorage.getItem('token'),
+                gameId: this.state.gameSetUpId,
+                message: this.state.chatMessage
+            });
 
+            await api.post('/gameSetUps/chatMessages', requestBody);
+
+        } catch (error) {
+
+        }
     }
 
-    keyPressed(event) {
-        if (event.key === "Enter") {
-            this.sendMessage()
+    keyPressed(e) {
+        if (e.keyCode === 13) {
+            this.sendMessage();
+            this.setState({
+                chatMessage: ""
+            })
         }
     }
 
@@ -335,7 +367,7 @@ class Lobby extends React.Component {
                         <ChatMessagesContainer>
                             {this.state.chatMessages.map(chatMessage => {
                                 return (
-                                    <ChatMessage id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}> <span style={{color: this.state.colors[this.state.players.indexOf(localStorage.getItem('username'))]}}>{chatMessage.playerName}:</span> {chatMessage.message}</ChatMessage>
+                                    <ChatMessage id={"chatMessage"+this.state.chatMessages.indexOf(chatMessage)}><span style={{color: this.state.colors[this.state.players.indexOf(chatMessage.playerName)]}}>({msToTime(chatMessage.time)}) {chatMessage.playerName}: </span>{chatMessage.message}</ChatMessage>
                                 )
                             })}
                             <div style={{ float:"left", clear: "both" }}
@@ -344,8 +376,9 @@ class Lobby extends React.Component {
                         </ChatMessagesContainer>
                         <InputField
                             placeholder="Enter here.."
+                            value={this.state.chatMessage}
                             onChange={e => {this.handleInputChange('chatMessage', e.target.value)}}
-                            onKeyPress={this.keyPressed}
+                            onKeyDown={this.keyPressed}
                         />
                     </ChatContainer>
                 </UIContainer>

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css, keyframes} from "styled-components";
 
 /**everything based on InGame Background*/
 
@@ -7,6 +7,67 @@ export const EasterEgg = styled.img`
   z-index: 2;
   display: none;
   width: 100%;
+`;
+
+export const round = keyframes`
+  0% {
+    left: -67px;
+    top: 300px;
+  }
+
+  25% {
+    left: 500px;
+    top: 300px;
+  }
+  
+  75% {
+    left: 500px;
+    top: 300px;
+  }
+  
+  100% {
+    left: 100%;
+    top: 300px;
+  }
+`;
+
+export const roundRight = keyframes`
+  0% {
+    left: 500px;
+    top: 300px;
+  }
+
+  100% {
+    right: 0px;
+    top: 300px;
+  }
+`;
+
+/*export const roundRotate = keyframes`
+  0% {
+    transform: rotate(0deg)
+  }
+  
+  100% {
+    transform: rotate(3600deg)
+  }
+`;*/
+
+export const roundAnimation = css`
+    ${round} 4s 1 2s
+`;
+
+
+export const RoundMessage = styled.div`
+    position: absolute;
+    width: 100%;
+    left: -800px;
+    top: 300px
+    font-family: Happy Monkey;
+    font-size: 56px;
+    background: yellow;
+    z-index: 2;
+    animation: ${roundAnimation}
 `;
 
 export const BoardContainer = styled.div`
