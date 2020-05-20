@@ -36,7 +36,7 @@ export const RoundMessage1 = styled.div`
     border-radius: 20px;
     right: 100%;
     padding-right: 9px;
-    top: 302px
+    top: 35%;
     font-family: Happy Monkey;
     font-size: 56px;
     z-index: 2;
@@ -57,7 +57,7 @@ export const RoundMessage2 = styled.div`
     border-radius: 20px;
     right: 100%;
     padding-right: 9px;
-    top: 302px
+    top: 35%;
     font-family: Happy Monkey;
     font-size: 56px;
     z-index: 2;
@@ -78,7 +78,7 @@ export const RoundMessage3 = styled.div`
     border-radius: 20px;
     right: 100%;
     padding-right: 9px;
-    top: 302px
+    top: 35%;
     font-family: Happy Monkey;
     font-size: 56px;
     z-index: 2;
@@ -99,7 +99,7 @@ export const RoundMessage4 = styled.div`
     border-radius: 20px;
     right: 100%;
     padding-right: 9px;
-    top: 302px
+    top: 35%;
     font-family: Happy Monkey;
     font-size: 56px;
     z-index: 2;
@@ -120,7 +120,7 @@ function Message(props) {
     const remainingCards = props.remainingCards;
     if (phaseNumber === 1) {
         if (activePlayer === localStorage.getItem('username')) {
-            return <RoundMessage1> Enter a number between 1 and 5! </RoundMessage1>
+            return <RoundMessage1> Click on a word! </RoundMessage1>
         } else {
             return <RoundMessage1> Wait for next phase! </RoundMessage1>
         }

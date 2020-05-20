@@ -376,7 +376,7 @@ class Lobby extends React.Component {
                             </div>
                         </ChatMessagesContainer>
                         <InputField
-                            placeholder="Enter here.."
+                            placeholder="Say hi to your team members.."
                             value={this.state.chatMessage}
                             onChange={e => {this.handleInputChange('chatMessage', e.target.value)}}
                             onKeyDown={this.keyPressed}

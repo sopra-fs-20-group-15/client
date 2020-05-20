@@ -3,7 +3,7 @@ import styled, {keyframes} from 'styled-components';
 import {api, handleError} from '../../helpers/api';
 import {withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
-import {GuessedCards, Deck, ActiveCardContainer, Number, Word} from "../../views/design/InGame/CardsUI";
+import {GuessedCards, Deck, ActiveCardContainer, Number, Word, ChooseWord} from "../../views/design/InGame/CardsUI";
 import {
     Game,
     BoardContainer,
@@ -159,7 +159,7 @@ class InGame extends React.Component {
         this.deleteGame = this.deleteGame.bind(this);
     }
 
-    isStillAlive = async() => {
+    isStillAlive = async () => {
         try {
             const requestBody = JSON.stringify({
                 playerToken: localStorage.getItem('token')
@@ -245,6 +245,9 @@ class InGame extends React.Component {
             }
 
             if (!this.state.deleted) {
+                this.setState({
+                    deleted: true
+                });
                 this.props.history.push('/lobbyOverview');
             }
 
@@ -261,8 +264,11 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            await api.delete('/gameSetUps/' + localStorage.getItem('gameSetUpId'), {data: requestBody});
-            localStorage.removeItem('gameSetUpId')
+            console.log('setup id', localStorage.getItem('gameSetUpId'));
+            const response = await api.delete('/gameSetUps/' + localStorage.getItem('gameSetUpId'), {data: requestBody});
+            localStorage.removeItem('gameSetUpId');
+
+            console.log('response form delete setup', response);
 
         } catch (error) {
             if (error.response.status !== 404) {
@@ -1179,25 +1185,25 @@ class InGame extends React.Component {
                             ) : (
                                 <ActiveCardContainer id={"activeCard"} pulsate={this.state.phaseNumber === 1 && localStorage.getItem('username') === this.state.activePlayer}>
                                     <Number style={{color: "#00CDCD", top: "17.5px"}}> 1. </Number>
-                                    <Word id={"word1"} style={{borderColor: "#00CDCD", top: "17.5px"}}
+                                    <ChooseWord id={"word1"} style={{borderColor: "#00CDCD", top: "17.5px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(1)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(1)}}> ??? </ChooseWord>
                                     <Number style={{color: "#42c202", top: "65px"}}> 2. </Number>
-                                    <Word id={"word2"} style={{borderColor: "#42c202", top: "35px"}}
+                                    <ChooseWord id={"word2"} style={{borderColor: "#42c202", top: "35px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(2)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(2)}}> ??? </ChooseWord>
                                     <Number style={{color: "#db3d3d", top: "112.5px"}}> 3. </Number>
-                                    <Word id={"word3"} style={{borderColor: "#db3d3d", top: "52.5px"}}
+                                    <ChooseWord id={"word3"} style={{borderColor: "#db3d3d", top: "52.5px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(3)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(3)}}> ??? </ChooseWord>
                                     <Number style={{color: "#fc9229", top: "160px"}}> 4. </Number>
-                                    <Word id={"word4"} style={{borderColor: "#fc9229", top: "70px"}}
+                                    <ChooseWord id={"word4"} style={{borderColor: "#fc9229", top: "70px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(4)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(4)}}> ??? </ChooseWord>
                                     <Number style={{color: "#ffe203", top: "207.5px"}}> 5. </Number>
-                                    <Word id={"word5"} style={{borderColor: "#ffe203", top: "87.5px"}}
+                                    <ChooseWord id={"word5"} style={{borderColor: "#ffe203", top: "87.5px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(5)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(5)}}> ??? </ChooseWord>
                                 </ActiveCardContainer>
                             )}
                         </BoardContainer>
@@ -1231,18 +1237,18 @@ class InGame extends React.Component {
                             {localStorage.getItem('username') !== this.state.activePlayer ?
                                 <NameField>1. {localStorage.getItem('username')} </NameField> :
                                 <NameFieldActivePlayer>1. {localStorage.getItem('username')} </NameFieldActivePlayer>}
-                                <InputFieldPlayer disabled={this.state.player1Input || ((this.state.phaseNumber === 1 || this.state.phaseNumber === 3 || this.state.phaseNumber === 4) && localStorage.getItem('username') !== this.state.activePlayer) || ((this.state.phaseNumber === 2 || this.state.phaseNumber === 4) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer && this.state.passivePlayersCluesGiven.includes(localStorage.getItem('username')))}>
+                                <InputFieldPlayer disabled={this.state.player1Input || ((this.state.phaseNumber === 1 || this.state.phaseNumber === 3 || this.state.phaseNumber === 4) && localStorage.getItem('username') !== this.state.activePlayer) || ((this.state.phaseNumber === 1 || this.state.phaseNumber === 2 || this.state.phaseNumber === 4) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer && this.state.passivePlayersCluesGiven.includes(localStorage.getItem('username')))}>
                                     {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(localStorage.getItem('username'))) || this.state.phaseNumber === 4 ? (
                                         <Output id={"clue1"}></Output>
                                     ) : (
-                                        (((this.state.phaseNumber === 1 || this.state.phaseNumber === 3) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer)) ? (
+                                        ((this.state.phaseNumber === 3 && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer)) ? (
                                             <Input placeholder="Enter here.." onChange=
                                                 {e => {
                                                     this.handleInputChange('player1Input', e.target.value);
                                                 }}/>
                                         ) : (
-                                            (this.state.phaseNumber === 1 && localStorage.getItem('username') !== this.state.activePlayer) ? (
-                                                <Output> Wait for phase 2! </Output>
+                                            (this.state.phaseNumber === 1) ? (
+                                                    (localStorage.getItem('username') !== this.state.activePlayer ? <Output> Wait for phase 2! </Output> : <Output> Click on a word! </Output>)
                                             ) : (
                                                 <Output> Wait for phase 3! </Output>))
                                     )}
