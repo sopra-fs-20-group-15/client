@@ -1054,7 +1054,7 @@ class InGame extends React.Component {
         try {
 
             this.getPlayers();
-            this.getPhase();
+            // this.getPhase();
 
         } catch (error) {
             alert(`Something went wrong while fetching the players!`);
@@ -1066,14 +1066,6 @@ class InGame extends React.Component {
         clearInterval(this.interval);
         clearInterval(this.intervalStillAlive);
     }
-
-    stillAlive = async () => {
-        try {
-            await api.put('/games/' + this.state.gameId + '/phases', localStorage.getItem('token'));
-        } catch (error) {
-            console.log(console.log('Error in stillAlive()', handleError(error)))
-        }
-    };
 
     async playerOrder(players) {
         let clonePlayers = [];
