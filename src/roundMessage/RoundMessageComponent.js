@@ -7,13 +7,13 @@ export const round = keyframes`
     left: -100%;
   }
 
-  25% {
+  15% {
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
   }
   
-  75% {
+  85% {
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
@@ -24,28 +24,9 @@ export const round = keyframes`
   }
 `;
 
-export const roundRight = keyframes`
-  0% {
-    
-  }
-
-  100% {
-    
-  }
-`;
-
-/*export const roundRotate = keyframes`
-  0% {
-    transform: rotate(0deg)
-  }
-
-  100% {
-    transform: rotate(3600deg)
-  }
-`;*/
 
 export const roundAnimation = css`
-    ${round} 6s 1 2s
+    ${round} 4s 1 2s
 `;
 
 
@@ -158,8 +139,6 @@ function Message(props) {
     } else if (phaseNumber === 4) {
         if (remainingCards === 0) {
             return <RoundMessage4> Game Over! </RoundMessage4>
-        } else if (remainingCards === 1) {
-            return <RoundMessage4> Last Round! </RoundMessage4>
         }
         return <RoundMessage4> Wait for next round! </RoundMessage4>
     }
@@ -189,13 +168,7 @@ class RoundMessageComponent extends Component {
     render() {
         return (
             <Message phaseNumber={this.state.phaseNumber} activePlayer={this.props.activePlayer}
-            passivePlayers={this.props.passivePlayers}/>
-            /*<RoundMessage id={"anim"} phaseNumber={this.state.phaseNumber}> {(this.state.phaseNumber === 1 && this.props.activePlayer === localStorage.getItem('username') ?
-                "Enter number between 1 and 5!" :
-                (this.state.phaseNumber === 2 && this.props.passivePlayers.includes(localStorage.getItem('username')) ?
-                    "Enter a clue!" : (this.state.phaseNumber === 3 && this.props.activePlayer === localStorage.getItem('username') ?
-                        "Enter a guess!" : "Wait for next phase!")))}
-            </RoundMessage>*/
+            passivePlayers={this.props.passivePlayers} remainingCards={this.props.remainingCards}/>
         );
     }
 }

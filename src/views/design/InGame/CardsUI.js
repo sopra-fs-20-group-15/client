@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {pulseAnimation} from "./PlayerUI";
 
 /**everything based on Deck and Cards*/
 
@@ -36,6 +37,7 @@ export const Deck = styled.div`
 export const ActiveCardContainer = styled.div`
   width: 180px;
   height: 255px;
+  animation: ${props => (props.pulsate ? pulseAnimation : "default")};
   
   position: absolute;
   bottom: 0%;
@@ -62,6 +64,10 @@ export const Number = styled.div`
 
 export const Word = styled.div`
     position: relative;
+    &:hover {
+    ${props => (props.disabled ? "default" : "transform: scale(1.2)")};
+    }
+    cursor: ${props => (props.disabled ? "default" : "pointer")};
     padding: 5px 0;
     height: 30px;
     width: 80%;

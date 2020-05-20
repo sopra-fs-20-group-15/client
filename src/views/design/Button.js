@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-// only difference to Button is height
 export const LogoutButton = styled.button`
   &:hover {
     transform: translateY(-2px);

@@ -57,7 +57,6 @@ export const SignalFieldPlayer = styled.button`
     transform: translateY(-2px);
   }
   cursor: ${props => (props.disabled ? "default" : "pointer")};
-  // opacity: ${props => (props.disabled ? 0.8 : 1)};
     
   height: 70px;
   width: 70px;

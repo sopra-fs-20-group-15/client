@@ -6,7 +6,6 @@ export const SMALL_LAPTOPS_WIDTH = 970;
 export const TABLETS_WIDTH = 750;
 export const SMALL_WIDTH = 768;
 
-//padding used to be 15
 export const BaseContainer = styled.div`
   position: relative;
   margin-left: auto;
