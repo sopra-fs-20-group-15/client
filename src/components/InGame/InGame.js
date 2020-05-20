@@ -141,6 +141,7 @@ class InGame extends React.Component {
         };
 
         this.interval = setInterval(this.handlePolling, 500);
+        this.intervalStillAlive = setInterval(this.isStillAlive, 2000);
         this.handlePolling = this.handlePolling.bind(this);
         this.determineMysteryWord = this.determineMysteryWord.bind(this);
         this.giveClue = this.giveClue.bind(this);
@@ -952,7 +953,6 @@ class InGame extends React.Component {
                         this.getCardAmount();
                         this.getScores();
                         this.getCard();
-                        this.isStillAlive();
 
                         this.getPhase();
                     }
@@ -964,7 +964,6 @@ class InGame extends React.Component {
                         this.getCardAmount();
                         this.getScores();
                         this.getCard();
-                        this.isStillAlive();
 
                         this.getPhase();
                     }
@@ -977,7 +976,6 @@ class InGame extends React.Component {
                         this.getCard();
                         this.getCardAmount();
                         this.getScores();
-                        this.isStillAlive();
 
                         this.getPhase();
                     }
@@ -989,7 +987,6 @@ class InGame extends React.Component {
                         this.getCard();
                         this.getCardAmount();
                         this.getScores();
-                        this.isStillAlive();
 
                         this.getPhase();
                     }
@@ -1003,7 +1000,6 @@ class InGame extends React.Component {
                         this.getPlayers();
                         this.getCardAmount();
                         this.getScores();
-                        this.isStillAlive();
 
                         this.getPhase();
                     }
@@ -1016,7 +1012,6 @@ class InGame extends React.Component {
                         this.getPlayers();
                         this.getCardAmount();
                         this.getScores();
-                        this.isStillAlive();
 
                         this.getPhase();
                     }
@@ -1029,7 +1024,6 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getCardAmount();
                     this.getScores();
-                    this.isStillAlive();
 
                     this.getPhase();
                 } else {
