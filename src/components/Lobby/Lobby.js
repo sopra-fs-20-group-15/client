@@ -68,6 +68,7 @@ const ChatMessage = styled.div`
   position: relative;
   display: inline-block;
   overflow-wrap: break-word;
+  hyphens: auto;
 `;
 
 const UIContainer = styled.div`
@@ -250,8 +251,7 @@ class Lobby extends React.Component {
             }
 
         } catch (error) {
-            alert(`Something went wrong while retrieving the chat messages!`);
-            console.log('error', handleError(error))
+            console.log('Error in getChatMessages()', handleError(error))
         }
     };
 
@@ -263,6 +263,7 @@ class Lobby extends React.Component {
 
             const response = await api.post('/games/'+this.props.match.params.id, requestBody);
 
+            localStorage.setItem('gameSetUpId', this.props.match.params.id);
             localStorage.setItem('GameGuard',response.data.id);
             localStorage.removeItem('LobbyGuard');
             this.props.history.push('/gameLobby/'+response.data.id);
