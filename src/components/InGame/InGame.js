@@ -119,7 +119,7 @@ class InGame extends React.Component {
             clues: [],
             guess: "",
             validGuess: false,
-            timer: 3000,
+            timer: 30,
             remainingCards: 13,
             guessedCards: [0, 0, 0, 0, 0, 0, 0],
             scores: [0, 0, 0, 0, 0, 0, 0],
@@ -852,7 +852,7 @@ class InGame extends React.Component {
     }
 
     updatePhase() {
-        let nextTimer = [3000, 50, 60, 10];
+        let nextTimer = [30, 50, 60, 10];
         /** Only Phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
