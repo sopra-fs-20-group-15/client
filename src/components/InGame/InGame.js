@@ -862,17 +862,17 @@ class InGame extends React.Component {
                 } else if (this.state.sound) {
                     this.playWrongGuessAudio();
                 }*/
-                this.updatePhaseHUD(4);
             }
+            this.updatePhaseHUD(4);
         } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 this.setState({
                     timer: nextTimer[2],
                     phaseNumber: 3
                 });
-                this.updatePhaseHUD(3);
                 this.unsignalSubmission();
             }
+            this.updatePhaseHUD(3);
         }
 
         /** Only Phase 2 has always a chosen Mystery Word */
@@ -882,8 +882,8 @@ class InGame extends React.Component {
                     timer: nextTimer[1],
                     phaseNumber: 2
                 });
-                this.updatePhaseHUD(2);
             }
+            this.updatePhaseHUD(2);
         }
         /** Only Phase 1 has always none of these above*/
         else if (this.state.currentCard !== []) {
@@ -893,11 +893,11 @@ class InGame extends React.Component {
                     phaseNumber: 1,
                     round: this.state.round + 1
                 });
-                this.updatePhaseHUD(1);
                 this.unsignalSubmission();
                 this.undoCrossingOut();
                 this.undoClueDisplay();
             }
+            this.updatePhaseHUD(1);
         }
     }
 
@@ -947,81 +947,137 @@ class InGame extends React.Component {
 
     /** This method makes sure that a player's page is updated correctly based on the role of the player (active
      * or passive player) and the phase number (between 1 and 4). */
+    // handlePolling = async () => {
+    //     try {
+    //         if (!this.state.gameHasEnded) {
+    //             this.updatePhase();
+    //             if (this.state.phaseNumber === 1) {
+    //                 if (localStorage.getItem('username') === this.state.activePlayer) {
+    //                     this.getMysteryWord();
+    //                     this.getCluePlayers();
+    //
+    //                     this.getPlayers();
+    //                     this.getCardAmount();
+    //                     this.getScores();
+    //                     this.getCard();
+    //
+    //                     this.getPhase();
+    //                 }
+    //                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
+    //                     this.getMysteryWord();
+    //                     this.getCluePlayers();
+    //
+    //                     this.getPlayers();
+    //                     this.getCardAmount();
+    //                     this.getScores();
+    //                     this.getCard();
+    //
+    //                     this.getPhase();
+    //                 }
+    //             } else if (this.state.phaseNumber === 2) {
+    //                 if (localStorage.getItem('username') === this.state.activePlayer) {
+    //                     this.getCluePlayers();
+    //                     this.getMysteryWord();
+    //
+    //                     this.getPlayers();
+    //                     this.getCard();
+    //                     this.getCardAmount();
+    //                     this.getScores();
+    //
+    //                     this.getPhase();
+    //                 }
+    //                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
+    //                     this.getCluePlayers();
+    //                     this.getMysteryWord();
+    //
+    //                     this.getPlayers();
+    //                     this.getCard();
+    //                     this.getCardAmount();
+    //                     this.getScores();
+    //
+    //                     this.getPhase();
+    //                 }
+    //             } else if (this.state.phaseNumber === 3) {
+    //                 if (localStorage.getItem('username') === this.state.activePlayer) {
+    //                     this.getValidClues();
+    //                     this.getCluePlayers();
+    //                     this.getGuess();
+    //                     this.getMysteryWord();
+    //
+    //                     this.getPlayers();
+    //                     this.getCardAmount();
+    //                     this.getScores();
+    //
+    //                     this.getPhase();
+    //                 }
+    //                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
+    //                     this.getMysteryWord();
+    //                     this.getValidClues();
+    //                     this.getCluePlayers();
+    //                     this.getGuess();
+    //
+    //                     this.getPlayers();
+    //                     this.getCardAmount();
+    //                     this.getScores();
+    //
+    //                     this.getPhase();
+    //                 }
+    //             } else if (this.state.phaseNumber === 4) {
+    //                 this.getMysteryWord();
+    //                 this.getGuess();
+    //                 this.getCluePlayers();
+    //                 this.getValidClues();
+    //
+    //                 this.getPlayers();
+    //                 this.getCardAmount();
+    //                 this.getScores();
+    //
+    //                 this.getPhase();
+    //             } else {
+    //                 alert("The phase number is not in the range from 1 to 4!")
+    //             }
+    //         }
+    //     } catch (error) {
+    //         alert(`Something went wrong during the polling process!`);
+    //         console.log('Error in handlePolling()', handleError(error))
+    //     }
+    // };
+
     handlePolling = async () => {
         try {
             if (!this.state.gameHasEnded) {
                 this.updatePhase();
                 if (this.state.phaseNumber === 1) {
-                    if (localStorage.getItem('username') === this.state.activePlayer) {
-                        this.getMysteryWord();
-                        this.getCluePlayers();
+                    this.getMysteryWord();
+                    this.getCluePlayers();
 
-                        this.getPlayers();
-                        this.getCardAmount();
-                        this.getScores();
-                        this.getCard();
+                    this.getPlayers();
+                    this.getCardAmount();
+                    this.getScores();
+                    this.getCard();
 
-                        this.getPhase();
-                    }
-                    if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                        this.getMysteryWord();
-                        this.getCluePlayers();
-
-                        this.getPlayers();
-                        this.getCardAmount();
-                        this.getScores();
-                        this.getCard();
-
-                        this.getPhase();
-                    }
+                    this.getPhase();
                 } else if (this.state.phaseNumber === 2) {
-                    if (localStorage.getItem('username') === this.state.activePlayer) {
-                        this.getCluePlayers();
-                        this.getMysteryWord();
+                    this.getCluePlayers();
+                    this.getMysteryWord();
 
-                        this.getPlayers();
-                        this.getCard();
-                        this.getCardAmount();
-                        this.getScores();
+                    this.getPlayers();
+                    this.getCard();
+                    this.getCardAmount();
+                    this.getScores();
 
-                        this.getPhase();
-                    }
-                    if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                        this.getCluePlayers();
-                        this.getMysteryWord();
-
-                        this.getPlayers();
-                        this.getCard();
-                        this.getCardAmount();
-                        this.getScores();
-
-                        this.getPhase();
-                    }
+                    this.getPhase();
                 } else if (this.state.phaseNumber === 3) {
-                    if (localStorage.getItem('username') === this.state.activePlayer) {
-                        this.getValidClues();
-                        this.getCluePlayers();
-                        this.getGuess();
-                        this.getMysteryWord();
+                    this.getValidClues();
+                    this.getCluePlayers();
+                    this.getGuess();
+                    this.getMysteryWord();
 
-                        this.getPlayers();
-                        this.getCardAmount();
-                        this.getScores();
+                    this.getPlayers();
+                    this.getCardAmount();
+                    this.getScores();
 
-                        this.getPhase();
-                    }
-                    if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-                        this.getMysteryWord();
-                        this.getValidClues();
-                        this.getCluePlayers();
-                        this.getGuess();
-
-                        this.getPlayers();
-                        this.getCardAmount();
-                        this.getScores();
-
-                        this.getPhase();
-                    }
+                    this.getPhase();
                 } else if (this.state.phaseNumber === 4) {
                     this.getMysteryWord();
                     this.getGuess();
