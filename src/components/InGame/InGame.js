@@ -181,9 +181,10 @@ class InGame extends React.Component {
             const response = await api.get('/games/' + this.props.match.params.id + '/phases');
 
             if (response.status === 200) {
-                // this.setState({
-                //     phaseNumber: response.data.phaseNumber
-                // });
+                this.setState({
+                    phaseNumber: response.data.phaseNumber,
+                    timer: response.data.timeStart
+                });
             }
 
             console.log('DATA',response.data);
@@ -948,106 +949,13 @@ class InGame extends React.Component {
 
     /** This method makes sure that a player's page is updated correctly based on the role of the player (active
      * or passive player) and the phase number (between 1 and 4). */
-    // handlePolling = async () => {
-    //     try {
-    //         if (!this.state.gameHasEnded) {
-    //             this.updatePhase();
-    //             if (this.state.phaseNumber === 1) {
-    //                 if (localStorage.getItem('username') === this.state.activePlayer) {
-    //                     this.getMysteryWord();
-    //                     this.getCluePlayers();
-    //
-    //                     this.getPlayers();
-    //                     this.getCardAmount();
-    //                     this.getScores();
-    //                     this.getCard();
-    //
-    //                     this.getPhase();
-    //                 }
-    //                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-    //                     this.getMysteryWord();
-    //                     this.getCluePlayers();
-    //
-    //                     this.getPlayers();
-    //                     this.getCardAmount();
-    //                     this.getScores();
-    //                     this.getCard();
-    //
-    //                     this.getPhase();
-    //                 }
-    //             } else if (this.state.phaseNumber === 2) {
-    //                 if (localStorage.getItem('username') === this.state.activePlayer) {
-    //                     this.getCluePlayers();
-    //                     this.getMysteryWord();
-    //
-    //                     this.getPlayers();
-    //                     this.getCard();
-    //                     this.getCardAmount();
-    //                     this.getScores();
-    //
-    //                     this.getPhase();
-    //                 }
-    //                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-    //                     this.getCluePlayers();
-    //                     this.getMysteryWord();
-    //
-    //                     this.getPlayers();
-    //                     this.getCard();
-    //                     this.getCardAmount();
-    //                     this.getScores();
-    //
-    //                     this.getPhase();
-    //                 }
-    //             } else if (this.state.phaseNumber === 3) {
-    //                 if (localStorage.getItem('username') === this.state.activePlayer) {
-    //                     this.getValidClues();
-    //                     this.getCluePlayers();
-    //                     this.getGuess();
-    //                     this.getMysteryWord();
-    //
-    //                     this.getPlayers();
-    //                     this.getCardAmount();
-    //                     this.getScores();
-    //
-    //                     this.getPhase();
-    //                 }
-    //                 if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
-    //                     this.getMysteryWord();
-    //                     this.getValidClues();
-    //                     this.getCluePlayers();
-    //                     this.getGuess();
-    //
-    //                     this.getPlayers();
-    //                     this.getCardAmount();
-    //                     this.getScores();
-    //
-    //                     this.getPhase();
-    //                 }
-    //             } else if (this.state.phaseNumber === 4) {
-    //                 this.getMysteryWord();
-    //                 this.getGuess();
-    //                 this.getCluePlayers();
-    //                 this.getValidClues();
-    //
-    //                 this.getPlayers();
-    //                 this.getCardAmount();
-    //                 this.getScores();
-    //
-    //                 this.getPhase();
-    //             } else {
-    //                 alert("The phase number is not in the range from 1 to 4!")
-    //             }
-    //         }
-    //     } catch (error) {
-    //         alert(`Something went wrong during the polling process!`);
-    //         console.log('Error in handlePolling()', handleError(error))
-    //     }
-    // };
-
     handlePolling = async () => {
         try {
             if (!this.state.gameHasEnded) {
                 if(this.state.pageRefreshed){
+
+                    this.getPhase();
+                    this.updatePhaseHUD(this.state.phaseNumber)
 
                     this.setState({
                         pageRefreshed: false
@@ -1074,6 +982,8 @@ class InGame extends React.Component {
                     this.getCardAmount();
                     this.getScores();
 
+                    console.log("mystWord2", this.state.mysteryWordId);
+
                 } else if (this.state.phaseNumber === 3) {
                     this.getValidClues();
                     this.getCluePlayers();
@@ -1083,6 +993,9 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getCardAmount();
                     this.getScores();
+                    this.getCard();
+
+                    console.log("mystWord3", this.state.mysteryWordId);
 
                 } else if (this.state.phaseNumber === 4) {
                     this.getMysteryWord();
@@ -1093,6 +1006,7 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getCardAmount();
                     this.getScores();
+                    // this.getCard();
 
                 } else {
                     alert("The phase number is not in the range from 1 to 4!")
@@ -1115,9 +1029,6 @@ class InGame extends React.Component {
         try {
 
             this.getPlayers();
-            console.log("lol",this.state.players);
-            console.log("lol",this.state.passivePlayers);
-            console.log("lol",this.state.activePlayer);
             this.getPhase();
 
         } catch (error) {
