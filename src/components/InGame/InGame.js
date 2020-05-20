@@ -158,7 +158,8 @@ class InGame extends React.Component {
         this.deleteGame = this.deleteGame.bind(this);
     }
 
-    async isStillAlive() {
+
+    isStillAlive = async () => {
         try {
             const requestBody = JSON.stringify({
                 playerToken: localStorage.getItem('token')
@@ -169,7 +170,7 @@ class InGame extends React.Component {
             console.log('ALIVE',response);
 
         } catch(error) {
-            console.log("something wrong with life");
+            console.log("something wrong with life",error);
         }
     }
 
@@ -1068,7 +1069,7 @@ class InGame extends React.Component {
 
     stillAlive = async () => {
         try {
-            await api.put('/games/' + this.state.activeGameId + '/phases', localStorage.getItem('token'));
+            await api.put('/games/' + this.state.gameId + '/phases', localStorage.getItem('token'));
         } catch (error) {
             console.log(console.log('Error in stillAlive()', handleError(error)))
         }

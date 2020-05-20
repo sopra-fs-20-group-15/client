@@ -53,7 +53,7 @@ const ChatMessagesContainer = styled.div`
   height: 290px;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding-top: 12px;
+  padding-top: 25px;
 `;
 
 const ChatMessage = styled.div`
