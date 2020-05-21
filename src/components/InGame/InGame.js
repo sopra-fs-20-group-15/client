@@ -200,10 +200,6 @@ class InGame extends React.Component {
         let goneSeconds = ((newTime - startTime) - goneMSeconds)/1000; // gets gone seconds
         let remainingSeconds = this.state.nextTimer[this.state.phaseNumber-1]-goneSeconds;
 
-        console.log("MS",goneMSeconds);
-        console.log("S",goneSeconds);
-        console.log("RS",remainingSeconds);
-
         return remainingSeconds;
     }
 
@@ -240,6 +236,8 @@ class InGame extends React.Component {
                 setTimeout(() => localStorage.removeItem('GameGuard'), 16000);
             } else {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
+                    this.resetMysteryWord();
+                    this.resetMysteryWordId();
                     this.initializeTurn();
                 }
             }
@@ -346,19 +344,19 @@ class InGame extends React.Component {
     }
 
     async resetMysteryWord() {
-        if (this.state.phaseNumber === 4) {
+        // if (this.state.phaseNumber === 4) {
             this.setState({
                 mysteryWord: "",
             })
-        }
+        // }
     }
 
     async resetMysteryWordId() {
-        if (this.state.phaseNumber === 4) {
+        // if (this.state.phaseNumber === 4) {
             this.setState({
                 mysteryWordId: null
             })
-        }
+        // }
     }
 
     async determineMysteryWordId() {
@@ -373,9 +371,6 @@ class InGame extends React.Component {
 
     async getMysteryWord() {
         try {
-            console.log('phase', this.state.phaseNumber);
-            console.log('mw', this.state.mysteryWord);
-            console.log('mw id', this.state.mysteryWordId);
             const response = await api.get('/games/' + this.state.gameId + "/mysteryWord/" + localStorage.getItem('token'));
             if (response.status === 200) {
                 this.setState({
@@ -389,12 +384,17 @@ class InGame extends React.Component {
                 this.crossOutWords(this.state.mysteryWordId);
             }
 
-            this.resetMysteryWord();
-            this.resetMysteryWordId()
+            if (this.state.phaseNumber == 4) {
+                this.resetMysteryWord();
+                this.resetMysteryWordId();
+            }
+
         } catch (error) {
             console.log('Error in getMysteryWord', handleError(error));
-            this.resetMysteryWord();
-            this.resetMysteryWordId()
+            if (this.state.phaseNumber == 4) {
+                this.resetMysteryWord();
+                this.resetMysteryWordId();
+            }
         }
     }
 
@@ -972,8 +972,8 @@ class InGame extends React.Component {
         try {
             if (!this.state.gameHasEnded) {
                 if(this.state.pageRefreshed){
-                    // this.getPhase();
-                    // this.updatePhaseHUD(this.state.phaseNumber);
+                //     this.getPhase();
+                //     this.updatePhaseHUD(this.state.phaseNumber);
                     this.setState({
                         pageRefreshed: false
                     });
@@ -1009,7 +1009,7 @@ class InGame extends React.Component {
                     this.getScores();
                     this.getCard();
 
-                    console.log("mystWord3", this.state.mysteryWordId);
+                    console.log("card", this.state.currentCard);
 
                 } else if (this.state.phaseNumber === 4) {
                     this.getMysteryWord();
@@ -1020,7 +1020,7 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getCardAmount();
                     this.getScores();
-                    // this.getCard();
+                    this.getCard();
 
                 } else {
                     alert("The phase number is not in the range from 1 to 4!")
