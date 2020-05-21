@@ -768,7 +768,6 @@ class InGame extends React.Component {
         }
     }
 
-
     playCorrectGuessAudio() {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/cheering.wav');
         audio.play();
@@ -778,7 +777,6 @@ class InGame extends React.Component {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/mario_06.wav');
         audio.play();
     }
-
 
     displayGuess() {
         /**displays guess in phase 4*/
@@ -892,8 +890,8 @@ class InGame extends React.Component {
                     timer: this.state.nextTimer[2],
                     phaseNumber: 3
                 });
-                this.unsignalSubmission();
             }
+            this.unsignalSubmission();
             this.updatePhaseHUD(3);
         }
         /** Only Phase 2 has always a chosen Mystery Word */
@@ -972,8 +970,6 @@ class InGame extends React.Component {
         try {
             if (!this.state.gameHasEnded) {
                 if(this.state.pageRefreshed){
-                //     this.getPhase();
-                //     this.updatePhaseHUD(this.state.phaseNumber);
                     this.setState({
                         pageRefreshed: false
                     });
@@ -1008,8 +1004,6 @@ class InGame extends React.Component {
                     this.getCardAmount();
                     this.getScores();
                     this.getCard();
-
-                    console.log("card", this.state.currentCard);
 
                 } else if (this.state.phaseNumber === 4) {
                     this.getMysteryWord();
