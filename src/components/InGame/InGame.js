@@ -976,6 +976,7 @@ class InGame extends React.Component {
         try {
             if (!this.state.gameHasEnded) {
                 if(this.state.pageRefreshed){
+                    this.getCard();
                     this.setState({
                         pageRefreshed: false
                     });
@@ -1020,7 +1021,7 @@ class InGame extends React.Component {
                     this.getPlayers();
                     this.getCardAmount();
                     this.getScores();
-                    this.getCard();
+                    // this.getCard();
 
                 } else {
                     alert("The phase number is not in the range from 1 to 4!")
