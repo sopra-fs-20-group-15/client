@@ -119,13 +119,14 @@ class InGame extends React.Component {
             clues: [],
             guess: "",
             validGuess: false,
-            timer: 30,
+            timer: 60,
             remainingCards: 13,
             guessedCards: [0, 0, 0, 0, 0, 0, 0],
             scores: [0, 0, 0, 0, 0, 0, 0],
             round: 1,
             phaseNumber: 1,
             phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
+            nextTimer:[30, 50, 60, 10],
             pageRefreshed: true,
             player1Input: null,
             player2Input: null,
@@ -148,7 +149,7 @@ class InGame extends React.Component {
             deleted: false
         };
 
-        this.interval = setInterval(this.handlePolling, 500);
+        this.interval = setInterval(this.handlePolling, 750);
         this.intervalIsStillAlive = setInterval(this.isStillAlive, 2000);
         this.handlePolling = this.handlePolling.bind(this);
         this.determineMysteryWord = this.determineMysteryWord.bind(this);
@@ -179,14 +180,31 @@ class InGame extends React.Component {
 
             if (response.status === 200) {
                 this.setState({
-                    phaseNumber: response.data.phaseNumber,
-                    timer: response.data.timeStart
+                    phaseNumber: response.data.phaseNumber
+                });
+                this.setState({
+                    timer: this.getRemainingTime(response.data.timeStart)
                 });
             }
-
+            this.updatePhaseHUD(this.state.phaseNumber);
+            
         } catch(error) {
             console.log('Error in getPhase()', handleError(error))
         }
+    }
+
+    getRemainingTime(startTime) {
+        let d = new Date();
+        let newTime = d.getTime();
+        let goneMSeconds = (newTime - startTime)%1000;  //gets gone miliseconds
+        let goneSeconds = ((newTime - startTime) - goneMSeconds)/1000; // gets gone seconds
+        let remainingSeconds = this.state.nextTimer[this.state.phaseNumber-1]-goneSeconds;
+
+        console.log("MS",goneMSeconds);
+        console.log("S",goneSeconds);
+        console.log("RS",remainingSeconds);
+
+        return remainingSeconds;
     }
 
     async initializeTurn() {
@@ -852,13 +870,12 @@ class InGame extends React.Component {
     }
 
     updatePhase() {
-        let nextTimer = [30, 50, 60, 10];
         /** Only Phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
             if (this.state.phaseNumber !== 4) {
                 this.setState({
-                    timer: nextTimer[3],
+                    timer: this.state.nextTimer[3],
                     phaseNumber: 4
                 });
                 /*if (this.state.validGuess && this.state.sound) {
@@ -872,7 +889,7 @@ class InGame extends React.Component {
         } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 this.setState({
-                    timer: nextTimer[2],
+                    timer: this.state.nextTimer[2],
                     phaseNumber: 3
                 });
                 this.unsignalSubmission();
@@ -883,7 +900,7 @@ class InGame extends React.Component {
         else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
             if (this.state.phaseNumber !== 2) {
                 this.setState({
-                    timer: nextTimer[1],
+                    timer: this.state.nextTimer[1],
                     phaseNumber: 2
                 });
             }
@@ -893,7 +910,7 @@ class InGame extends React.Component {
         else if (this.state.currentCard !== []) {
             if (this.state.phaseNumber !== 1) {
                 this.setState({
-                    timer: nextTimer[0],
+                    timer: this.state.nextTimer[0],
                     phaseNumber: 1,
                     round: this.state.round + 1
                 });
@@ -955,12 +972,11 @@ class InGame extends React.Component {
         try {
             if (!this.state.gameHasEnded) {
                 if(this.state.pageRefreshed){
-                    this.getPhase();
-                    this.updatePhaseHUD(this.state.phaseNumber)
+                    // this.getPhase();
+                    // this.updatePhaseHUD(this.state.phaseNumber);
                     this.setState({
                         pageRefreshed: false
                     });
-                    this.setState()
                 } else {
                     this.updatePhase();
                 }
