@@ -768,7 +768,7 @@ class InGame extends React.Component {
         }
     }
 
-/*
+
     playCorrectGuessAudio() {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/cheering.wav');
         audio.play();
@@ -778,7 +778,7 @@ class InGame extends React.Component {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/mario_06.wav');
         audio.play();
     }
-*/
+
 
     displayGuess() {
         /**displays guess in phase 4*/
@@ -878,11 +878,11 @@ class InGame extends React.Component {
                     timer: this.state.nextTimer[3],
                     phaseNumber: 4
                 });
-                /*if (this.state.validGuess && this.state.sound) {
+                if (this.state.validGuess && this.state.sound) {
                     this.playCorrectGuessAudio();
                 } else if (this.state.sound) {
                     this.playWrongGuessAudio();
-                }*/
+                }
             }
             this.updatePhaseHUD(4);
             /** Is Phase 3 when all Players gave an Clue */
