@@ -81,21 +81,11 @@ const LeaveGameButtonContainer = styled.div`
 `;
 
 function array_move(array, oldIndex, newIndex) {
-    let elementToMove = array.splice(oldIndex, 1)[0];
-    array.splice(newIndex, 0, elementToMove);
+    array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
     return array;
 }
 
 
-/**
- * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
- * You should have a class (instead of a functional component) when:
- * - You need an internal state that cannot be achieved via props from other parent components
- * - You fetch data from the server (e.g., in componentDidMount())
- * - You want to access the DOM via Refs
- * https://reactjs.org/docs/react-component.html
- * @Class
- */
 class InGame extends React.Component {
     /**
      * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
@@ -158,6 +148,7 @@ class InGame extends React.Component {
         this.gameHasEnded = this.gameHasEnded.bind(this);
         this.initializeTurn = this.initializeTurn.bind(this);
         this.deleteGame = this.deleteGame.bind(this);
+        this.keyPressed = this.keyPressed.bind(this);
     }
 
     isStillAlive = async () => {
@@ -212,7 +203,6 @@ class InGame extends React.Component {
             await api.put('/games/' + this.state.gameId + '/initializations', requestBody);
 
         } catch (error) {
-            alert(`Something went wrong while initializing the turn!`);
             console.log('Error in initializeTurn()', handleError(error))
         }
     }
@@ -312,30 +302,22 @@ class InGame extends React.Component {
         try {
             if (localStorage.getItem('username') === this.state.activePlayer) {
                 if (this.state.phaseNumber === 1) {
-                    if (1 <= wordId && wordId <= 5) {
-                        const requestBody = JSON.stringify({
-                            wordId: wordId,
-                            playerToken: localStorage.getItem('token')
-                        });
+                    const requestBody = JSON.stringify({
+                        wordId: wordId,
+                        playerToken: localStorage.getItem('token')
+                    });
 
-                        this.setState({
-                            mysteryWord: this.state.currentCard[wordId - 1],
-                            mysteryWordId: wordId
-                        });
+                    this.setState({
+                        mysteryWord: this.state.currentCard[wordId - 1],
+                        mysteryWordId: wordId
+                    });
 
-                        await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
+                    await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
-                        this.crossOutWords(wordId);
-
-                    } else {
-                        alert('You have to enter a number between one and five!')
-                    }
+                    this.crossOutWords(wordId);
                 }
             }
         } catch (error) {
-            if (error.response.status !== 500) {
-                alert(`Something went wrong while determining the Mystery Word!`);
-            }
             console.log('Error in determineMysteryWord()', handleError(error))
         }
     }
@@ -365,15 +347,6 @@ class InGame extends React.Component {
         // }
     }
 
-    async determineMysteryWordId() {
-        for (let i = 0; i < this.state.currentCard.length; i++) {
-            if (this.state.mysteryWord && this.state.mysteryWord === this.state.currentCard[i]) {
-                this.setState({
-                    mysteryWordId: i + 1
-                });
-            }
-        }
-    }
 
     async getMysteryWord() {
         try {
@@ -390,7 +363,7 @@ class InGame extends React.Component {
                 this.crossOutWords(this.state.mysteryWordId);
             }
 
-            if (this.state.phaseNumber == 4) {
+            if (this.state.phaseNumber === 4) {
                 this.resetMysteryWord();
                 this.resetMysteryWordId();
             }
@@ -426,16 +399,11 @@ class InGame extends React.Component {
                     } else {
                         alert('Your clue has to consist of exactly one word!')
                     }
-                } else {
-                    alert('You have already given a clue!')
                 }
             } else {
                 // alert('Only passive players can give clues!')
             }
         } catch (error) {
-            if (error.response.status !== 500 && error.response.status !== 401) {
-                alert(`Something went wrong while trying to give a clue!`);
-            }
             console.log('Error in giveClue()', handleError(error))
         }
     }
@@ -450,15 +418,11 @@ class InGame extends React.Component {
                 });
             }
 
-            /** Making sure that the clue of the person who plays is also being displayed. This has
-             * to be done separately since the player itself is not in the clonePlayers list. */
             this.displayOwnClue();
 
-            /** display clues of all players*/
             this.displayCluesOfOthers();
 
         } catch (error) {
-            alert(`Something went wrong while getting the valid clues!`);
             console.log('Error in getValidClues', handleError(error))
         }
     }
@@ -520,9 +484,6 @@ class InGame extends React.Component {
 
             }
         } catch (error) {
-            if (error.response.status !== 500) {
-                alert(`Something went wrong while giving the guess!`);
-            }
             console.log('Error in setGuess()', handleError(error))
         }
     }
@@ -688,9 +649,6 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            if (error.response.status !== 204) {
-                alert(`Something went wrong while getting the current deck size!`);
-            }
             console.log('Error in getCardAmount()', handleError(error))
         }
     }
@@ -716,9 +674,6 @@ class InGame extends React.Component {
                 });
             }
         } catch (error) {
-            if (error.response.status !== 204) {
-                alert(`Something went wrong while trying to get the players and their clues!`);
-            }
             console.log('Error in getCluePlayers()', handleError(error))
         }
     }
@@ -759,10 +714,10 @@ class InGame extends React.Component {
                 }
 
             } else {
-                alert("You can only leave the Game in the forth Phase (Word Reveal)!");
+                alert("You can only leave the game in the forth phase ('Word Reveal')!");
             }
         } catch(error) {
-            alert("Something went wrong while leaving the Game");
+            console.log('Error in leaveGame()', handleError(error))
         }
     }
 
@@ -834,8 +789,6 @@ class InGame extends React.Component {
                     this.giveClue(input);
                 }
             }
-        } else {
-            alert('You are not allowed to press other peoples buttons!');
         }
     }
 
@@ -1028,7 +981,6 @@ class InGame extends React.Component {
                 }
             }
         } catch (error) {
-            alert(`Something went wrong during the polling process!`);
             console.log('Error in handlePolling()', handleError(error))
         }
     };
@@ -1045,10 +997,12 @@ class InGame extends React.Component {
 
             this.getPlayers();
             this.getPhase();
-            setTimeout(() => this.deleteGameSetUp(), 5000)
+            setTimeout(() => this.deleteGameSetUp(), 5000);
+            console.log('order 1', this.playersWithoutUser(["1", "2", "3", "4", "5", "6", "7"]));
+            console.log('order 2', this.playersWithoutUser(["1", "2", "3", "4", "5"]));
+            console.log('order 3', this.playersWithoutUser(["1", "2", "3"]))
 
         } catch (error) {
-            alert(`Something went wrong while fetching the players!`);
             console.log('Error in componentDidMount', handleError(error))
         }
     }
@@ -1058,13 +1012,22 @@ class InGame extends React.Component {
         clearInterval(this.intervalIsStillAlive);
     }
 
+    keyPressed(e) {
+        if (e.keyCode === 13) {
+            this.handleInput(localStorage.getItem('username'), this.state.player1Input);
+            this.setState({
+                chatMessage: "",
+                player1input: null
+            })
+        }
+    }
+
     async playerOrder(players) {
-        let clonePlayers = [];
         if (players.length >= 3) {
-            clonePlayers = array_move(players, 2, 0);
+            array_move(players, 2, 0);
         }
         if (players.length >= 5) {
-            array_move(clonePlayers, 4, 0)
+            array_move(players, 4, 0)
         }
         return players
     }
@@ -1075,8 +1038,8 @@ class InGame extends React.Component {
             clonePlayers.push(players[i])
         }
 
-        for (let i = 0; i<players.indexOf(localStorage.getItem('username')); i++) {
-            clonePlayers.push(players[i])
+        for (let j = 0; j<players.indexOf(localStorage.getItem('username')); j++) {
+            clonePlayers.push(players[j])
         }
 
         this.playerOrder(clonePlayers);
@@ -1256,7 +1219,7 @@ class InGame extends React.Component {
                                             <Input placeholder="Enter here.." onChange=
                                                 {e => {
                                                     this.handleInputChange('player1Input', e.target.value);
-                                                }}/>
+                                                }} onKeyDown={this.keyPressed}/>
                                         ) : (
                                             (this.state.phaseNumber === 1) ? (
                                                     (localStorage.getItem('username') !== this.state.activePlayer ? <Output> Wait for phase 2! </Output> : <Output> Click on a word! </Output>)
