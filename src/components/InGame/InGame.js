@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, {keyframes} from 'styled-components';
+import styled from 'styled-components';
 import {api, handleError} from '../../helpers/api';
 import {withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
@@ -30,6 +30,8 @@ import {
 } from "../../views/design/InGame/PlayerUI";
 import {LogoutButton} from "../../views/design/Button";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
+import MuteIcon from '../../views/pictures/MuteIcon.png';
+import SoundIcon from '../../views/pictures/SoundIcon.png';
 import PlayerComponent from "../../views/PlayerComponent";
 import {Button} from "../../views/design/Button";
 import EasterEggs from "../../views/EasterEggs";
@@ -38,9 +40,10 @@ import RoundMessageComponent from "../../roundMessage/RoundMessageComponent";
 
 const SoundButton = styled.div`
   position: absolute;
-  top: 650px;
-  display: flex;
-  margin-top: 20px;
+  width: 100px;
+  height: 100px;
+  bottom: 1.5%;
+  left: 1%;
 `;
 
 const DrawCard = styled.div`
@@ -96,7 +99,7 @@ class InGame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sound: true,
+            soundOn: true,
             gameId: null,
             currentCard: [],
             mysteryWordId: null,
@@ -109,14 +112,14 @@ class InGame extends React.Component {
             clues: [],
             guess: "",
             validGuess: false,
-            timer: 60,
+            timer: 3000,
             remainingCards: 13,
             guessedCards: [0, 0, 0, 0, 0, 0, 0],
             scores: [0, 0, 0, 0, 0, 0, 0],
             round: 1,
             phaseNumber: 1,
             phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
-            nextTimer:[30, 50, 60, 10],
+            nextTimer:[3000, 50, 60, 10],
             pageRefreshed: true,
             player1Input: null,
             player2Input: null,
@@ -270,7 +273,6 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            console.log('setup id', localStorage.getItem('gameSetUpId'));
             const response = await api.delete('/gameSetUps/' + localStorage.getItem('gameSetUpId'), {data: requestBody});
             localStorage.removeItem('gameSetUpId');
 
@@ -721,11 +723,11 @@ class InGame extends React.Component {
         }
     }
 
-    turnOffandOnSound() {
-        if (this.state.sound) {
-        this.setState({sound: false});
+    turnSoundOnAndOff() {
+        if (this.state.soundOn) {
+        this.setState({soundOn: false});
         }
-        else {this.setState({sound: true}) ;
+        else {this.setState({soundOn: true}) ;
         }
     }
 
@@ -835,9 +837,9 @@ class InGame extends React.Component {
                     timer: this.state.nextTimer[3],
                     phaseNumber: 4
                 });
-                if (this.state.validGuess && this.state.sound) {
+                if (this.state.validGuess && this.state.soundOn) {
                     this.playCorrectGuessAudio();
-                } else if (this.state.sound) {
+                } else if (this.state.soundOn) {
                     this.playWrongGuessAudio();
                 }
             }
@@ -998,9 +1000,6 @@ class InGame extends React.Component {
             this.getPlayers();
             this.getPhase();
             setTimeout(() => this.deleteGameSetUp(), 5000);
-            console.log('order 1', this.playersWithoutUser(["1", "2", "3", "4", "5", "6", "7"]));
-            console.log('order 2', this.playersWithoutUser(["1", "2", "3", "4", "5"]));
-            console.log('order 3', this.playersWithoutUser(["1", "2", "3"]))
 
         } catch (error) {
             console.log('Error in componentDidMount', handleError(error))
@@ -1053,14 +1052,11 @@ class InGame extends React.Component {
                 <RoundMessageComponent activePlayer={this.state.activePlayer} passivePlayers={this.state.passivePlayers}
                 phaseNumber={this.state.phaseNumber} remainingCards={this.state.remainingCards}/>
                 <EasterEggs/>
-                <SoundButton>
-                    <Button
-                        width="50%"
-                        onClick={() => {
-                            this.turnOffandOnSound();
-                        }}>
-                        (This a a sound icon)
-                    </Button>
+                <SoundButton style={{cursor: "pointer"}} onClick={() => {
+                    this.turnSoundOnAndOff();
+                }}>
+                    <img src={SoundIcon} alt={"Mute Button"} style={{position: "relative", left: "20%", top: "20%"}}/>
+                    <img src={MuteIcon} alt={"Mute Button"} style={{position: "absolute", left: "0%", display: (this.state.soundOn ? "none" : "inline")}}/>
                 </SoundButton>
                 <EndGameContainer id={"end"}>
                     <GameOver> Well played! </GameOver>
@@ -1080,7 +1076,7 @@ class InGame extends React.Component {
                     <Timer seconds={this.state.timer} phaseNumber={this.state.phaseNumber}
                            determineMysteryWord={this.determineMysteryWord} round={this.state.round}
                            giveClue={this.giveClue} setGuess={this.setGuess} gameHasEnded={this.gameHasEnded}
-                           gameId={this.state.gameId} mysteryWord={this.state.mysteryWord}/>
+                           gameId={this.state.gameId} mysteryWord={this.state.mysteryWord} soundOn={this.state.soundOn}/>
                     <Phase>
                         <PhaseCircle id={"phase1"} style={{left: "26px", backgroundColor: "#FF0000"}}/>
                         <PhaseCircle id={"phase2"} style={{left: "82px"}}/>

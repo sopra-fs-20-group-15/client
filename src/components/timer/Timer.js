@@ -124,7 +124,9 @@ class Timer extends Component {
             }
 
             if (seconds === 6 && this.props.phaseNumber !== 4) {
-                this.playCountdownAudio();
+                if (this.props.soundOn) {
+                    this.playCountdownAudio();
+                }
                 this.setState({
                     countdown: true
                 });
