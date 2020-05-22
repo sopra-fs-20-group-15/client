@@ -72,48 +72,6 @@ export const PhaseMessage2 = styled.div`
     text-align: center;
 `;
 
-export const PhaseMessage3 = styled.div`
-    position: absolute;
-    border: 3px solid black;
-    border-radius: 20px;
-    right: 100%;
-    padding-right: 9px;
-    top: 35%;
-    font-family: Happy Monkey;
-    font-size: 56px;
-    z-index: 2;
-    font-style: italic;
-    animation: ${roundAnimation};
-    width: 40%;
-
-    
-    background: linear-gradient(#FF0000, #FCC812);
-    font-weight: bold;
-    
-    text-align: center;
-`;
-
-export const PhaseMessage4 = styled.div`
-    position: absolute;
-    border: 3px solid black;
-    border-radius: 20px;
-    right: 100%;
-    padding-right: 9px;
-    top: 35%;
-    font-family: Happy Monkey;
-    font-size: 56px;
-    z-index: 2;
-    font-style: italic;
-    animation: ${roundAnimation};
-    width: 40%;
-
-    
-    background: linear-gradient(#FF0000, #FCC812);
-    font-weight: bold;
-    
-    text-align: center;
-`;
-
 function Message(props) {
     const phaseNumber = props.phaseNumber;
     const activePlayer = props.activePlayer;
