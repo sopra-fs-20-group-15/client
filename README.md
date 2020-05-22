@@ -30,13 +30,17 @@ We can split the Client in three components: pre-game, in-game and post-game.
 ### Pre-Game
 The pre-game components handle the process of registering a user account and preparing and joining a game.
 
+####Login/Register
 With the components [Login](\src\components\login\Login.js) and [Register](\src\components\register\Register.js), the 
 User can register an account and log in with it. All functions like registering an account or logging in are handled in 
-the Server while the Client is sending API requests. By logging in, a token is saved in the browser, which is used for 
-guarding the pages after the Login Page. The Guards in the [routeProtectors folder](\src\components\shared\routeProtectors) 
-handle unauthorized access of pages, where it is required that the user is logged in.
+the Server while the Client is sending API requests (Full list of the API request specifications available in the [Materials](https://github.com/sopra-fs-20-group-15/Material) 
+folder in GitHub). By logging in, a token is saved in the browser, which is used for guarding the pages after the Login 
+Page. The Guards in the [routeProtectors folder](\src\components\shared\routeProtectors) handle unauthorized access of 
+pages, where it is required that the user is logged in.
 
-The components [LobbyOverview](\src\components\LobbyOverview\LobbyOverview.js), [CreateGame](\src\components\CreateGame\CreateGame.js) and [Lobby](\src\components\Lobby\Lobby.js)
+####Joining/Creating GameSetUp
+The components [LobbyOverview](\src\components\LobbyOverview\LobbyOverview.js), [CreateGame](\src\components\CreateGame\CreateGame.js) 
+and [Lobby](\src\components\Lobby\Lobby.js) handles everything that is needed, before the actual game can start. 
 
 FORTSETZUNG FOLGT
 
@@ -76,10 +80,29 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 FORTSETZUNG FOLGT
 
 ##Roadmap
-FORTSETZUNG FOLGT
+For any developers wanting to fork this project or contribute to this project by implementing new features, we highly
+ recommend implementing following features:
+ 
+ * Implementing more sound effects or graphical effects to make the game more intuitive.
+ * Adding more personalization options by implementing a profile page that can be edited.
+ * Implementing friend lists and friend request in order to play with friends and invite them into lobbies.
+ * Refactoring [Ingame](/src/components/InGame/InGame.js) so that it becomes more readable and smaller.
+
 
 ##Authors and Acknowledgement
-FORTSETZUNG FOLGT
+Contributors to this project in alphabetical order:
+
+ * Cedeño, Jordan
+ * Eder, Charlotte
+ * Haemmerli, Raphael
+ * Mitiyamulle Arachchige, Kai
+ * Vu, Minh Phuong
+
+Special Thanks to:
+
+ * Scheitlin, Alex (Teaching Assistant, General Development Advisor)
+ * Enis, Peter (Main Beta Tester)
+ * Friends and Family (Further Beta Testers)
 
 ##License
 FORTSETZUNG FOLGT
