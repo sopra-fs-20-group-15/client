@@ -1,9 +1,9 @@
 import React from 'react';
-import styled, {keyframes} from 'styled-components';
+import styled from 'styled-components';
 import {api, handleError} from '../../helpers/api';
 import {withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
-import {GuessedCards, Deck, ActiveCardContainer, Number, Word} from "../../views/design/InGame/CardsUI";
+import {GuessedCards, Deck, ActiveCardContainer, Number, Word, ChooseWord} from "../../views/design/InGame/CardsUI";
 import {
     Game,
     BoardContainer,
@@ -14,7 +14,7 @@ import {
     GameOver,
     Statistics,
     StatisticsContainer,
-    Waiting, RoundMessage
+    Waiting
 } from "../../views/design/InGame/InGameUI";
 import {Phase, PhaseCircle, PhaseMessage} from "../../views/design/InGame/PhaseUI";
 import {
@@ -30,17 +30,19 @@ import {
 } from "../../views/design/InGame/PlayerUI";
 import {LogoutButton} from "../../views/design/Button";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
+import MuteIcon from '../../views/pictures/MuteIcon.png';
+import SoundIcon from '../../views/pictures/SoundIcon.png';
 import PlayerComponent from "../../views/PlayerComponent";
-import {Button} from "../../views/design/Button";
 import EasterEggs from "../../views/EasterEggs";
-import RoundMessageComponent from "../../roundMessage/RoundMessageComponent";
+import PhaseMessageComponent from "../../roundMessage/PhaseMessageComponent";
 
 
 const SoundButton = styled.div`
   position: absolute;
-  top: 650px;
-  display: flex;
-  margin-top: 20px;
+  width: 100px;
+  height: 100px;
+  bottom: 1.5%;
+  left: 1%;
 `;
 
 const DrawCard = styled.div`
@@ -81,21 +83,11 @@ const LeaveGameButtonContainer = styled.div`
 `;
 
 function array_move(array, oldIndex, newIndex) {
-    let elementToMove = array.splice(oldIndex, 1)[0];
-    array.splice(newIndex, 0, elementToMove);
+    array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
     return array;
 }
 
 
-/**
- * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
- * You should have a class (instead of a functional component) when:
- * - You need an internal state that cannot be achieved via props from other parent components
- * - You fetch data from the server (e.g., in componentDidMount())
- * - You want to access the DOM via Refs
- * https://reactjs.org/docs/react-component.html
- * @Class
- */
 class InGame extends React.Component {
     /**
      * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
@@ -106,7 +98,7 @@ class InGame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sound: true,
+            soundOn: true,
             gameId: null,
             currentCard: [],
             mysteryWordId: null,
@@ -126,6 +118,7 @@ class InGame extends React.Component {
             round: 1,
             phaseNumber: 1,
             phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
+            nextTimer:[30, 50, 60, 10],
             pageRefreshed: true,
             player1Input: null,
             player2Input: null,
@@ -148,7 +141,7 @@ class InGame extends React.Component {
             deleted: false
         };
 
-        this.interval = setInterval(this.handlePolling, 500);
+        this.interval = setInterval(this.handlePolling, 750);
         this.intervalIsStillAlive = setInterval(this.isStillAlive, 2000);
         this.handlePolling = this.handlePolling.bind(this);
         this.determineMysteryWord = this.determineMysteryWord.bind(this);
@@ -157,9 +150,10 @@ class InGame extends React.Component {
         this.gameHasEnded = this.gameHasEnded.bind(this);
         this.initializeTurn = this.initializeTurn.bind(this);
         this.deleteGame = this.deleteGame.bind(this);
+        this.keyPressed = this.keyPressed.bind(this);
     }
 
-    isStillAlive = async() => {
+    isStillAlive = async () => {
         try {
             const requestBody = JSON.stringify({
                 playerToken: localStorage.getItem('token')
@@ -179,14 +173,27 @@ class InGame extends React.Component {
 
             if (response.status === 200) {
                 this.setState({
-                    phaseNumber: response.data.phaseNumber,
-                    timer: response.data.timeStart
+                    phaseNumber: response.data.phaseNumber
+                });
+                this.setState({
+                    timer: this.getRemainingTime(response.data.timeStart)
                 });
             }
-
+            this.updatePhaseHUD(this.state.phaseNumber);
+            
         } catch(error) {
             console.log('Error in getPhase()', handleError(error))
         }
+    }
+
+    getRemainingTime(startTime) {
+        let d = new Date();
+        let newTime = d.getTime();
+        let goneMSeconds = (newTime - startTime)%1000;  //gets gone miliseconds
+        let goneSeconds = ((newTime - startTime) - goneMSeconds)/1000; // gets gone seconds
+        let remainingSeconds = this.state.nextTimer[this.state.phaseNumber-1]-goneSeconds;
+
+        return remainingSeconds;
     }
 
     async initializeTurn() {
@@ -198,7 +205,6 @@ class InGame extends React.Component {
             await api.put('/games/' + this.state.gameId + '/initializations', requestBody);
 
         } catch (error) {
-            alert(`Something went wrong while initializing the turn!`);
             console.log('Error in initializeTurn()', handleError(error))
         }
     }
@@ -222,6 +228,8 @@ class InGame extends React.Component {
                 setTimeout(() => localStorage.removeItem('GameGuard'), 16000);
             } else {
                 if (localStorage.getItem('username') === this.state.activePlayer) {
+                    this.resetMysteryWord();
+                    this.resetMysteryWordId();
                     this.initializeTurn();
                 }
             }
@@ -245,6 +253,9 @@ class InGame extends React.Component {
             }
 
             if (!this.state.deleted) {
+                this.setState({
+                    deleted: true
+                });
                 this.props.history.push('/lobbyOverview');
             }
 
@@ -261,8 +272,10 @@ class InGame extends React.Component {
                 playerToken: localStorage.getItem('token')
             });
 
-            await api.delete('/gameSetUps/' + localStorage.getItem('gameSetUpId'), {data: requestBody});
-            localStorage.removeItem('gameSetUpId')
+            const response = await api.delete('/gameSetUps/' + localStorage.getItem('gameSetUpId'), {data: requestBody});
+            localStorage.removeItem('gameSetUpId');
+
+            console.log('response form delete setup', response);
 
         } catch (error) {
             if (error.response.status !== 404) {
@@ -290,30 +303,22 @@ class InGame extends React.Component {
         try {
             if (localStorage.getItem('username') === this.state.activePlayer) {
                 if (this.state.phaseNumber === 1) {
-                    if (1 <= wordId && wordId <= 5) {
-                        const requestBody = JSON.stringify({
-                            wordId: wordId,
-                            playerToken: localStorage.getItem('token')
-                        });
+                    const requestBody = JSON.stringify({
+                        wordId: wordId,
+                        playerToken: localStorage.getItem('token')
+                    });
 
-                        this.setState({
-                            mysteryWord: this.state.currentCard[wordId - 1],
-                            mysteryWordId: wordId
-                        });
+                    this.setState({
+                        mysteryWord: this.state.currentCard[wordId - 1],
+                        mysteryWordId: wordId
+                    });
 
-                        await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
+                    await api.put('/games/' + this.state.gameId + "/mysteryWord", requestBody);
 
-                        this.crossOutWords(wordId);
-
-                    } else {
-                        alert('You have to enter a number between one and five!')
-                    }
+                    this.crossOutWords(wordId);
                 }
             }
         } catch (error) {
-            if (error.response.status !== 500) {
-                alert(`Something went wrong while determining the Mystery Word!`);
-            }
             console.log('Error in determineMysteryWord()', handleError(error))
         }
     }
@@ -328,36 +333,24 @@ class InGame extends React.Component {
     }
 
     async resetMysteryWord() {
-        if (this.state.phaseNumber === 4) {
+        // if (this.state.phaseNumber === 4) {
             this.setState({
                 mysteryWord: "",
             })
-        }
+        // }
     }
 
     async resetMysteryWordId() {
-        if (this.state.phaseNumber === 4) {
+        // if (this.state.phaseNumber === 4) {
             this.setState({
                 mysteryWordId: null
             })
-        }
+        // }
     }
 
-    async determineMysteryWordId() {
-        for (let i = 0; i < this.state.currentCard.length; i++) {
-            if (this.state.mysteryWord && this.state.mysteryWord === this.state.currentCard[i]) {
-                this.setState({
-                    mysteryWordId: i + 1
-                });
-            }
-        }
-    }
 
     async getMysteryWord() {
         try {
-            console.log('phase', this.state.phaseNumber);
-            console.log('mw', this.state.mysteryWord);
-            console.log('mw id', this.state.mysteryWordId);
             const response = await api.get('/games/' + this.state.gameId + "/mysteryWord/" + localStorage.getItem('token'));
             if (response.status === 200) {
                 this.setState({
@@ -371,12 +364,17 @@ class InGame extends React.Component {
                 this.crossOutWords(this.state.mysteryWordId);
             }
 
-            this.resetMysteryWord();
-            this.resetMysteryWordId()
+            if (this.state.phaseNumber === 4) {
+                this.resetMysteryWord();
+                this.resetMysteryWordId();
+            }
+
         } catch (error) {
             console.log('Error in getMysteryWord', handleError(error));
-            this.resetMysteryWord();
-            this.resetMysteryWordId()
+            if (this.state.phaseNumber == 4) {
+                this.resetMysteryWord();
+                this.resetMysteryWordId();
+            }
         }
     }
 
@@ -402,16 +400,11 @@ class InGame extends React.Component {
                     } else {
                         alert('Your clue has to consist of exactly one word!')
                     }
-                } else {
-                    alert('You have already given a clue!')
                 }
             } else {
                 // alert('Only passive players can give clues!')
             }
         } catch (error) {
-            if (error.response.status !== 500 && error.response.status !== 401) {
-                alert(`Something went wrong while trying to give a clue!`);
-            }
             console.log('Error in giveClue()', handleError(error))
         }
     }
@@ -426,15 +419,11 @@ class InGame extends React.Component {
                 });
             }
 
-            /** Making sure that the clue of the person who plays is also being displayed. This has
-             * to be done separately since the player itself is not in the clonePlayers list. */
             this.displayOwnClue();
 
-            /** display clues of all players*/
             this.displayCluesOfOthers();
 
         } catch (error) {
-            alert(`Something went wrong while getting the valid clues!`);
             console.log('Error in getValidClues', handleError(error))
         }
     }
@@ -496,9 +485,6 @@ class InGame extends React.Component {
 
             }
         } catch (error) {
-            if (error.response.status !== 500) {
-                alert(`Something went wrong while giving the guess!`);
-            }
             console.log('Error in setGuess()', handleError(error))
         }
     }
@@ -664,9 +650,6 @@ class InGame extends React.Component {
             }
 
         } catch (error) {
-            if (error.response.status !== 204) {
-                alert(`Something went wrong while getting the current deck size!`);
-            }
             console.log('Error in getCardAmount()', handleError(error))
         }
     }
@@ -692,9 +675,6 @@ class InGame extends React.Component {
                 });
             }
         } catch (error) {
-            if (error.response.status !== 204) {
-                alert(`Something went wrong while trying to get the players and their clues!`);
-            }
             console.log('Error in getCluePlayers()', handleError(error))
         }
     }
@@ -735,22 +715,21 @@ class InGame extends React.Component {
                 }
 
             } else {
-                alert("You can only leave the Game in the forth Phase (Word Reveal)!");
+                alert("You can only leave the game in the forth phase ('Word Reveal')!");
             }
         } catch(error) {
-            alert("Something went wrong while leaving the Game");
+            console.log('Error in leaveGame()', handleError(error))
         }
     }
 
-    turnOffandOnSound() {
-        if (this.state.sound) {
-        this.setState({sound: false});
+    turnSoundOnAndOff() {
+        if (this.state.soundOn) {
+        this.setState({soundOn: false});
         }
-        else {this.setState({sound: true}) ;
+        else {this.setState({soundOn: true}) ;
         }
     }
 
-/*
     playCorrectGuessAudio() {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/cheering.wav');
         audio.play();
@@ -760,7 +739,6 @@ class InGame extends React.Component {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/mario_06.wav');
         audio.play();
     }
-*/
 
     displayGuess() {
         /**displays guess in phase 4*/
@@ -812,8 +790,6 @@ class InGame extends React.Component {
                     this.giveClue(input);
                 }
             }
-        } else {
-            alert('You are not allowed to press other peoples buttons!');
         }
     }
 
@@ -852,38 +828,37 @@ class InGame extends React.Component {
     }
 
     updatePhase() {
-        let nextTimer = [30, 50, 60, 10];
         /** Only Phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
             /** if it is not Phase 4, change to 4 and reset Timer */
             if (this.state.phaseNumber !== 4) {
                 this.setState({
-                    timer: nextTimer[3],
+                    timer: this.state.nextTimer[3],
                     phaseNumber: 4
                 });
-                /*if (this.state.validGuess && this.state.sound) {
+                if (this.state.validGuess && this.state.soundOn) {
                     this.playCorrectGuessAudio();
-                } else if (this.state.sound) {
+                } else if (this.state.soundOn) {
                     this.playWrongGuessAudio();
-                }*/
+                }
             }
             this.updatePhaseHUD(4);
             /** Is Phase 3 when all Players gave an Clue */
         } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 this.setState({
-                    timer: nextTimer[2],
+                    timer: this.state.nextTimer[2],
                     phaseNumber: 3
                 });
-                this.unsignalSubmission();
             }
+            this.unsignalSubmission();
             this.updatePhaseHUD(3);
         }
         /** Only Phase 2 has always a chosen Mystery Word */
         else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
             if (this.state.phaseNumber !== 2) {
                 this.setState({
-                    timer: nextTimer[1],
+                    timer: this.state.nextTimer[1],
                     phaseNumber: 2
                 });
             }
@@ -893,7 +868,7 @@ class InGame extends React.Component {
         else if (this.state.currentCard !== []) {
             if (this.state.phaseNumber !== 1) {
                 this.setState({
-                    timer: nextTimer[0],
+                    timer: this.state.nextTimer[0],
                     phaseNumber: 1,
                     round: this.state.round + 1
                 });
@@ -955,12 +930,10 @@ class InGame extends React.Component {
         try {
             if (!this.state.gameHasEnded) {
                 if(this.state.pageRefreshed){
-                    this.getPhase();
-                    this.updatePhaseHUD(this.state.phaseNumber)
+                    this.getCard();
                     this.setState({
                         pageRefreshed: false
                     });
-                    this.setState()
                 } else {
                     this.updatePhase();
                 }
@@ -993,8 +966,6 @@ class InGame extends React.Component {
                     this.getScores();
                     this.getCard();
 
-                    console.log("mystWord3", this.state.mysteryWordId);
-
                 } else if (this.state.phaseNumber === 4) {
                     this.getMysteryWord();
                     this.getGuess();
@@ -1011,7 +982,6 @@ class InGame extends React.Component {
                 }
             }
         } catch (error) {
-            alert(`Something went wrong during the polling process!`);
             console.log('Error in handlePolling()', handleError(error))
         }
     };
@@ -1028,10 +998,9 @@ class InGame extends React.Component {
 
             this.getPlayers();
             this.getPhase();
-            setTimeout(() => this.deleteGameSetUp(), 5000)
+            setTimeout(() => this.deleteGameSetUp(), 5000);
 
         } catch (error) {
-            alert(`Something went wrong while fetching the players!`);
             console.log('Error in componentDidMount', handleError(error))
         }
     }
@@ -1041,13 +1010,22 @@ class InGame extends React.Component {
         clearInterval(this.intervalIsStillAlive);
     }
 
+    keyPressed(e) {
+        if (e.keyCode === 13) {
+            this.handleInput(localStorage.getItem('username'), this.state.player1Input);
+            this.setState({
+                chatMessage: "",
+                player1input: null
+            })
+        }
+    }
+
     async playerOrder(players) {
-        let clonePlayers = [];
         if (players.length >= 3) {
-            clonePlayers = array_move(players, 2, 0);
+            array_move(players, 2, 0);
         }
         if (players.length >= 5) {
-            array_move(clonePlayers, 4, 0)
+            array_move(players, 4, 0)
         }
         return players
     }
@@ -1058,8 +1036,8 @@ class InGame extends React.Component {
             clonePlayers.push(players[i])
         }
 
-        for (let i = 0; i<players.indexOf(localStorage.getItem('username')); i++) {
-            clonePlayers.push(players[i])
+        for (let j = 0; j<players.indexOf(localStorage.getItem('username')); j++) {
+            clonePlayers.push(players[j])
         }
 
         this.playerOrder(clonePlayers);
@@ -1070,17 +1048,14 @@ class InGame extends React.Component {
     render() {
         return (
             <Game>
-                <RoundMessageComponent activePlayer={this.state.activePlayer} passivePlayers={this.state.passivePlayers}
-                phaseNumber={this.state.phaseNumber} remainingCards={this.state.remainingCards}/>
+                <PhaseMessageComponent activePlayer={this.state.activePlayer} passivePlayers={this.state.passivePlayers}
+                                       phaseNumber={this.state.phaseNumber} remainingCards={this.state.remainingCards}/>
                 <EasterEggs/>
-                <SoundButton>
-                    <Button
-                        width="50%"
-                        onClick={() => {
-                            this.turnOffandOnSound();
-                        }}>
-                        (This a a sound icon)
-                    </Button>
+                <SoundButton style={{cursor: "pointer"}} onClick={() => {
+                    this.turnSoundOnAndOff();
+                }}>
+                    <img src={SoundIcon} alt={"Mute Button"} style={{position: "relative", left: "20%", top: "20%"}}/>
+                    <img src={MuteIcon} alt={"Mute Button"} style={{position: "absolute", left: "0%", display: (this.state.soundOn ? "none" : "inline")}}/>
                 </SoundButton>
                 <EndGameContainer id={"end"}>
                     <GameOver> Well played! </GameOver>
@@ -1100,7 +1075,7 @@ class InGame extends React.Component {
                     <Timer seconds={this.state.timer} phaseNumber={this.state.phaseNumber}
                            determineMysteryWord={this.determineMysteryWord} round={this.state.round}
                            giveClue={this.giveClue} setGuess={this.setGuess} gameHasEnded={this.gameHasEnded}
-                           gameId={this.state.gameId} mysteryWord={this.state.mysteryWord}/>
+                           gameId={this.state.gameId} mysteryWord={this.state.mysteryWord} soundOn={this.state.soundOn}/>
                     <Phase>
                         <PhaseCircle id={"phase1"} style={{left: "26px", backgroundColor: "#FF0000"}}/>
                         <PhaseCircle id={"phase2"} style={{left: "82px"}}/>
@@ -1179,25 +1154,25 @@ class InGame extends React.Component {
                             ) : (
                                 <ActiveCardContainer id={"activeCard"} pulsate={this.state.phaseNumber === 1 && localStorage.getItem('username') === this.state.activePlayer}>
                                     <Number style={{color: "#00CDCD", top: "17.5px"}}> 1. </Number>
-                                    <Word id={"word1"} style={{borderColor: "#00CDCD", top: "17.5px"}}
+                                    <ChooseWord id={"word1"} style={{borderColor: "#00CDCD", top: "17.5px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(1)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(1)}}> ??? </ChooseWord>
                                     <Number style={{color: "#42c202", top: "65px"}}> 2. </Number>
-                                    <Word id={"word2"} style={{borderColor: "#42c202", top: "35px"}}
+                                    <ChooseWord id={"word2"} style={{borderColor: "#42c202", top: "35px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(2)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(2)}}> ??? </ChooseWord>
                                     <Number style={{color: "#db3d3d", top: "112.5px"}}> 3. </Number>
-                                    <Word id={"word3"} style={{borderColor: "#db3d3d", top: "52.5px"}}
+                                    <ChooseWord id={"word3"} style={{borderColor: "#db3d3d", top: "52.5px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(3)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(3)}}> ??? </ChooseWord>
                                     <Number style={{color: "#fc9229", top: "160px"}}> 4. </Number>
-                                    <Word id={"word4"} style={{borderColor: "#fc9229", top: "70px"}}
+                                    <ChooseWord id={"word4"} style={{borderColor: "#fc9229", top: "70px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(4)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(4)}}> ??? </ChooseWord>
                                     <Number style={{color: "#ffe203", top: "207.5px"}}> 5. </Number>
-                                    <Word id={"word5"} style={{borderColor: "#ffe203", top: "87.5px"}}
+                                    <ChooseWord id={"word5"} style={{borderColor: "#ffe203", top: "87.5px"}}
                                           disabled={this.state.phaseNumber !== 1 || localStorage.getItem('username') !== this.state.activePlayer}
-                                          onClick={() => {this.determineMysteryWord(5)}}> ??? </Word>
+                                          onClick={() => {this.determineMysteryWord(5)}}> ??? </ChooseWord>
                                 </ActiveCardContainer>
                             )}
                         </BoardContainer>
@@ -1231,18 +1206,18 @@ class InGame extends React.Component {
                             {localStorage.getItem('username') !== this.state.activePlayer ?
                                 <NameField>1. {localStorage.getItem('username')} </NameField> :
                                 <NameFieldActivePlayer>1. {localStorage.getItem('username')} </NameFieldActivePlayer>}
-                                <InputFieldPlayer disabled={this.state.player1Input || ((this.state.phaseNumber === 1 || this.state.phaseNumber === 3 || this.state.phaseNumber === 4) && localStorage.getItem('username') !== this.state.activePlayer) || ((this.state.phaseNumber === 2 || this.state.phaseNumber === 4) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer && this.state.passivePlayersCluesGiven.includes(localStorage.getItem('username')))}>
+                                <InputFieldPlayer disabled={this.state.player1Input || ((this.state.phaseNumber === 1 || this.state.phaseNumber === 3 || this.state.phaseNumber === 4) && localStorage.getItem('username') !== this.state.activePlayer) || ((this.state.phaseNumber === 1 || this.state.phaseNumber === 2 || this.state.phaseNumber === 4) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer && this.state.passivePlayersCluesGiven.includes(localStorage.getItem('username')))}>
                                     {(this.state.phaseNumber === 3 && this.state.passivePlayers.includes(localStorage.getItem('username'))) || this.state.phaseNumber === 4 ? (
                                         <Output id={"clue1"}></Output>
                                     ) : (
-                                        (((this.state.phaseNumber === 1 || this.state.phaseNumber === 3) && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer)) ? (
+                                        ((this.state.phaseNumber === 3 && localStorage.getItem('username') === this.state.activePlayer) || (this.state.phaseNumber === 2 && localStorage.getItem('username') !== this.state.activePlayer)) ? (
                                             <Input placeholder="Enter here.." onChange=
                                                 {e => {
                                                     this.handleInputChange('player1Input', e.target.value);
-                                                }}/>
+                                                }} onKeyDown={this.keyPressed}/>
                                         ) : (
-                                            (this.state.phaseNumber === 1 && localStorage.getItem('username') !== this.state.activePlayer) ? (
-                                                <Output> Wait for phase 2! </Output>
+                                            (this.state.phaseNumber === 1) ? (
+                                                    (localStorage.getItem('username') !== this.state.activePlayer ? <Output> Wait for phase 2! </Output> : <Output> Click on a word! </Output>)
                                             ) : (
                                                 <Output> Wait for phase 3! </Output>))
                                     )}

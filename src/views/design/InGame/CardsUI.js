@@ -64,6 +64,22 @@ export const Number = styled.div`
 
 export const Word = styled.div`
     position: relative;
+    padding: 5px 0;
+    height: 30px;
+    width: 80%;
+    margin-left: 30px;
+    margin-right: auto;
+    
+    border-style: solid;
+    
+    font-family: Happy Monkey;
+    font-size: 15px;
+    justify-content: center;
+    display: flex;
+`;
+
+export const ChooseWord = styled.div`
+    position: relative;
     &:hover {
     ${props => (props.disabled ? "default" : "transform: scale(1.2)")};
     }

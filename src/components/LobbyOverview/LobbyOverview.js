@@ -344,7 +344,7 @@ class LobbyOverview extends Component {
                         <GridItemTitle> Bots </GridItemTitle>
                         <GridItemTitle> Choose Game </GridItemTitle>
                         <ErrorMessage>
-                            There are no games available at the moment! Why don't you create one yourself?
+                            {(this.state.lobbies !== null ? "There are no games available at the moment! Why don't you create one yourself?" : "")}
                         </ErrorMessage>
                     </GridContainer>
                 ) : (

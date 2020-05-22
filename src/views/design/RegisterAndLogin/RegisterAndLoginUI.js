@@ -32,12 +32,14 @@ export const Form = styled.div`
 `;
 
 export const UsernameInputField = styled.input`
+
   mix-blend-mode: normal;
   border: 1px solid rgba(203, 189, 140, 0.95);
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   &::placeholder {
-    color: rgba(256, 256, 200, 0.3);
+    font-family: Happy Monkey;
+    color: rgba(0, 0, 0, 0.5);
   }
   position: relative;
   left: 0px;
@@ -48,10 +50,11 @@ export const UsernameInputField = styled.input`
   border-radius: 20px;
   margin-bottom: 20px;
   background: rgba(203, 189, 140, 0.95);
-  color: brown;
-  
+  font-family: Happy Monkey;
   top: -2px;
   bottom: 20px; 
+
+
 `;
 
 export const ButtonGroup = styled.div`
@@ -81,7 +84,8 @@ export const PasswordInputField = styled.input`
   box-sizing: border-box;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   &::placeholder {
-    color: rgba(256, 256, 200, 0.3);
+    font-family: Happy Monkey;
+    color: rgba(0, 0, 0, 0.5);
   }
   position: relative;
   left: 0px;
@@ -92,7 +96,6 @@ export const PasswordInputField = styled.input`
   border-radius: 20px;
   margin-bottom: 20px;
   background: rgba(203, 189, 140, 0.95);
-  color: brown;
   
   top: 13px;
   bottom: 20px;

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
-import styled from "styled-components";
-import {Round, TimerContainer} from "../../views/design/InGame/TimerUI";
+import styled, {css, keyframes} from "styled-components";
 
 
 const Seconds = styled.div`
@@ -12,6 +11,53 @@ const Seconds = styled.div`
     margin-right: auto;
     font-family: Happy Monkey;
     font-size: 70px;
+    justify-content: center;
+    display: flex;
+`;
+
+export const pulse = keyframes`
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+`;
+
+export const pulseAnimation = css`
+    ${pulse} 1s infinite;
+`;
+
+export const TimerContainer = styled.div`
+  position: relative;
+  width: 175px;
+  height: 175px;
+  display: inline-block;
+  border-radius: 50%;
+  
+  animation: ${props => (props.countdown ? pulseAnimation : "default")}
+  
+  margin-left: 10px;
+
+  background: #BDAF7E;
+  border: 3px solid #000000;
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.25);
+`;
+
+export const Round = styled.div`
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Happy Monkey;
+    text-decoration: underline;
+    font-size: 28px;
     justify-content: center;
     display: flex;
 `;
@@ -50,16 +96,16 @@ class Timer extends Component {
         } else if (phaseNumber === 4) {
             this.props.gameHasEnded();
         } else {
-            alert('Somehow you have managed to not be in any phase at all...')
+            console.log('Somehow you have managed to not be in any phase at all...')
         }
     }
 
-/*    playCountdownAudio() {
+    playCountdownAudio() {
         let audio = new Audio('http://soundbible.com/mp3/Countdown-Me-728881159.mp3');
         audio.load();
         audio.play();
         setTimeout(() => audio.pause(), 5000)
-    }*/
+    }
 
     async componentDidMount() {
         this.myInterval = setInterval(() => {
@@ -78,7 +124,9 @@ class Timer extends Component {
             }
 
             if (seconds === 6 && this.props.phaseNumber !== 4) {
-                // this.playCountdownAudio();
+                if (this.props.soundOn) {
+                    this.playCountdownAudio();
+                }
                 this.setState({
                     countdown: true
                 });
@@ -94,7 +142,7 @@ class Timer extends Component {
      * Since all phases have a different duration, the state always changes, and therefore (since every state change
      * triggers a re-rendering) the Timer component is re-rendered every time. */
     componentDidUpdate(prevProps) {
-        // conditional statement prevents infinite loop
+        /** Conditional statement prevents infinite loop. */
         if (this.props.seconds !== prevProps.seconds) {
             this.setState({seconds: this.props.seconds});
         }

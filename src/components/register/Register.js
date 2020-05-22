@@ -11,35 +11,16 @@ const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
 };
 
-/**
- * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
- * You should have a class (instead of a functional component) when:
- * - You need an internal state that cannot be achieved via props from other parent components
- * - You fetch data from the server (e.g., in componentDidMount())
- * - You want to access the DOM via Refs
- * https://reactjs.org/docs/react-component.html
- * @Class
- */
 class Register extends React.Component {
-    /**
-     * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
-     * The constructor for a React component is called before it is mounted (rendered).
-     * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
-     * These fields are then handled in the onChange() methods in the resp. InputFields
-     */
     constructor() {
         super();
         this.state = {
             name: null,
             username: null
         };
+        this.keyPressed = this.keyPressed.bind(this);
     }
 
-    /**
-     * HTTP POST request is sent to the backend.
-     * If the request is successful, a new user is returned to the front-end
-     * and its token is stored in the localStorage.
-     */
     async register() {
         try {
             // eslint-disable-next-line
@@ -83,25 +64,24 @@ class Register extends React.Component {
         }
     }
 
-    /**
-     *  Every time the user enters something in the input field, the state gets updated.
-     * @param key (the key of the state for identifying the field that needs to be updated)
-     * @param value (the value that gets assigned to the identified state key)
-     */
     handleInputChange(key, value) {
         // Example: if the key is username, this statement is the equivalent to the following one:
         // this.setState({'username': value});
         this.setState({[key]: value});
     }
 
-    /**
-     * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
-     * Initialization that requires DOM nodes should go here.
-     * If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-     * You may call setState() immediately in componentDidMount().
-     * It will trigger an extra rendering, but it will happen before the browser updates the screen.
-     */
-    componentDidMount() {
+    componentDidMount() {}
+
+    keyPressed(e) {
+        if (e.keyCode === 13) {
+            if (this.state.username && this.state.repeatedPassword && this.state.password) {
+                if (this.state.repeatedPassword === this.state.password) {
+                    this.register();
+                } else {
+                    alert("Passwords do not match!")
+                }
+            }
+        }
     }
 
     render() {
@@ -130,6 +110,7 @@ class Register extends React.Component {
                             onChange={e => {
                                 this.handleInputChange('repeatedPassword', e.target.value);
                             }}
+                            onKeyDown={this.keyPressed}
                         />
                     </Form>
                 </FormContainer>
