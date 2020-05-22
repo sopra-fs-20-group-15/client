@@ -30,7 +30,7 @@ export const roundAnimation = css`
 `;
 
 
-export const RoundMessage1 = styled.div`
+export const PhaseMessage1 = styled.div`
     position: absolute;
     border: 3px solid black;
     border-radius: 20px;
@@ -51,7 +51,7 @@ export const RoundMessage1 = styled.div`
     text-align: center;
 `;
 
-export const RoundMessage2 = styled.div`
+export const PhaseMessage2 = styled.div`
     position: absolute;
     border: 3px solid black;
     border-radius: 20px;
@@ -72,7 +72,7 @@ export const RoundMessage2 = styled.div`
     text-align: center;
 `;
 
-export const RoundMessage3 = styled.div`
+export const PhaseMessage3 = styled.div`
     position: absolute;
     border: 3px solid black;
     border-radius: 20px;
@@ -93,7 +93,7 @@ export const RoundMessage3 = styled.div`
     text-align: center;
 `;
 
-export const RoundMessage4 = styled.div`
+export const PhaseMessage4 = styled.div`
     position: absolute;
     border: 3px solid black;
     border-radius: 20px;
@@ -120,31 +120,38 @@ function Message(props) {
     const remainingCards = props.remainingCards;
     if (phaseNumber === 1) {
         if (activePlayer === localStorage.getItem('username')) {
-            return <RoundMessage1> Click on a word! </RoundMessage1>
+            return <PhaseMessage1> Click on a word! </PhaseMessage1>
         } else {
-            return <RoundMessage1> Wait for next phase! </RoundMessage1>
+            return <PhaseMessage1> Wait for next phase! </PhaseMessage1>
         }
     } else if (phaseNumber === 2) {
         if (activePlayer === localStorage.getItem('username')) {
-            return <RoundMessage2> Wait for next phase! </RoundMessage2>
+            return <PhaseMessage2> Wait for next phase! </PhaseMessage2>
         } else {
-            return <RoundMessage2> Enter a clue! </RoundMessage2>
+            return <PhaseMessage2> Enter a clue! </PhaseMessage2>
         }
     } else if (phaseNumber === 3) {
         if (activePlayer === localStorage.getItem('username')) {
-            return <RoundMessage3> Enter your guess! </RoundMessage3>
+            if (remainingCards === 1) {
+                return <PhaseMessage1> Game over if you guess wrong! </PhaseMessage1>
+            } else {
+                return <PhaseMessage1> Enter your guess! </PhaseMessage1>
+            }
         } else {
-            return <RoundMessage3> Wait for next phase! </RoundMessage3>
+            return <PhaseMessage1> Wait for next phase! </PhaseMessage1>
         }
     } else if (phaseNumber === 4) {
         if (remainingCards === 0) {
-            return <RoundMessage4> Game Over! </RoundMessage4>
+            return <PhaseMessage2> Game Over! </PhaseMessage2>
         }
-        return <RoundMessage4> Wait for next round! </RoundMessage4>
+        if (remainingCards === 1) {
+            return <PhaseMessage2> Only one round left! </PhaseMessage2>
+        }
+        return <PhaseMessage2> Wait for next round! </PhaseMessage2>
     }
 }
 
-class RoundMessageComponent extends Component {
+class PhaseMessageComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -158,7 +165,7 @@ class RoundMessageComponent extends Component {
 
     /** This method makes sure that if the props of the timer change, the state of the timer is changed accordingly.
      * Since all phases have a different duration, the state always changes, and therefore (since every state change
-     * triggers a re-rendering) the RoundMessageComponent component is re-rendered every time. */
+     * triggers a re-rendering) the PhaseMessageComponent component is re-rendered every time. */
     componentDidUpdate(prevProps) {
         if (this.props.phaseNumber !== prevProps.phaseNumber) {
             this.setState({phaseNumber: this.props.phaseNumber});
@@ -173,4 +180,4 @@ class RoundMessageComponent extends Component {
     }
 }
 
-export default withRouter(RoundMessageComponent);
+export default withRouter(PhaseMessageComponent);

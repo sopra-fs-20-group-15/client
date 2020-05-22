@@ -14,7 +14,7 @@ import {
     GameOver,
     Statistics,
     StatisticsContainer,
-    Waiting, RoundMessage
+    Waiting
 } from "../../views/design/InGame/InGameUI";
 import {Phase, PhaseCircle, PhaseMessage} from "../../views/design/InGame/PhaseUI";
 import {
@@ -33,9 +33,8 @@ import ClickIcon from '../../views/pictures/ClickIcon.png'
 import MuteIcon from '../../views/pictures/MuteIcon.png';
 import SoundIcon from '../../views/pictures/SoundIcon.png';
 import PlayerComponent from "../../views/PlayerComponent";
-import {Button} from "../../views/design/Button";
 import EasterEggs from "../../views/EasterEggs";
-import RoundMessageComponent from "../../roundMessage/RoundMessageComponent";
+import PhaseMessageComponent from "../../roundMessage/PhaseMessageComponent";
 
 
 const SoundButton = styled.div`
@@ -1049,8 +1048,8 @@ class InGame extends React.Component {
     render() {
         return (
             <Game>
-                <RoundMessageComponent activePlayer={this.state.activePlayer} passivePlayers={this.state.passivePlayers}
-                phaseNumber={this.state.phaseNumber} remainingCards={this.state.remainingCards}/>
+                <PhaseMessageComponent activePlayer={this.state.activePlayer} passivePlayers={this.state.passivePlayers}
+                                       phaseNumber={this.state.phaseNumber} remainingCards={this.state.remainingCards}/>
                 <EasterEggs/>
                 <SoundButton style={{cursor: "pointer"}} onClick={() => {
                     this.turnSoundOnAndOff();
