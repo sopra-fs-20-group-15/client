@@ -14,7 +14,7 @@ class App extends Component {
             <meta charSet="utf-8" />
             <title>Just One </title>
             <link rel="canonical" href="https://sopra-fs20-group-15-client.herokuapp.com" />
-              <meta name="A fun multiplayer game for 3 to 7 people!"/>
+              <meta property="og:description" content="A fun multiplayer game for 3 to 7 people!" />
               <meta property="og:image" content="./pictures/JustOneLogo.png" />
           </Helmet>
         <AppRouter />
