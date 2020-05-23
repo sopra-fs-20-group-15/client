@@ -2,8 +2,8 @@ import React, {Component, Fragment} from 'react';
 import styled from 'styled-components';
 import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
-import {Button, LogoutButton} from '../../views/design/Button';
-import {GuessedCards,Deck,ActiveCardContainer,Number,Word} from "../../views/design/InGame/CardsUI";
+import {LogoutButton} from '../../views/design/Button';
+import {ChooseWord,ActiveCardContainer,Number,Word} from "../../views/design/InGame/CardsUI";
 import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/InGame/PhaseUI";
 import {
     Player,
@@ -11,7 +11,6 @@ import {
     SignalFieldPlayer,
     Input,
     InputField,
-    Output,
     NameField,
     NameFieldActivePlayer,
     GuessedCardsField,
@@ -19,12 +18,8 @@ import {
 } from "../../views/design/InGame/PlayerUI";
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
-import {HUDContainer} from "../../views/design/InGame/InGameUI";
 
 const Form = styled.div`
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: center;
   
   position: absolute;
   
@@ -80,9 +75,6 @@ const InstructionText = styled.div`
   height: 25px;
   width: 100%;
   
-  // border: 1px solid rgba(0, 0, 0, 1);
-  // box-sizing: border-box;
-  
   font-family: Happy Monkey;
   font-size: 20px;
   font-weight: 500;
@@ -95,7 +87,6 @@ const background = {
 const TopButtonContainer = styled.div`
   position: absolute;
   top: 20px;
-  // right: 15px;
   justify-content: center;
 `;
 
@@ -109,7 +100,7 @@ class Tutorial extends React.Component {
             mysteryWords: ["Apple","Netflix","Chill","Naruto","Ghibli"],
             aliceInput: null,
             bobInput: null,
-            comment: null,
+            comment: "Click on a Word!",
             aliceNumber: 0,
         };
     }
@@ -143,6 +134,16 @@ class Tutorial extends React.Component {
         }
     }
 
+    setMysteryWord(number) {
+        this.updatePhaseHUD(2);
+        this.setState({
+            phaseNumber:2,
+            comment:"Well Done!",
+            mysteryWordId: number
+        });
+        this.updateMysteryWord(number);
+    }
+
     updateRightGuess() {
         let field = document.getElementById("alice");
         field.style.backgroundColor = "#0900ff";
@@ -154,24 +155,12 @@ class Tutorial extends React.Component {
     }
 
     handleInputAlice() {
-        //actions of active player
         if (this.state.phaseNumber === 1) {
-            //determine mystery Word
-            if(1<= this.state.aliceInput && this.state.aliceInput <=5){
-                this.updatePhaseHUD(2);
-                this.setState({
-                    phaseNumber:2,
-                    comment:"Well Done!",
-                    mysteryWordId: this.state.aliceInput
-                });
-                this.updateMysteryWord(this.state.aliceInput);
-            } else {
-                this.setState({comment:"Number is not between 1 and 5!"});
-            }
+            this.setState({comment:"Click on a Word!"});
         }
         else if (this.state.phaseNumber === 3) {
             //guess mystery word
-            if (this.state.aliceInput === this.state.mysteryWords[(this.state.mysteryWordId-1)]){
+            if (this.state.aliceInput.toLowerCase() === this.state.mysteryWords[(this.state.mysteryWordId-1)].toLowerCase()){
                 this.updatePhaseHUD(4);
                 this.setState({phaseNumber:4, comment:"You got it now!", aliceNumber: 1});
                 this.updateRightGuess();
@@ -190,8 +179,11 @@ class Tutorial extends React.Component {
     }
 
     handleInputBob() {
+        if (this.state.phaseNumber === 1) {
+            this.setState({comment:"Click on a Word!"});
+        }
         //actions of passive players
-        if (this.state.phaseNumber === 2) {
+        else if (this.state.phaseNumber === 2) {
             //gives clue
             if (this.state.bobInput !== this.state.mysteryWords[(this.state.mysteryWordId-1)]){
                 this.updatePhaseHUD(3);
@@ -289,17 +281,27 @@ class Tutorial extends React.Component {
                             <PhaseCircle id={"phase4"} style={{left:"194px"}}/>
                             <PhaseMessage> {this.state.phases[this.state.phaseNumber-1]} </PhaseMessage>
                         </Phase>
-                        <ActiveCardContainer id={"activeCard"} style={{position:"absolute", left:"35%", bottom:"15%"}}>
+                        <ActiveCardContainer id={"activeCard"} style={{position:"absolute", left:"35%", bottom:"15%"}} pulsate={this.state.phaseNumber===1}>
                             <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
-                            <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.mysteryWords[0]} </Word>
+                            <ChooseWord id={"word1"} style={{borderColor: "#00CDCD", top: "17.5px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(1)}}> {this.state.mysteryWords[0]} </ChooseWord>
                             <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
-                            <Word id={"word2"} style={{borderColor:"#42c202", top:"35px"}}> {this.state.mysteryWords[1]} </Word>
+                            <ChooseWord id={"word2"} style={{borderColor: "#42c202", top: "35px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(2)}}> {this.state.mysteryWords[1]} </ChooseWord>
                             <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
-                            <Word id={"word3"} style={{borderColor:"#db3d3d", top:"52.5px"}}> {this.state.mysteryWords[2]} </Word>
+                            <ChooseWord id={"word3"} style={{borderColor: "#db3d3d", top: "52.5px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(3)}}> {this.state.mysteryWords[2]} </ChooseWord>
                             <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
-                            <Word id={"word4"} style={{borderColor:"#fc9229", top:"70px"}}> {this.state.mysteryWords[3]} </Word>
+                            <ChooseWord id={"word4"} style={{borderColor: "#fc9229", top: "70px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(4)}}> {this.state.mysteryWords[3]} </ChooseWord>
                             <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
-                            <Word id={"word5"} style={{borderColor:"#ffe203", top:"87.5px"}}> {this.state.mysteryWords[4]} </Word>
+                            <ChooseWord id={"word5"} style={{borderColor: "#ffe203", top: "87.5px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(5)}}> {this.state.mysteryWords[4]} </ChooseWord>
                         </ActiveCardContainer>
                         <CommentField>{this.state.comment}</CommentField>
                     </Form>
