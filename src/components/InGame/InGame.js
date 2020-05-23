@@ -99,6 +99,7 @@ class InGame extends React.Component {
         super(props);
         this.state = {
             soundOn: true,
+            disableSoundButton: false,
             gameId: null,
             currentCard: [],
             mysteryWordId: null,
@@ -1057,8 +1058,8 @@ class InGame extends React.Component {
                 <SoundButton hidden ={this.state.disableSoundButton} style={{cursor: "pointer"}} onClick={() => {
                     this.turnSoundOnAndOff();
                 }}>
-                    <img src={SoundIcon} alt={"Mute Button"} style={{position: "relative", left: "20%", top: "20%"}}/>
-                    <img src={MuteIcon} alt={"Mute Button"} style={{position: "absolute", left: "0%", display: (this.state.soundOn ? "none" : "inline")}}/>
+                    <img src={SoundIcon} alt={"Mute Button"} style={{position: "relative", left: "20%", top: "20%", visibility: (this.state.disableSoundButton ? "hidden" : "show")}}/>
+                    <img src={MuteIcon} alt={"Mute Button"} style={{position: "absolute", left: "0%", display: (this.state.soundOn ? "none" : "inline"), visibility: (this.state.disableSoundButton ? "hidden" : "show")}}/>
                 </SoundButton>
                 <EndGameContainer id={"end"}>
                     <GameOver> Well played! </GameOver>
