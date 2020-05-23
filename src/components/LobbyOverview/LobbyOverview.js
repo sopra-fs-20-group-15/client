@@ -277,11 +277,13 @@ class LobbyOverview extends Component {
     async sentToOblivion() {
         try {
             const response = await api.get('/players/tokens/'+ localStorage.getItem('token'));
-
-            console.log("nice",response.data);
-
         } catch(error) {
-            alert("You are a bitch!");
+            localStorage.removeItem('token');
+            localStorage.removeItem('id');
+            localStorage.removeItem('username');
+            localStorage.removeItem('LobbyGuard');
+            localStorage.removeItem('GameGuard');
+            this.props.history.push("/register");
         }
     }
 
@@ -308,7 +310,7 @@ class LobbyOverview extends Component {
             this.getLobbies();
         } catch (error) {
             alert(`Something went wrong while fetching the lobbies: \n${handleError(error)}`);
-            this.props.history.push("/lobbyOverview")
+            this.props.history.push("/lobbyOverview");
         }
     }
 
