@@ -274,6 +274,19 @@ class LobbyOverview extends Component {
         }
     }
 
+    async sentToOblivion() {
+        try {
+            const response = await api.get('/players/tokens/'+ localStorage.getItem('token'));
+        } catch(error) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('id');
+            localStorage.removeItem('username');
+            localStorage.removeItem('LobbyGuard');
+            localStorage.removeItem('GameGuard');
+            this.props.history.push("/register");
+        }
+    }
+
     async overlayOn() {
         document.getElementById("passwordContainer").style.display = "block";
         document.getElementById("passwordOverlay").style.display = "block";
@@ -293,10 +306,11 @@ class LobbyOverview extends Component {
 
     async componentDidMount() {
         try {
+            this.sentToOblivion();
             this.getLobbies();
         } catch (error) {
             alert(`Something went wrong while fetching the lobbies: \n${handleError(error)}`);
-            this.props.history.push("/lobbyOverview")
+            this.props.history.push("/lobbyOverview");
         }
     }
 
