@@ -17,7 +17,7 @@ following git repository: https://github.com/sopra-fs-20-group-15/server.git
 
 ##Technologies Used
 This project is written in Javascript and uses the React library for building user interfaces. It also uses CSS for 
-styling the user interfaces. The Client and Server communicate to each other through REST API Calls. This is also the 
+styling the interfaces. The Client and Server communicate to each other through REST API Calls. This is also the 
 reason why this project is implemented with Spring Boot, which allows for easy management of REST endpoints. It also 
 uses GitHub for versioning control and software development.
 
@@ -30,39 +30,47 @@ We can split the Client in three components: pre-game, in-game and post-game.
 ### Pre-Game
 The pre-game components handle the process of registering a user account and preparing and starting a game.
 
-####Login and Register
-With the components [Login](\src\components\login\Login.js) and [Register](\src\components\register\Register.js), the 
+* With the components [Login](src\components\login\Login.js) and [Register](src\components\register\Register.js), the 
 User can register an account and log in with it. All functions like registering an account or logging in are handled in 
 the Server while the Client is sending API requests (Full list of the API request specifications available in the [Materials](https://github.com/sopra-fs-20-group-15/Material) 
-folder in GitHub). Sometimes, a requestBody with specific informations is also needed. By logging in, a token is saved in the browser, which is used for guarding the pages after the Login 
-Page. The Guards in the [routeProtectors folder](\src\components\shared\routeProtectors) handle unauthorized access of 
-pages, where it is required that the user is logged in.
+folder in GitHub). Sometimes, a requestBody with specific information is also needed. By logging in, a token is saved in 
+the browser, which is used for guarding the pages after the Login Page. The Guards in the [routeProtectors folder](src\components\shared\routeProtectors) 
+handle unauthorized access of pages, where it is required that the user is logged in.
 
-####Rules and Tutorial
-[Rules](src/components/Rules/Rules.js) and [Tutorial](src/components/Tutorial/Tutorial.js) provides the user useful pages
+* [Rules](src/components/Rules/Rules.js) and [Tutorial](src/components/Tutorial/Tutorial.js) provides the user useful pages
 to let the user learn how to play the game. If the user doesn't know the Rules, he can read it up here. The tutorial page
 is a mock-up of the Game page. The user can simulate a game round in it. The Tutorial components shares some methods and
-components with the [InGame](/src/components/InGame/InGame.js) components, which are further explained in the next paragraphs.
+components with the [InGame](src/components/InGame/InGame.js) components, which are further explained in the paragraph 
+In-Game.
 
-
-####Joining and Creating Lobbies
-The components [LobbyOverview](\src\components\LobbyOverview\LobbyOverview.js), [CreateGame](\src\components\CreateGame\CreateGame.js) 
-and [Lobby](\src\components\Lobby\Lobby.js) handles everything that is needed, before the actual game can start. The CreateGame
+* The components [LobbyOverview](src\components\LobbyOverview\LobbyOverview.js), [CreateGame](src\components\CreateGame\CreateGame.js) 
+and [Lobby](src\components\Lobby\Lobby.js) handles everything that is needed, before the actual game can start. The CreateGame
 component provides the user with an efficient interface that let the user creates a GameSetUp (in the backend), which 
-can be seen as lobbies and be joined in the LobbyOverview interface. The user can choose the maximum amount of players, amount of bots 
-and optional password for the lobby. The creator of the lobby can manually start the game or terminate the lobby. There
-is also a chat in the Lobby interface, so that users can communicate with each other.
-
+can be seen as lobbies and be joined in the LobbyOverview interface. The user can choose the maximum amount of players, 
+amount of bots and optional password for the lobby. The creator of the lobby can manually start the game or terminate 
+the lobby. There is also a chat in the Lobby interface, so that users can communicate with each other.
 In order to keep the LobbyOverview updated, the getLobbies() method is called every second, rendering the page new, whe
 there's a new lobby or a lobby deleted. This method of polling information from the backend in an interval is used in the
 next components too.
 
 ###In-Game
-FORTSETZUNG FOLGT
+* The [InGame](src/components/InGame/InGame.js) compoment handles everything that has to do with the actual game and the 
+gameflow. The interface provides the user with a field as input options and many information resources like a HUD with a timer
+and a phase indicator, a display for every player and the current card and deck size. A banner that shows up every phase
+informs what the user has to do on each phase. Some key methods of the InGame component are listed here below:
+
+handlePolling():
+
+updatePhase()
+
+handleInput():
+
+componentDidMount():
+
+isStillAlive():
 
 ###Post-Game
-####Leaderboard
-The [Leaderboard](/src/components/Leaderboard/Leaderboard.js) displays the scores and games played from each player. The 
+* The [Leaderboard](src/components/Leaderboard/Leaderboard.js) displays the scores and games played from each player. The 
 informations are sent from the backend by calling the getPlayers() method in componentDidMount(). It is called before the 
 page is rendered, so that the Leaderboard can be displayed instantly.
 
