@@ -1057,8 +1057,8 @@ class InGame extends React.Component {
                 <SoundButton hidden ={this.state.disableSoundButton} style={{cursor: "pointer"}} onClick={() => {
                     this.turnSoundOnAndOff();
                 }}>
-                    <img src={SoundIcon} alt={"Mute Button"} style={{position: "relative", left: "20%", top: "20%"}}/>
-                    <img src={MuteIcon} alt={"Mute Button"} style={{position: "absolute", left: "0%", display: (this.state.soundOn ? "none" : "inline")}}/>
+                    <img hidden ={this.state.disableSoundButton} src={SoundIcon} alt={"Mute Button"} style={{position: "relative", left: "20%", top: "20%"}}/>
+                    <img hidden ={this.state.disableSoundButton} src={MuteIcon} alt={"Mute Button"} style={{position: "absolute", left: "0%", display: (this.state.soundOn ? "none" : "inline")}}/>
                 </SoundButton>
                 <EndGameContainer id={"end"}>
                     <GameOver> Well played! </GameOver>
