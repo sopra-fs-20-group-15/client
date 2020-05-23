@@ -107,6 +107,7 @@ class InGame extends React.Component {
         super(props);
         this.state = {
             sound: true,
+            disableSoundButton: false,
             gameId: null,
             currentCard: [],
             mysteryWordId: null,
@@ -1024,6 +1025,10 @@ class InGame extends React.Component {
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
     async componentDidMount() {
+        if (navigator.userAgent.includes("Safari") && !navigator.userAgent.includes("Chrome")){
+            this.setState({sound: false, disableSoundButton: true})
+        }
+
         try {
 
             this.getPlayers();
@@ -1075,6 +1080,7 @@ class InGame extends React.Component {
                 <EasterEggs/>
                 <SoundButton>
                     <Button
+                        hidden = {this.state.disableSoundButton}
                         width="50%"
                         onClick={() => {
                             this.turnOffandOnSound();
@@ -1272,5 +1278,6 @@ class InGame extends React.Component {
         );
     }
 }
+
 
 export default withRouter(InGame);
