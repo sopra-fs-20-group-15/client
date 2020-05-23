@@ -30,6 +30,8 @@ We can split the Client in three components: pre-game, in-game and post-game.
 ### Pre-Game
 The pre-game components handle the process of registering a user account and preparing and starting a game.
 
+#### LOLOL
+
 * With the components [Login](src\components\login\Login.js) and [Register](src\components\register\Register.js), the 
 User can register an account and log in with it. All functions like registering an account or logging in are handled in 
 the Server while the Client is sending API requests (Full list of the API request specifications available in the [Materials](https://github.com/sopra-fs-20-group-15/Material) 
@@ -53,7 +55,7 @@ In order to keep the LobbyOverview updated, the getLobbies() method is called ev
 there's a new lobby or a lobby deleted. This method of polling information from the backend in an interval is used in the
 next components too.
 
-###In-Game
+### In-Game
 * The [InGame](src/components/InGame/InGame.js) compoment handles everything that has to do with the actual game and the 
 gameflow. The interface provides the user with a field as input options and many information resources like a HUD with a timer
 and a phase indicator, a display for every player and the current card and deck size. A banner that shows up every phase
@@ -61,7 +63,7 @@ informs what the user has to do on each phase. Some key methods of the InGame co
 
 handlePolling():
 
-updatePhase()
+updatePhase():
 
 handleInput():
 
@@ -69,12 +71,12 @@ componentDidMount():
 
 isStillAlive():
 
-###Post-Game
+### Post-Game
 * The [Leaderboard](src/components/Leaderboard/Leaderboard.js) displays the scores and games played from each player. The 
 informations are sent from the backend by calling the getPlayers() method in componentDidMount(). It is called before the 
 page is rendered, so that the Leaderboard can be displayed instantly.
 
- ##Launch and Deployment
+## Launch and Deployment
  
 For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All 
 other dependencies including React get installed with:
@@ -106,10 +108,10 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-##Illustrations
+## Illustrations
 FORTSETZUNG FOLGT
 
-##Roadmap
+## Roadmap
 For any developers wanting to fork this project or contribute to this project by implementing new features, we highly
  recommend implementing following features:
  
@@ -120,7 +122,7 @@ For any developers wanting to fork this project or contribute to this project by
  * Refactoring [Ingame](/src/components/InGame/InGame.js) so that it becomes more readable and smaller.
 
 
-##Authors and Acknowledgement
+## Authors and Acknowledgement
 Contributors to this project in alphabetical order:
 
  * Cedeño, Jordan
@@ -135,7 +137,7 @@ Special Thanks to:
  * Enis, Peter (Main Beta Tester)
  * Friends and Family (Further Beta Testers)
 
-##License
+## License
 FORTSETZUNG FOLGT
 
 
