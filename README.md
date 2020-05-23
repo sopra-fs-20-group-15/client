@@ -120,7 +120,25 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## Illustrations
-FORTSETZUNG FOLGT
+The UI has been designed using the layout program "Figma". You can access our drafts [here](https://www.figma.com/file/bHFRbVQa21wShpwuMGVPHb/JustOne?node-id=131%3A13151).
+You get a good sense of the look and flow of our web application, especially when using the "Present" mode.
+
+Starting the application you will be asked to register: ![Register Screen](./images/RegisterScreen.png)
+
+Then you will be asked to login: ![Login Screen](./images/LoginScreen.png)
+
+After that you are on a page where you have an overview off all available lobbies and the opportunity
+to create one yourself: ![Lobby Overview](./images/LobbyOverview.png)
+
+You can choose different settings when creating a game: ![Create Game](./images/CreateGame.png)
+
+After creating a game or joining a lobby through the lobby overview, you get redirected to the lobby: ![Lobby](./images/Lobby.png)
+
+From there on you are redirected to the in-game page after the host hast started the game: ![In Game](./images/InGame.png)
+
+*some of the initial design that we came up with in Figma ended up not being implemented in the
+final version of our game due to changing circumstances, so do not be surprised if there are
+slight altercations in the web application compared to the Figma files
 
 ## Roadmap
 For any developers wanting to fork this project or contribute to this project by implementing new features, we highly
@@ -145,7 +163,6 @@ Contributors to this project in alphabetical order:
 Special Thanks to:
 
  * Scheitlin, Alex (Teaching Assistant, General Development Advisor)
- * Enis, Peter (Main Beta Tester)
  * Friends and Family (Further Beta Testers)
 
 ## License
