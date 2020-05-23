@@ -10,6 +10,8 @@ export const BaseContainer = styled.div`
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  width: ${DESKTOP_WIDTH}px;
-  height: ${DESKTOP_HEIGHT}px;
+  // width: ${DESKTOP_WIDTH}px;
+  // height: ${DESKTOP_HEIGHT}px;
+  width: 100%;
+  height: 100%;
 `;
