@@ -994,6 +994,9 @@ class InGame extends React.Component {
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
     async componentDidMount() {
+        if (navigator.userAgent.includes("Safari") && !navigator.userAgent.includes("Chrome")){
+            this.setState({sound: false, disableSoundButton: true})
+        }
         try {
 
             this.getPlayers();
@@ -1051,7 +1054,7 @@ class InGame extends React.Component {
                 <PhaseMessageComponent activePlayer={this.state.activePlayer} passivePlayers={this.state.passivePlayers}
                                        phaseNumber={this.state.phaseNumber} remainingCards={this.state.remainingCards}/>
                 <EasterEggs/>
-                <SoundButton style={{cursor: "pointer"}} onClick={() => {
+                <SoundButton hidden ={this.state.disableSoundButton} style={{cursor: "pointer"}} onClick={() => {
                     this.turnSoundOnAndOff();
                 }}>
                     <img src={SoundIcon} alt={"Mute Button"} style={{position: "relative", left: "20%", top: "20%"}}/>
