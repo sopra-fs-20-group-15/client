@@ -274,6 +274,17 @@ class LobbyOverview extends Component {
         }
     }
 
+    async sentToOblivion() {
+        try {
+            const response = await api.get('/players/tokens/'+ localStorage.getItem('token'));
+
+            console.log("nice",response.data);
+
+        } catch(error) {
+            alert("You are a bitch!");
+        }
+    }
+
     async overlayOn() {
         document.getElementById("passwordContainer").style.display = "block";
         document.getElementById("passwordOverlay").style.display = "block";
@@ -293,6 +304,7 @@ class LobbyOverview extends Component {
 
     async componentDidMount() {
         try {
+            this.sentToOblivion();
             this.getLobbies();
         } catch (error) {
             alert(`Something went wrong while fetching the lobbies: \n${handleError(error)}`);
