@@ -5,6 +5,7 @@ import {LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from '../../views/pictures/TriangleBackground.png';
 import RulesPicture from '../../views/pictures/RulesPicture.jpg';
+import {Form} from "../../views/design/RulesAndTutorial/RulesAndTutorialUI";
 
 const FormContainer = styled.div` 
   display: flex;
@@ -70,9 +71,7 @@ class Rules extends React.Component {
                         Tutorial
                     </LogoutButton>
                 </TopButtonContainer>
-                <FormContainer>
-                    <img className={"center"} src={RulesPicture} alt={"RulesPicture"}/>
-                </FormContainer>
+                <Form style={{top:"90px", height:"625px", paddingTop:"1%", paddingLeft:"1%", paddingRight:"1%", right:"0.4%"}}>Hello fellow peasants</Form>
             </BaseContainer>
         );
     }
