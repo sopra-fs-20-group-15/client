@@ -134,7 +134,7 @@ export const Input = styled.input`
   width: 240px;
   
   padding-bottom: 10%;
-  padding-left: 5px;
+  padding-left: 6px;
   
   background: #CBBD8C;
   border:none;
@@ -151,7 +151,7 @@ export const Output = styled.div`
   width: 240px;
   
   padding-bottom: 10%;
-  padding-left: 5px;
+  padding-left: 6px;
   
   background: #CBBD8C;
   // border:none;

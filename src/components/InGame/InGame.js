@@ -228,9 +228,9 @@ class InGame extends React.Component {
                 setTimeout(() => this.deleteGame(), 16000);
                 setTimeout(() => localStorage.removeItem('GameGuard'), 16000);
             } else {
+                this.resetMysteryWord();
+                this.resetMysteryWordId();
                 if (localStorage.getItem('username') === this.state.activePlayer) {
-                    this.resetMysteryWord();
-                    this.resetMysteryWordId();
                     this.initializeTurn();
                 }
             }
@@ -334,19 +334,15 @@ class InGame extends React.Component {
     }
 
     async resetMysteryWord() {
-        // if (this.state.phaseNumber === 4) {
             this.setState({
                 mysteryWord: "",
             })
-        // }
     }
 
     async resetMysteryWordId() {
-        // if (this.state.phaseNumber === 4) {
             this.setState({
                 mysteryWordId: null
             })
-        // }
     }
 
 
@@ -366,15 +362,15 @@ class InGame extends React.Component {
             }
 
             if (this.state.phaseNumber === 4) {
-                this.resetMysteryWord();
-                this.resetMysteryWordId();
+                // this.resetMysteryWord();
+                // this.resetMysteryWordId();
             }
 
         } catch (error) {
             console.log('Error in getMysteryWord', handleError(error));
             if (this.state.phaseNumber == 4) {
-                this.resetMysteryWord();
-                this.resetMysteryWordId();
+                // this.resetMysteryWord();
+                // this.resetMysteryWordId();
             }
         }
     }
