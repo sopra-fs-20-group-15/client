@@ -17,7 +17,7 @@ import {
 } from "../../views/design/InGame/PlayerUI";
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
-import {Form} from "../../views/design/RulesAndTutorial/RulesAndTutorialUI";
+import {Form, InstructionText} from "../../views/design/RulesAndTutorial/RulesAndTutorialUI";
 
 const CommentField = styled.div`
   justify-content: center;
@@ -42,16 +42,6 @@ const CommentField = styled.div`
   
   border-radius: 20px;
   background: #CBBD8C;
-`;
-
-const InstructionText = styled.div`
-  
-  height: 25px;
-  width: 100%;
-  
-  font-family: Happy Monkey;
-  font-size: 20px;
-  font-weight: 500;
 `;
 
 const background = {
@@ -205,12 +195,12 @@ class Tutorial extends React.Component {
                         Rules
                     </LogoutButton>
                     <Form>
-                        <InstructionText>- Each Round has 4 Phases indicated by the Phase HUD (in this Tutorial at the right Side from the Active Card).</InstructionText>
-                        <InstructionText style={{marginLeft:"14px"}}>Depending on the current Phase, Players have different Tasks to do.</InstructionText>
+                        <InstructionText>- Each Round has 4 Phases indicated by the Phase HUD (in this Tutorial at the right Side from the Active Card). Depending on the</InstructionText>
+                        <InstructionText style={{marginLeft:"14px"}}>current Phase, Players have different Tasks to do.</InstructionText>
                         <InstructionText>- Phase 1: The Active Player (indicated by the red Name Box) has to choose a Mystery Word by clicking on it. (Normally, the Active</InstructionText>
                         <InstructionText style={{marginLeft:"14px"}}>Player can't see the available Mystery Words on the current Card.)</InstructionText>
-                        <InstructionText>- Phase 2: The Passive Players (indicated by the yellow Name Box) has to submit a Clue on this Phase. To do that, write in the Input</InstructionText>
-                        <InstructionText style={{marginLeft:"14px"}}>Box a fitting Clue for the Mystery Word and submit it by pressing the round Button right to the Input Box. (Normally, you only control one Player
+                        <InstructionText>- Phase 2: The Passive Players (indicated by the yellow Name Box) has to submit a Clue on this Phase. To do that, write in the</InstructionText>
+                        <InstructionText style={{marginLeft:"14px"}}>Input Box a fitting Clue for the Mystery Word and submit it by pressing the round Button right to the Input Box. (Normally, you only control one Player
                                                                      (an active or a passive one) and you can only write and submit Inputs in your own Input Box.</InstructionText>
                         <InstructionText/>
                         <InstructionText>- Phase 3: The Active Player has to submit a Guess based on the Clues the Passive Players have given (usually, there are more</InstructionText>

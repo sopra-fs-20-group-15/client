@@ -25,3 +25,13 @@ export const Form = styled.div`
   border-radius: 20px;
   background: #E4DAA5;
 `;
+
+export const InstructionText = styled.div`
+  
+  height: 25px;
+  width: 100%;
+  word-break:normal;
+  font-family: Happy Monkey;
+  font-size: 20px;
+  font-weight: 500;
+`;
