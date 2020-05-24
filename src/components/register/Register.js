@@ -49,7 +49,10 @@ class Register extends React.Component {
                 }
             }
         } catch (error) {
-            alert(`Something went wrong during the registration: \n${handleError(error)}`)
+            console.log('Error in register()', handleError(error));
+            if (error.response.status === 409) {
+                alert('This username is taken!')
+            }
             this.props.history.push('/register');
         }
     }
@@ -59,7 +62,7 @@ class Register extends React.Component {
         try {
             this.props.history.push(`/login`);
         } catch (error) {
-            alert(`Something went wrong during the login: \n${handleError(error)}`);
+            console.log('Error in goToLogin()', handleError(error));
         }
     }
 

@@ -120,10 +120,6 @@ class CreateGame extends Component{
             password: null
         };
 
-        // any way to refactor this into one (or two) methods?
-        /* The bind() method creates a new function that, when called, has its this keyword
-        set to the provided value, with a given sequence of arguments preceding any provided when
-        the new function is called. */
         this.handleDecreaseAngels = this.handleDecreaseAngels.bind(this);
         this.handleIncreaseAngels = this.handleIncreaseAngels.bind(this);
         this.handleDecreaseDevils = this.handleDecreaseDevils.bind(this);
@@ -134,13 +130,11 @@ class CreateGame extends Component{
     /** Creates a game */
     async createGame() {
         try {
-            // requestBody should be in accordance with REST specification for GamePostDTO
             const requestBody = JSON.stringify({
                 gameName: this.state.gameName,
                 numberOfPlayers: this.state.maxNumberOfPlayers,
                 numberOfAngles: this.state.numberOfAngels,
                 numberOfDevils: this.state.numberOfDevils,
-                // is this variable necessary? -> possible for backend to decide base on whether password is null?
                 gameType: (this.state.password === null ? "PUBLIC" : "PRIVATE"),
                 password: this.state.password,
                 playerToken: localStorage.getItem('token')
@@ -148,15 +142,12 @@ class CreateGame extends Component{
 
             const response = await api.post('/games', requestBody);
 
-
-            // player creates a game -> gameId is saved in his local storage
-            // response.data gives us a dictionary with the different return values documented in our REST specifications
             localStorage.setItem('gameId', response.data.gameId);
             localStorage.setItem('LobbyGuard',response.data.gameId);
 
             this.props.history.push(`/lobby/${response.data.gameId}`);
         } catch (error) {
-            alert(`Something went wrong during the creation of the game: \n${handleError(error)}`)
+            console.log('Error in createGame()', handleError(error));
             this.props.history.push('/lobbyOverview');
         }
     }
@@ -166,7 +157,7 @@ class CreateGame extends Component{
         try {
             this.props.history.push('/lobbyOverview')
         } catch (error) {
-            alert(`Something went wrong during the cancellation of the game: \n${handleError(error)}`)
+            console.log('Error in cancel()', handleError(error))
         }
     }
 
@@ -204,7 +195,11 @@ class CreateGame extends Component{
         if (this.state.numberOfDevils + this.state.numberOfAngels < this.state.maxNumberOfPlayers - 1 && this.state.numberOfAngels + 1 <= 5) {
             this.setState({numberOfAngels: this.state.numberOfAngels + 1})
         } else {
-            alert("No more bots can be added!")
+            if (this.state.numberOfAngels + 1 > 5) {
+                alert("No more than five angels can be added!")
+            } else {
+                alert("No more bots can be added!")
+            }
         }
     };
 
@@ -222,7 +217,11 @@ class CreateGame extends Component{
         if (this.state.numberOfDevils + this.state.numberOfAngels < this.state.maxNumberOfPlayers - 1 && this.state.numberOfDevils + 1 <= 5) {
             this.setState({numberOfDevils: this.state.numberOfDevils + 1})
         } else {
-            alert("No more bots can be added!")
+            if (this.state.numberOfAngels + 1 > 5) {
+                alert("No more than five devils can be added!")
+            } else {
+                alert("No more bots can be added!")
+            }
         }
     };
 

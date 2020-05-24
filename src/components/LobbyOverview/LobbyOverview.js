@@ -237,7 +237,10 @@ class LobbyOverview extends Component {
             this.props.history.push('/lobby/' + this.state.chosenLobby.id);
 
         } catch (error) {
-            alert(`Something went wrong while trying to join the lobby: \n${handleError(error)}`);
+            console.log('Error in joinPrivateLobby()', handleError(error));
+            if (error.response.status === 401) {
+                alert('You typed in the wrong password!')
+            }
             this.props.history.push("/lobbyOverview")
         }
     }
@@ -268,21 +271,20 @@ class LobbyOverview extends Component {
 
             } else if (this.state.chosenLobby.gameType === "PRIVATE") {
                 this.overlayOn();
-            } else {
-                alert('Something is wrong with the game type!');
             }
         } catch (error) {
-            alert(`Something went wrong while trying to join the lobby: \n${handleError(error)}`);
+            console.log('Error in joinLobby()', handleError(error));
             this.props.history.push("/lobbyOverview")
         }
     }
 
     /** If a player does not exist, this function makes sure that upon trying to enter the lobby overview page, the
      * player is redirected to the register screen */
-    async sentToOblivion() {
+    async sendToOblivion() {
         try {
             const response = await api.get('/players/tokens/'+ localStorage.getItem('token'));
         } catch(error) {
+            console.log('Error in sendToOblivion()', handleError(error));
             localStorage.removeItem('token');
             localStorage.removeItem('id');
             localStorage.removeItem('username');
@@ -313,10 +315,10 @@ class LobbyOverview extends Component {
 
     async componentDidMount() {
         try {
-            this.sentToOblivion();
+            this.sendToOblivion();
             this.getLobbies();
         } catch (error) {
-            alert(`Something went wrong while fetching the lobbies: \n${handleError(error)}`);
+            console.log('Error in componentDidMount()', handleError(error));
             this.props.history.push("/lobbyOverview");
         }
     }

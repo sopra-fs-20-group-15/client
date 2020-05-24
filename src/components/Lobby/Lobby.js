@@ -274,7 +274,7 @@ class Lobby extends React.Component {
             this.props.history.push('/gameLobby/'+response.data.id);
 
         } catch (error) {
-            alert(`Something went wrong while starting the Game: \n${handleError(error)}`);
+            console.log('Error in startGame()', handleError(error))
         }
     }
 
@@ -290,7 +290,7 @@ class Lobby extends React.Component {
             localStorage.removeItem('LobbyGuard');
             this.props.history.push('/lobbyOverview');
         } catch (error) {
-            alert(`Something went wrong while leaving the Lobby: \n${handleError(error)}`);
+            console.log('Error in leaveLobby()', handleError(error))
         }
     }
 
@@ -306,7 +306,7 @@ class Lobby extends React.Component {
             localStorage.removeItem('LobbyGuard');
             this.props.history.push('/lobbyOverview');
         } catch (error) {
-            alert(`Something went wrong while terminating the game: \n${handleError(error)}`);
+            console.log('Error in terminateGame()', handleError(error))
         }
     }
 
@@ -322,7 +322,7 @@ class Lobby extends React.Component {
             await api.post('/gameSetUps/chatMessages', requestBody);
 
         } catch (error) {
-
+            console.log('Error in sendMessage()', handleError(error))
         }
     }
 
@@ -353,7 +353,7 @@ class Lobby extends React.Component {
             this.getChatMessages();
             this.scrollToBottom();
         } catch(error) {
-            alert(`Something went wrong while fetching the lobby's data: \n${handleError(error)}`);
+            console.log('Error in componentDidMount()', handleError(error))
         }
     }
 

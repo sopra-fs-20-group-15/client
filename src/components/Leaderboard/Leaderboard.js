@@ -115,7 +115,7 @@ class Leaderboard extends Component {
         try {
             this.getPlayers();
         } catch (error) {
-            alert(`Something went wrong while fetching the lobbies: \n${handleError(error)}`);
+            console.log('Error in componentDidMount()', handleError(error))
             this.props.history.push("/leaderboard")
         }
     }
@@ -128,11 +128,6 @@ class Leaderboard extends Component {
         return (
             <BaseContainer style={background}>
                 <PregameHeaderComponent from={"leaderboard"} history={this.props.history} loggedIn={true}/>
-                {/** The first condition is needed if no game has been created yet. Before the GET request for the available
-                 lobbies has been processed (takes a few milliseconds), this.state.lobbies equals null. After the request
-                 has finished processing, this.state.lobbies now equals an empty array. Without the first condition an error
-                 would occur, since the render() method would try to get the length of a null value (first phase, before
-                 GET request has been processed).*/}
                 {!this.state.players || !(this.state.players.length > 0) ? (
                     <GridContainer>
                         <GridItemTitle> Rank</GridItemTitle>
@@ -157,7 +152,6 @@ class Leaderboard extends Component {
                                     <GridNormalItem style={{paddingLeft:"10px"}}> {player.playerName} </GridNormalItem>
                                     <GridNormalItem style={{display:"flex"}}> {player.gamesPlayed} </GridNormalItem>
                                     <GridNormalItem style={{display:"flex"}}> {player.score} </GridNormalItem>
-
                                 </Fragment>
                             )
                         })}

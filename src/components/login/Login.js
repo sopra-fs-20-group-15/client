@@ -39,7 +39,12 @@ class Login extends React.Component {
             // Login successfully worked --> navigate to the route /game in the GameRouter
             this.props.history.push(`/lobbyOverview`);
         } catch (error) {
-            alert(`Something went wrong during the login: \n${handleError(error)}`);
+            if (error.response.status === 401) {
+                alert('You typed in the wrong password!')
+            } else if (error.response.status === 404) {
+                alert('This username does not exist!')
+            }
+            console.log('Error in login()', handleError(error));
         }
     }
 
@@ -48,7 +53,7 @@ class Login extends React.Component {
         try {
             this.props.history.push("/register")
         } catch (error) {
-            alert("Something went wrong while trying to return to the registration screen")
+            console.log('Error in goToRegister()', handleError(error));
         }
     }
 
