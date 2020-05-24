@@ -21,9 +21,6 @@ styling the interfaces. The Client and Server communicate to each other through 
 reason why this project is implemented with Spring Boot, which allows for easy management of REST endpoints. It also 
 uses GitHub for versioning control and software development.
 
-This project is set to deploy to Heroku (running build on the web) and SonarCloud (quality control). If you wish to 
-deploy to your own Heroku and SonarCloud create secrets for the secrets in [deploy.yml](.github/workflows/deploy.yml).
-
 ## High-Level Components
 We can split the Client in three components: pre-game, in-game and post-game.
 
@@ -31,27 +28,31 @@ We can split the Client in three components: pre-game, in-game and post-game.
 The pre-game components handle the process of registering a user account and preparing and starting a game.
 
 #### Login and Register
-With the components [Login](src\components\login\Login.js) and [Register](src\components\register\Register.js), the 
+With the components [Login](src/components/login/Login.js) and [Register](src/components/register/Register.js), the 
 User can register an account and log in with it. All functions like registering an account or logging in are handled in 
 the Server while the Client is sending API requests (Full list of the API request specifications available in the [Materials](https://github.com/sopra-fs-20-group-15/Material) 
-folder in GitHub). Sometimes, a requestBody with specific information is also needed. By logging in, a token is saved in 
-the browser, which is used for guarding the pages after the Login Page. The Guards in the [routeProtectors folder](src\components\shared\routeProtectors) 
-handle unauthorized access of pages, where it is required that the user is logged in.
+folder in GitHub). Sometimes, a requestBody with specific information is also needed.
+
+By logging in, a token is saved in the browser, which is used for guarding the pages after the Login Page. The Guards in 
+the [routeProtectors folder](src/components/shared/routeProtectors) handle unauthorized access of pages, where it is 
+required that the user is logged in.
 
 #### Rules and Tutorial
 [Rules](src/components/Rules/Rules.js) and [Tutorial](src/components/Tutorial/Tutorial.js) provides the user useful pages
 to let the user learn how to play the game. If the user doesn't know the Rules, he can read it up here. The tutorial page
-is a mock-up of the Game page. The user can simulate a game round in it. The Tutorial components shares some methods and
-components with the [InGame](src/components/InGame/InGame.js) components, which are further explained in the paragraph 
-In-Game.
+is a mock-up of the Game page. The user can simulate a game round in it.
+
+The Tutorial components shares some methods with the [InGame](src/components/InGame/InGame.js) component (updatePhase() 
+and handleInput()), which are further explained in the paragraph In-Game.
 
 #### Creating and Joining a Lobby
-The components [LobbyOverview](src\components\LobbyOverview\LobbyOverview.js), [CreateGame](src\components\CreateGame\CreateGame.js) 
-and [Lobby](src\components\Lobby\Lobby.js) handles everything that is needed, before the actual game can start. The CreateGame
+The components [LobbyOverview](src/components/LobbyOverview/LobbyOverview.js), [CreateGame](src/components/CreateGame/CreateGame.js) 
+and [Lobby](src/components/Lobby/Lobby.js) handles everything that is needed, before the actual game can start. The CreateGame
 component provides the user with an efficient interface that let the user creates a GameSetUp (in the backend), which 
 can be seen as lobbies and be joined in the LobbyOverview interface. The user can choose the maximum amount of players, 
 amount of bots and optional password for the lobby. The creator of the lobby can manually start the game or terminate 
 the lobby. There is also a chat in the Lobby interface, so that users can communicate with each other.
+
 In order to keep the LobbyOverview updated, the getLobbies() method is called every second, rendering the page new, whe
 there's a new lobby or a lobby deleted. This method of polling information from the backend in an interval is used in the
 next components too.
@@ -88,6 +89,8 @@ information are sent from the backend by calling the getPlayers() method in comp
 page is rendered, so that the Leaderboard can be displayed instantly.
 
 ## Launch and Deployment
+This section covers how to launch and deploy the client side of the application. To view how to do the same for the server 
+side, please visit the following git repository: https://github.com/sopra-fs-20-group-15/server.git
  
 For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All 
 other dependencies including React get installed with:
@@ -119,6 +122,11 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+
+This project is set to deploy to Heroku (production build) and SonarCloud (quality control). This is done by using Github 
+Actions. If you wish to deploy to your own Heroku and SonarCloud accounts you will have to create the corresponding 
+secrets mentioned in [deploy.yml](.github/workflows/deploy.yml) (config file) for your branch / fork.
+
 ## Illustrations
 FORTSETZUNG FOLGT
 
@@ -145,8 +153,19 @@ Contributors to this project in alphabetical order:
 Special Thanks to:
 
  * Scheitlin, Alex (Teaching Assistant, General Development Advisor)
- * Enis, Peter (Main Beta Tester)
  * Friends and Family (Further Beta Testers)
 
 ## License
-FORTSETZUNG FOLGT
+Copyright 2020 SoPra Group 15
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
