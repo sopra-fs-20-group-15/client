@@ -21,9 +21,9 @@ class Register extends React.Component {
         this.keyPressed = this.keyPressed.bind(this);
     }
 
+    /** Lets a user register */
     async register() {
         try {
-            // eslint-disable-next-line
             if (this.state.password === this.state.password.trim()) {
                 if (this.state.username === this.state.username.trim()) {
                     const requestBody = JSON.stringify({
@@ -33,7 +33,6 @@ class Register extends React.Component {
 
                     await api.post('/players', requestBody);
 
-                    // registration successfully worked --> navigate to the route /login
                     this.props.history.push(`/login`);
                 } else {
                     if (this.state.username.trim().length === 0) {
@@ -55,7 +54,7 @@ class Register extends React.Component {
         }
     }
 
-
+    /** Redirects a user to the login page */
     async goToLogin() {
         try {
             this.props.history.push(`/login`);
@@ -64,14 +63,17 @@ class Register extends React.Component {
         }
     }
 
+    /** Sets state according to input typed in input field
+     * @param: string key
+     * @param: string value */
     handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
         this.setState({[key]: value});
     }
 
     componentDidMount() {}
 
+    /** Lets a player register using the enter key
+     * @param: event e */
     keyPressed(e) {
         if (e.keyCode === 13) {
             if (this.state.username && this.state.repeatedPassword && this.state.password) {

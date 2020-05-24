@@ -69,6 +69,8 @@ class Tutorial extends React.Component {
         };
     }
 
+    /** Updates phase HUD
+     * @param: int id */
     updatePhaseHUD(id) {
         for (let i=1 ; i<=4 ; i++) {
             if (i === id) {
@@ -89,6 +91,8 @@ class Tutorial extends React.Component {
         }
     }
 
+    /** Crosses out words that are not the mystery word
+     * @param: int input */
     updateMysteryWord(input) {
         for (let i = 0; i < 5; i++) {
             if (input - 1 !== i) {
@@ -98,6 +102,8 @@ class Tutorial extends React.Component {
         }
     }
 
+    /** Sets the mystery word
+     * @param: int number */
     setMysteryWord(number) {
         this.updatePhaseHUD(2);
         this.setState({
@@ -108,16 +114,19 @@ class Tutorial extends React.Component {
         this.updateMysteryWord(number);
     }
 
+    /** Updates UI to signal right guess */
     updateRightGuess() {
         let field = document.getElementById("alice");
         field.style.backgroundColor = "#0900ff";
     }
 
+    /** Updates UI to signal wrong guess */
     updateWrongGuess() {
         let field = document.getElementById("alice");
         field.style.backgroundColor = "#ED0101";
     }
 
+    /** Handles input of stand-in active player Alice */
     handleInputAlice() {
         if (this.state.phaseNumber === 1) {
             this.setState({comment:"Click on a Word!"});
@@ -142,6 +151,7 @@ class Tutorial extends React.Component {
         }
     }
 
+    /** Handles input of stand-in passive player Bob */
     handleInputBob() {
         if (this.state.phaseNumber === 1) {
             this.setState({comment:"Click on a Word!"});
@@ -164,9 +174,8 @@ class Tutorial extends React.Component {
         }
     }
 
+    /** Sets state according to input typed into input field */
     handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
         this.setState({ [key]: value });
     }
 

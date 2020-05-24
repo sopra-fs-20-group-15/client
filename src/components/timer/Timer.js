@@ -86,6 +86,8 @@ class Timer extends Component {
         };
     }
 
+    /** Gives input in order to change phase if time goes to 0
+     * @param: int phaseNumber*/
     async updatePhase(phaseNumber) {
         if (phaseNumber === 1) {
             this.props.determineMysteryWord(Math.floor(Math.random() * 5) + 1);
@@ -100,6 +102,7 @@ class Timer extends Component {
         }
     }
 
+    /** Responsible for playing the countdown */
     playCountdownAudio() {
         let audio = new Audio('http://soundbible.com/mp3/Countdown-Me-728881159.mp3');
         audio.load();
@@ -138,9 +141,6 @@ class Timer extends Component {
         }, 1000)
     }
 
-    /** This method makes sure that if the props of the timer change, the state of the timer is changed accordingly.
-     * Since all phases have a different duration, the state always changes, and therefore (since every state change
-     * triggers a re-rendering) the Timer component is re-rendered every time. */
     componentDidUpdate(prevProps) {
         /** Conditional statement prevents infinite loop. */
         if (this.props.seconds !== prevProps.seconds) {
@@ -151,16 +151,8 @@ class Timer extends Component {
         }
     }
 
-    /** necessary? */
     async componentWillUnmount() {
         clearInterval(this.myInterval)
-    }
-
-    handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
-        // making sure that the new number of players does not violate the constraints imposed by the game rules
-        this.setState({[key]: value});
     }
 
 
