@@ -1,9 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import styled from 'styled-components';
 import {BaseContainer} from '../../helpers/layout';
-import {api, handleError} from '../../helpers/api';
-import {Button, LogoutButton} from '../../views/design/Button';
-import {GuessedCards,Deck,ActiveCardContainer,Number,Word} from "../../views/design/InGame/CardsUI";
+import {LogoutButton} from '../../views/design/Button';
+import {ChooseWord,ActiveCardContainer,Number,Word} from "../../views/design/InGame/CardsUI";
 import {Phase,PhaseCircle,PhaseMessage} from "../../views/design/InGame/PhaseUI";
 import {
     Player,
@@ -11,7 +10,6 @@ import {
     SignalFieldPlayer,
     Input,
     InputField,
-    Output,
     NameField,
     NameFieldActivePlayer,
     GuessedCardsField,
@@ -19,36 +17,7 @@ import {
 } from "../../views/design/InGame/PlayerUI";
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from "../../views/pictures/TriangleBackground.png";
-import {HUDContainer} from "../../views/design/InGame/InGameUI";
-
-const Form = styled.div`
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: center;
-  
-  position: absolute;
-  
-  right: -3%;
-  height: 650px;
-  width: 1350px;
-  top: 70px;
-  bottom: 200px;
-  
-  padding-top: 5%;
-  padding-left: 10%;
-  padding-right: 10%;
-  
-  border: 2px solid rgba(0, 0, 0, 1);
-  box-sizing: border-box;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
-  
-  font-family: Happy Monkey;
-  font-size: 20px;
-  font-weight: 500;
-  
-  border-radius: 20px;
-  background: #E4DAA5;
-`;
+import {Form, InstructionText} from "../../views/design/RulesAndTutorial/RulesAndTutorialUI";
 
 const CommentField = styled.div`
   justify-content: center;
@@ -75,19 +44,6 @@ const CommentField = styled.div`
   background: #CBBD8C;
 `;
 
-const InstructionText = styled.div`
-  
-  height: 25px;
-  width: 100%;
-  
-  // border: 1px solid rgba(0, 0, 0, 1);
-  // box-sizing: border-box;
-  
-  font-family: Happy Monkey;
-  font-size: 20px;
-  font-weight: 500;
-`;
-
 const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
 };
@@ -95,7 +51,6 @@ const background = {
 const TopButtonContainer = styled.div`
   position: absolute;
   top: 20px;
-  // right: 15px;
   justify-content: center;
 `;
 
@@ -109,7 +64,7 @@ class Tutorial extends React.Component {
             mysteryWords: ["Apple","Netflix","Chill","Naruto","Ghibli"],
             aliceInput: null,
             bobInput: null,
-            comment: null,
+            comment: "Click on a Word!",
             aliceNumber: 0,
         };
     }
@@ -143,6 +98,16 @@ class Tutorial extends React.Component {
         }
     }
 
+    setMysteryWord(number) {
+        this.updatePhaseHUD(2);
+        this.setState({
+            phaseNumber:2,
+            comment:"Well Done!",
+            mysteryWordId: number
+        });
+        this.updateMysteryWord(number);
+    }
+
     updateRightGuess() {
         let field = document.getElementById("alice");
         field.style.backgroundColor = "#0900ff";
@@ -154,24 +119,12 @@ class Tutorial extends React.Component {
     }
 
     handleInputAlice() {
-        //actions of active player
         if (this.state.phaseNumber === 1) {
-            //determine mystery Word
-            if(1<= this.state.aliceInput && this.state.aliceInput <=5){
-                this.updatePhaseHUD(2);
-                this.setState({
-                    phaseNumber:2,
-                    comment:"Well Done!",
-                    mysteryWordId: this.state.aliceInput
-                });
-                this.updateMysteryWord(this.state.aliceInput);
-            } else {
-                this.setState({comment:"Number is not between 1 and 5!"});
-            }
+            this.setState({comment:"Click on a Word!"});
         }
         else if (this.state.phaseNumber === 3) {
             //guess mystery word
-            if (this.state.aliceInput === this.state.mysteryWords[(this.state.mysteryWordId-1)]){
+            if (this.state.aliceInput.toLowerCase() === this.state.mysteryWords[(this.state.mysteryWordId-1)].toLowerCase()){
                 this.updatePhaseHUD(4);
                 this.setState({phaseNumber:4, comment:"You got it now!", aliceNumber: 1});
                 this.updateRightGuess();
@@ -190,8 +143,11 @@ class Tutorial extends React.Component {
     }
 
     handleInputBob() {
+        if (this.state.phaseNumber === 1) {
+            this.setState({comment:"Click on a Word!"});
+        }
         //actions of passive players
-        if (this.state.phaseNumber === 2) {
+        else if (this.state.phaseNumber === 2) {
             //gives clue
             if (this.state.bobInput !== this.state.mysteryWords[(this.state.mysteryWordId-1)]){
                 this.updatePhaseHUD(3);
@@ -239,18 +195,17 @@ class Tutorial extends React.Component {
                         Rules
                     </LogoutButton>
                     <Form>
-                        <InstructionText>- Each Round has 4 Phases indicated by the Phase HUD (in this Tutorial at the right Side from the Active Card).</InstructionText>
-                        <InstructionText style={{marginLeft:"14px"}}>Depending on the current Phase, Players has different Tasks to do.</InstructionText>
-                        <InstructionText>- Phase 1: The Active Player (indicated by the red Name Box) has to choose a Mystery Word and submit a Number between 1 to 5.</InstructionText>
-                        <InstructionText style={{marginLeft:"14px"}}>To do that, write in the Input Box a Number and submit it by pressing the round Button next to it. (Normally, the Active Player</InstructionText>
-                        <InstructionText style={{marginLeft:"14px"}}>can't see the available Mystery Words on the current Card.)</InstructionText>
-                        <InstructionText>- Phase 2: The Passive Players (indicated by the yellow Name Box) has to submit a Clue in this Phase. To do that, write in the Input</InstructionText>
-                        <InstructionText style={{marginLeft:"14px"}}>Box a fitting Clue for the Mystery Word and submit it by pressing the round Button next to it. (Normally, you only control one Player
+                        <InstructionText>- Each Round has 4 Phases indicated by the Phase HUD (in this Tutorial at the right Side from the Active Card). Depending on the</InstructionText>
+                        <InstructionText style={{marginLeft:"14px"}}>current Phase, Players have different Tasks to do.</InstructionText>
+                        <InstructionText>- Phase 1: The Active Player (indicated by the red Name Box) has to choose a Mystery Word by clicking on it. (Normally, the Active</InstructionText>
+                        <InstructionText style={{marginLeft:"14px"}}>Player can't see the available Mystery Words on the current Card.)</InstructionText>
+                        <InstructionText>- Phase 2: The Passive Players (indicated by the yellow Name Box) has to submit a Clue on this Phase. To do that, write in the</InstructionText>
+                        <InstructionText style={{marginLeft:"14px"}}>Input Box a fitting Clue for the Mystery Word and submit it by pressing the round Button right to the Input Box. (Normally, you only control one Player
                                                                      (an active or a passive one) and you can only write and submit Inputs in your own Input Box.</InstructionText>
                         <InstructionText/>
-                        <InstructionText>- Phase 3: The Active Player has to submit a Guess based on the Clues the Passive Players gave (usually there are more than one</InstructionText>
-                        <InstructionText style={{marginLeft:"14px"}}>Clues available). Try submitting one!</InstructionText>
-                        <InstructionText>- Phase 4: The Guess will be checked and the Scores will be distributed. No Players has to do something in this Phase and the next</InstructionText>
+                        <InstructionText>- Phase 3: The Active Player has to submit a Guess based on the Clues the Passive Players have given (usually, there are more</InstructionText>
+                        <InstructionText style={{marginLeft:"14px"}}>than one Clue available). Try submitting one!</InstructionText>
+                        <InstructionText>- Phase 4: The Guess will be checked and the Scores will be distributed. No Player has to do something in this Phase and the next</InstructionText>
                         <InstructionText style={{marginLeft:"14px"}}>Round will begin automatically.</InstructionText>
                         <PlayerContainer style={{position:"absolute", top:"65%", right:"80%"}}>
                                 <Player style={{marginTop:"1%", marginLeft:"38%"}}>
@@ -289,17 +244,27 @@ class Tutorial extends React.Component {
                             <PhaseCircle id={"phase4"} style={{left:"194px"}}/>
                             <PhaseMessage> {this.state.phases[this.state.phaseNumber-1]} </PhaseMessage>
                         </Phase>
-                        <ActiveCardContainer id={"activeCard"} style={{position:"absolute", left:"35%", bottom:"15%"}}>
+                        <ActiveCardContainer id={"activeCard"} style={{position:"absolute", left:"35%", bottom:"15%"}} pulsate={this.state.phaseNumber===1}>
                             <Number style={{color:"#00CDCD", top:"17.5px"}}> 1. </Number>
-                            <Word id={"word1"} style={{borderColor:"#00CDCD", top:"17.5px"}}> {this.state.mysteryWords[0]} </Word>
+                            <ChooseWord id={"word1"} style={{borderColor: "#00CDCD", top: "17.5px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(1)}}> {this.state.mysteryWords[0]} </ChooseWord>
                             <Number style={{color:"#42c202", top:"65px"}}> 2. </Number>
-                            <Word id={"word2"} style={{borderColor:"#42c202", top:"35px"}}> {this.state.mysteryWords[1]} </Word>
+                            <ChooseWord id={"word2"} style={{borderColor: "#42c202", top: "35px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(2)}}> {this.state.mysteryWords[1]} </ChooseWord>
                             <Number style={{color:"#db3d3d", top:"112.5px"}}> 3. </Number>
-                            <Word id={"word3"} style={{borderColor:"#db3d3d", top:"52.5px"}}> {this.state.mysteryWords[2]} </Word>
+                            <ChooseWord id={"word3"} style={{borderColor: "#db3d3d", top: "52.5px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(3)}}> {this.state.mysteryWords[2]} </ChooseWord>
                             <Number style={{color:"#fc9229", top:"160px"}}> 4. </Number>
-                            <Word id={"word4"} style={{borderColor:"#fc9229", top:"70px"}}> {this.state.mysteryWords[3]} </Word>
+                            <ChooseWord id={"word4"} style={{borderColor: "#fc9229", top: "70px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(4)}}> {this.state.mysteryWords[3]} </ChooseWord>
                             <Number style={{color:"#ffe203", top:"207.5px"}}> 5. </Number>
-                            <Word id={"word5"} style={{borderColor:"#ffe203", top:"87.5px"}}> {this.state.mysteryWords[4]} </Word>
+                            <ChooseWord id={"word5"} style={{borderColor: "#ffe203", top: "87.5px"}}
+                                        disabled={this.state.phaseNumber !== 1}
+                                        onClick={() => {this.setMysteryWord(5)}}> {this.state.mysteryWords[4]} </ChooseWord>
                         </ActiveCardContainer>
                         <CommentField>{this.state.comment}</CommentField>
                     </Form>

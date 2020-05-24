@@ -4,19 +4,7 @@ import {BaseContainer} from '../../helpers/layout';
 import {LogoutButton} from '../../views/design/Button';
 import {withRouter} from 'react-router-dom';
 import TriangleBackground from '../../views/pictures/TriangleBackground.png';
-import RulesPicture from '../../views/pictures/RulesPicture.jpg';
-
-const FormContainer = styled.div` 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
- 
-  top:70px;
-  left:315px;
- 
-  position: absolute;
-  justify-content: center;
-`;
+import {Form,InstructionText} from "../../views/design/RulesAndTutorial/RulesAndTutorialUI";
 
 const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
@@ -25,7 +13,6 @@ const background = {
 const TopButtonContainer = styled.div`
   position: absolute;
   top: 20px;
-  // right: 15px;
   justify-content: center;
 `;
 
@@ -70,9 +57,18 @@ class Rules extends React.Component {
                         Tutorial
                     </LogoutButton>
                 </TopButtonContainer>
-                <FormContainer>
-                    <img className={"center"} src={RulesPicture} alt={"RulesPicture"}/>
-                </FormContainer>
+                <Form style={{top:"90px", height:"625px", paddingTop:"1%", paddingLeft:"1%", paddingRight:"1%", right:"0.4%", wordBreak:"normal"}}>
+                    <InstructionText style={{fontWeight:"bold"}}>OBJECT OF THE GAME</InstructionText>
+                    <InstructionText>Just One is a cooperative game. You all play together to get the best Score!</InstructionText>
+                    <InstructionText style={{marginTop:"8px"}}>As a team, the passive players choose their
+                        clues without coordination with each other. Be creative in order to not write the same clue as other players, as all indentical clues will
+                        be canceled before the active player gets to see them. Your scores are based on the number of mystery words found. The game ends when the
+                        deck is empty.</InstructionText>
+                    <InstructionText style={{marginTop:"55px"}}>To get a better understanding of the game, try to play the tutorial!</InstructionText>
+                    <InstructionText style={{fontWeight:"bold", marginTop:"8px"}}>GIVING CLUES</InstructionText>
+                    <InstructionText style={{marginTop:"8px"}}></InstructionText>
+
+                </Form>
             </BaseContainer>
         );
     }
