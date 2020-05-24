@@ -95,7 +95,7 @@ class InGame extends React.Component {
             round: 1,
             phaseNumber: 1,
             phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
-            nextTimer:[30, 50, 20, 10],
+            nextTimer:[30, 50, 60, 10],
             pageRefreshed: true,
             player1Input: null,
             player2Input: null,
