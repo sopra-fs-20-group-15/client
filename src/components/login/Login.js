@@ -22,6 +22,7 @@ class Login extends React.Component {
         this.keyPressed = this.keyPressed.bind(this);
     }
 
+    /** Lets a player login */
     async login() {
         try {
             const requestBody = JSON.stringify({
@@ -42,7 +43,8 @@ class Login extends React.Component {
         }
     }
 
-    async register() {
+    /** Redirect user to register screen */
+    async goToRegister() {
         try {
             this.props.history.push("/register")
         } catch (error) {
@@ -50,14 +52,17 @@ class Login extends React.Component {
         }
     }
 
+    /** Sets state according to input typed in input field
+     * @param: string key
+     * @param: string value */
     handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
         this.setState({[key]: value});
     }
 
     componentDidMount() {}
 
+    /** Lets a user login using the enter key
+     * @param: event e */
     keyPressed(e) {
         if (e.keyCode === 13) {
             if (this.state.username && this.state.password) {
@@ -106,7 +111,7 @@ class Login extends React.Component {
                         <Button
                             width="50%"
                             onClick={() => {
-                                this.register();
+                                this.goToRegister();
                             }}
                         >
                             Back to Registration

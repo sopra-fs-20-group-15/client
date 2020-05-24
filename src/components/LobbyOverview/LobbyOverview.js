@@ -223,6 +223,7 @@ class LobbyOverview extends Component {
         this.goToRules = this.goToRules.bind(this);
     }
 
+    /** Lets a player join a private lobby (called in joinLobby()) */
     async joinPrivateLobby() {
         try {
             const requestBody = JSON.stringify({
@@ -241,6 +242,7 @@ class LobbyOverview extends Component {
         }
     }
 
+    /** Fetches all lobbies from the backend */
     getLobbies = async () => {
         const response = await api.get('/games/lobbies');
         if (response.status === 200) {
@@ -250,6 +252,7 @@ class LobbyOverview extends Component {
         }
     };
 
+    /** Lets a player join a lobby */
     async joinLobby() {
         try {
             if (this.state.chosenLobby.gameType === "PUBLIC") {
@@ -274,6 +277,8 @@ class LobbyOverview extends Component {
         }
     }
 
+    /** If a player does not exist, this function makes sure that upon trying to enter the lobby overview page, the
+     * player is redirected to the register screen */
     async sentToOblivion() {
         try {
             const response = await api.get('/players/tokens/'+ localStorage.getItem('token'));
@@ -287,20 +292,22 @@ class LobbyOverview extends Component {
         }
     }
 
+    /** Turns the password overlay on */
     async overlayOn() {
         document.getElementById("passwordContainer").style.display = "block";
         document.getElementById("passwordOverlay").style.display = "block";
     }
 
+    /** Turns the password overlay off */
     async overlayOff() {
         document.getElementById("passwordContainer").style.display = "none";
         document.getElementById("passwordOverlay").style.display = "none";
     }
 
+    /** Sets state according to input typed in input fields
+     * @param: string key
+     * @param: string value */
     handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
-        // making sure that the new number of players does not violate the constraints imposed by the game rules
         this.setState({[key]: value});
     }
 
@@ -318,6 +325,7 @@ class LobbyOverview extends Component {
         clearInterval(this.interval);
     }
 
+    /** Redirects player to the tutorial page */
     async goToRules() {
         this.props.history.push("/tutorial")
     }

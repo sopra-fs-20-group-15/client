@@ -123,9 +123,9 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 The UI has been designed using the layout program "Figma". You can access our drafts [here](https://www.figma.com/file/bHFRbVQa21wShpwuMGVPHb/JustOne?node-id=131%3A13151).
 You get a good sense of the look and flow of our web application, especially when using the "Present" mode.
 
-Starting the application you will be asked to register: ![Register Screen](./images/RegisterScreen.png)
+Starting the application you will be asked to register: ![Register Screen](./images/Register.png)
 
-Then you will be asked to login: ![Login Screen](./images/LoginScreen.png)
+Then you will be asked to login: ![Login Screen](./images/Login.png)
 
 After that you are on a page where you have an overview off all available lobbies and the opportunity
 to create one yourself: ![Lobby Overview](./images/LobbyOverview.png)

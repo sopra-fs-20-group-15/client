@@ -3,30 +3,31 @@ import styled from 'styled-components';
 import {api, handleError} from '../../helpers/api';
 import {withRouter} from 'react-router-dom';
 import Timer from "../timer/Timer";
-import {GuessedCards, Deck, ActiveCardContainer, Number, Word, ChooseWord} from "../../views/design/InGame/CardsUI";
+import {ActiveCardContainer, ChooseWord, Deck, GuessedCards, Number, Word} from "../../views/design/InGame/CardsUI";
 import {
-    Game,
     BoardContainer,
-    HUDContainer,
-    TableContainer,
-    Table,
     EndGameContainer,
+    Game,
     GameOver,
+    HUDContainer,
     Statistics,
     StatisticsContainer,
+    Table,
+    TableContainer,
     Waiting
 } from "../../views/design/InGame/InGameUI";
 import {Phase, PhaseCircle, PhaseMessage} from "../../views/design/InGame/PhaseUI";
 import {
-    Player,
-    PlayerContainer,
-    SignalFieldPlayer,
+    GuessedCardsField,
     Input,
-    Output,
+    InputFieldPlayer,
     NameField,
     NameFieldActivePlayer,
-    GuessedCardsField,
-    ScoreField, InputFieldPlayer
+    Output,
+    Player,
+    PlayerContainer,
+    ScoreField,
+    SignalFieldPlayer
 } from "../../views/design/InGame/PlayerUI";
 import {LogoutButton} from "../../views/design/Button";
 import ClickIcon from '../../views/pictures/ClickIcon.png'
@@ -45,36 +46,6 @@ const SoundButton = styled.div`
   left: 1%;
 `;
 
-const DrawCard = styled.div`
-    position: absolute;
-    width: 130px;
-    height: 40px;
-    top: 20px;
-    left: 20px;
-    background: #FFFFFF;
-    border: 1.5px solid #000000;
-    border-radius: 20px;
-    box-sizing: border-box;
-    font-size: 22px;
-    text-align: center;
-    line-height: normal;
-    
-    &:hover {
-      transform: translateY(-2px);
-    }
-    cursor: ${props => (props.disabled ? "default" : "pointer")};
-    transition: all 0.3s ease;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  position: relative;
-  margin: auto;
-  width: 500px;
-  top: 250px;
-`;
-
 const LeaveGameButtonContainer = styled.div`
   position: absolute;
   bottom: 40px;
@@ -82,6 +53,11 @@ const LeaveGameButtonContainer = styled.div`
   justify-content: center;
 `;
 
+/** Changes position of an element in an array
+ * @param: string[]
+ * @param: int
+ * @param: int
+ * @return: string[] */
 function array_move(array, oldIndex, newIndex) {
     array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
     return array;
@@ -119,7 +95,7 @@ class InGame extends React.Component {
             round: 1,
             phaseNumber: 1,
             phases: ["1. Choose Number", "2. Write Clues", "3. Guess Word", "4. Word Reveal"],
-            nextTimer:[30, 50, 60, 10],
+            nextTimer:[30, 50, 20, 10],
             pageRefreshed: true,
             player1Input: null,
             player2Input: null,
@@ -154,6 +130,7 @@ class InGame extends React.Component {
         this.keyPressed = this.keyPressed.bind(this);
     }
 
+    /** Request that is used by backend to ensure that a player is still an active participant in the game */
     isStillAlive = async () => {
         try {
             const requestBody = JSON.stringify({
@@ -167,6 +144,7 @@ class InGame extends React.Component {
         }
     };
 
+    /** Used to synchronize the phase number and timer upon refreshing the page */
     async getPhase() {
         try {
 
@@ -187,16 +165,16 @@ class InGame extends React.Component {
         }
     }
 
+    /** Converts timestamp received from backend to remaining seconds of timer */
     getRemainingTime(startTime) {
         let d = new Date();
         let newTime = d.getTime();
-        let goneMSeconds = (newTime - startTime)%1000;  //gets gone miliseconds
-        let goneSeconds = ((newTime - startTime) - goneMSeconds)/1000; // gets gone seconds
-        let remainingSeconds = this.state.nextTimer[this.state.phaseNumber-1]-goneSeconds;
-
-        return remainingSeconds;
+        let goneMSeconds = (newTime - startTime)%1000;
+        let goneSeconds = ((newTime - startTime) - goneMSeconds)/1000; //
+        return this.state.nextTimer[this.state.phaseNumber - 1] - goneSeconds;
     }
 
+    /** Called upon starting a new round in order to reset all the variables in the backend (like the mystery word, clues etc.) */
     async initializeTurn() {
         try {
             const requestBody = JSON.stringify({
@@ -210,6 +188,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Called at the end of each round in order to check whether a new round has to start or the game should be finished */
     async gameHasEnded() {
         try {
             if (!this.state.gameHasEnded) {
@@ -224,7 +203,7 @@ class InGame extends React.Component {
                 this.getLowestNumberOfGuesses();
                 this.getTotalNumberOfGuesses();
                 this.getHighestScore();
-                this.overlayOn();
+                this.endgamOverlayOn();
                 setTimeout(() => this.deleteGame(), 16000);
                 setTimeout(() => localStorage.removeItem('GameGuard'), 16000);
             } else {
@@ -242,6 +221,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Deletes the active game in the backend after ending it */
     async deleteGame() {
         try {
             if (localStorage.getItem('username') === this.state.activePlayer && !this.state.deleted) {
@@ -267,6 +247,8 @@ class InGame extends React.Component {
         }
     }
 
+    /** Deletes the gameSetUp -> called five seconds after starting the game in order to make sure that the lobby will not
+     * be visible from the lobby overview anymore */
     async deleteGameSetUp() {
         try {
             const requestBody = JSON.stringify({
@@ -285,6 +267,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Fetches a card (=array of five words) from the backend */
     async getCard() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/cards/' + localStorage.getItem('token'));
@@ -300,6 +283,8 @@ class InGame extends React.Component {
         }
     }
 
+    /** Is called by the active player in order to determine a mystery word on the card
+     * @Param: int wordId (number between 1 and 5) */
     async determineMysteryWord(wordId) {
         try {
             if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -324,6 +309,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Responsible for crossing out all words on the card except for the mystery word */
     async crossOutWords(wordId) {
         for (let i = 0; i < this.state.currentCard.length; i++) {
             if (wordId - 1 !== i) {
@@ -333,14 +319,14 @@ class InGame extends React.Component {
         }
     }
 
+    /** Responsible for resetting the mystery word in the forth phase of the game */
     async resetMysteryWord() {
-        // if (this.state.phaseNumber === 4) {
             this.setState({
                 mysteryWord: "",
             })
-        // }
     }
 
+    /** Responsible for resetting the mystery word id in the forth phase of the game */
     async resetMysteryWordId() {
         // if (this.state.phaseNumber === 4) {
             this.setState({
@@ -349,7 +335,7 @@ class InGame extends React.Component {
         // }
     }
 
-
+    /** Fetches the mystery word from the backend */
     async getMysteryWord() {
         try {
             const response = await api.get('/games/' + this.state.gameId + "/mysteryWord/" + localStorage.getItem('token'));
@@ -379,6 +365,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Makes sure that the crossing out of the word that are not the mystery word is undone at the start of a new round */
     async undoCrossingOut() {
         for (let i = 0; i < this.state.currentCard.length; i++) {
             let lineThroughWord = document.getElementById("word" + (i + 1));
@@ -386,6 +373,8 @@ class InGame extends React.Component {
         }
     }
 
+    /** Lets player send a clue to the backend
+     * @Param: string clue */
     async giveClue(clue) {
         try {
             if (this.state.passivePlayers.includes(localStorage.getItem('username'))) {
@@ -402,14 +391,13 @@ class InGame extends React.Component {
                         alert('Your clue has to consist of exactly one word!')
                     }
                 }
-            } else {
-                // alert('Only passive players can give clues!')
             }
         } catch (error) {
             console.log('Error in giveClue()', handleError(error))
         }
     }
 
+    /** Fetches a list of valid clues from the backend */
     async getValidClues() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/' + localStorage.getItem('token'));
@@ -429,6 +417,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Responsible for displaying the clue sent by a player himself */
     async displayOwnClue() {
         if (localStorage.getItem('username') !== this.state.activePlayer) {
             for (let i = 0; i < this.state.clues.length; i++) {
@@ -443,6 +432,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Responsible for displaying clues sent by the other player */
     async displayCluesOfOthers() {
         for (let i = 0; i < this.state.clonePlayers.length; i++) {
             if (this.state.clonePlayers[i] !== this.state.activePlayer) {
@@ -467,6 +457,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Responsible for resetting the display of clues upon starting a new round */
     async undoClueDisplay() {
         for (let i = 0; i < this.state.clonePlayers.length; i++) {
             let output = document.getElementById("clue" + (2 + i));
@@ -474,6 +465,8 @@ class InGame extends React.Component {
         }
     }
 
+    /** Sends a guess to the backend
+     * @Param: string guess */
     async setGuess(guess) {
         try {
             if (localStorage.getItem('username') === this.state.activePlayer) {
@@ -490,7 +483,7 @@ class InGame extends React.Component {
         }
     }
 
-
+    /** Fetches the guess from the backend */
     async getGuess() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/guesses/' + localStorage.getItem('token'));
@@ -509,6 +502,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Fetches an array of the scores of the different players from the backend */
     async getScores() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/statistics');
@@ -542,6 +536,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Determines the highest score among all players in the game */
     async getHighestScore() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/statistics');
@@ -567,6 +562,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Determines the highest number of guesses among all players in the game */
     async getHighestNumberOfGuesses() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/statistics');
@@ -591,6 +587,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Determines the lowest score among all players in the game */
     async getLowestNumberOfGuesses() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/statistics');
@@ -617,6 +614,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Determines the total score among all players in the game */
     async getTotalNumberOfGuesses() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/statistics');
@@ -641,6 +639,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Fetches the amount of cards left in the game from the backend */
     async getCardAmount() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/cards/remainder/' + localStorage.getItem('token'));
@@ -655,6 +654,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Fetches a list of dictionaries mapping the players and their clues together */
     async getCluePlayers() {
         try {
             const response = await api.get('/games/' + this.state.gameId + '/clues/players/' + localStorage.getItem('token'));
@@ -680,6 +680,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Fetches the list of players from the backend and distributes the role of active and passive player */
     async getPlayers() {
         try {
             const response = await api.get('/activeGames/' + this.props.match.params.id);
@@ -701,6 +702,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Lets a player leave a game */
     async leaveGame() {
         try {
             if (this.state.phaseNumber === 4){
@@ -723,6 +725,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Lets a player mute the sounds */
     turnSoundOnAndOff() {
         if (this.state.soundOn) {
         this.setState({soundOn: false});
@@ -731,18 +734,20 @@ class InGame extends React.Component {
         }
     }
 
+    /** Responsible for playing a sound if the guess has been correct */
     playCorrectGuessAudio() {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/cheering.wav');
         audio.play();
     }
 
+    /** Responsible for playing a sound if the guess has been incorrect */
     playWrongGuessAudio() {
         let audio = new Audio('https://www.talkingwav.com/wp-content/uploads/2017/10/mario_06.wav');
         audio.play();
     }
 
+    /** Responsible for displaying a guess and signal its correctness */
     displayGuess() {
-        /**displays guess in phase 4*/
         if (this.state.phaseNumber === 4 && (this.state.guess !== null || this.state.guess !== "")) {
             if (this.state.clonePlayers.includes(this.state.activePlayer)) {
                 for (let i = 0; i < this.state.clonePlayers.length; i++) {
@@ -775,7 +780,9 @@ class InGame extends React.Component {
 
     /** This method makes sure that the input given by the different players is triggers the corresponding effects
      * based on the role of the player (active or passive player) and the phase number (between 1 and 3, in phase 4
-     * no input is taken). */
+     * no input is taken).
+     * @param: string playerName
+     * @param: string input */
     handleInput(playerName, input) {
         if (playerName === localStorage.getItem('username')) {
             if (playerName === this.state.activePlayer) {
@@ -794,14 +801,21 @@ class InGame extends React.Component {
         }
     }
 
+    /** Makes easter eggs visible
+     * @param: string value */
     showEasterEgg(value) {
         document.getElementById(value).style.display = "block";
     }
 
+    /** Hides easter egg (default state)
+     * @param: string value */
     hideEasterEgg(value) {
         document.getElementById(value).style.display = "none";
     }
 
+    /** Handles input typed in input fields (and renders easter eggs conditionally)
+     * @param: string key
+     * @param: string key */
     handleInputChange(key, value) {
         if (value === "wow" || value === "pure beauty" || value === "rachid" || value === "mexicans" || value === "hate crime") {
             this.showEasterEgg(value);
@@ -828,10 +842,10 @@ class InGame extends React.Component {
         this.setState({[key]: value});
     }
 
+    /** Called constantly in order to update the phase */
     updatePhase() {
-        /** Only Phase 4 has always a guess that's not empty */
+        /** Only phase 4 has always a guess that's not empty */
         if (this.state.guess !== "") {
-            /** if it is not Phase 4, change to 4 and reset Timer */
             if (this.state.phaseNumber !== 4) {
                 this.setState({
                     timer: this.state.nextTimer[3],
@@ -844,7 +858,7 @@ class InGame extends React.Component {
                 }
             }
             this.updatePhaseHUD(4);
-            /** Is Phase 3 when all Players gave an Clue */
+            /** In Phase 3 when all players gave a clue */
         } else if (this.state.passivePlayersCluesGiven.length === this.state.passivePlayers.length) {
             if (this.state.phaseNumber !== 3) {
                 this.setState({
@@ -855,7 +869,7 @@ class InGame extends React.Component {
             this.unsignalSubmission();
             this.updatePhaseHUD(3);
         }
-        /** Only Phase 2 has always a chosen Mystery Word */
+        /** Only phase 2 always has a chosen mystery word */
         else if (this.state.mysteryWord !== "" || this.state.mysteryWordId !== null) {
             if (this.state.phaseNumber !== 2) {
                 this.setState({
@@ -865,7 +879,7 @@ class InGame extends React.Component {
             }
             this.updatePhaseHUD(2);
         }
-        /** Only Phase 1 has always none of these above*/
+        /** Only phase 1 has always none of these above */
         else if (this.state.currentCard !== []) {
             if (this.state.phaseNumber !== 1) {
                 this.setState({
@@ -881,12 +895,15 @@ class InGame extends React.Component {
         }
     }
 
-    async overlayOn() {
+    /** Displays the endgame overlay */
+    async endgamOverlayOn() {
         if (document.getElementById("end") !== null) {
             document.getElementById("end").style.display = "block";
         }
     }
 
+    /** Updates phase HUD in upper right corner
+     * @param: int id */
     updatePhaseHUD(id) {
         for (let i = 1; i <= 4; i++) {
             if (i === id) {
@@ -907,6 +924,8 @@ class InGame extends React.Component {
         }
     }
 
+    /** Updates the signal field next in a player HUD upon clue submission
+     * @param: string player */
     async signalClueSubmission(player) {
         if (this.state.clonePlayers.includes(player)) {
             let i = this.state.clonePlayers.indexOf(player);
@@ -918,6 +937,7 @@ class InGame extends React.Component {
         }
     }
 
+    /** Undoes signaling of clue submission at start of phase 4 */
     async unsignalSubmission() {
         for (let i = 0; i < this.state.players.length; i++) {
             let field = document.getElementById("field" + (1 + i));
@@ -925,8 +945,7 @@ class InGame extends React.Component {
         }
     }
 
-    /** This method makes sure that a player's page is updated correctly based on the role of the player (active
-     * or passive player) and the phase number (between 1 and 4). */
+    /** Unifies all the methods that are polling in one method and calls them conditionally */
     handlePolling = async () => {
         try {
             if (!this.state.gameHasEnded) {
@@ -987,13 +1006,6 @@ class InGame extends React.Component {
         }
     };
 
-    /**
-     * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
-     * Initialization that requires DOM nodes should go here.
-     * If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-     * You may call setState() immediately in componentDidMount().
-     * It will trigger an extra rendering, but it will happen before the browser updates the screen.
-     */
     async componentDidMount() {
         if (navigator.userAgent.includes("Safari") && !navigator.userAgent.includes("Chrome")){
             this.setState({sound: false, disableSoundButton: true})
@@ -1014,16 +1026,20 @@ class InGame extends React.Component {
         clearInterval(this.intervalIsStillAlive);
     }
 
+    /** Makes sure input can be given using the enter key
+     * @param: event e */
     keyPressed(e) {
         if (e.keyCode === 13) {
             this.handleInput(localStorage.getItem('username'), this.state.player1Input);
             this.setState({
-                chatMessage: "",
                 player1input: null
             })
         }
     }
 
+    /** Subtask such that task of playersWithoutUsers(players) is completed
+     * @param: string[] players
+     * @return: string[] players*/
     async playerOrder(players) {
         if (players.length >= 3) {
             array_move(players, 2, 0);
@@ -1034,6 +1050,9 @@ class InGame extends React.Component {
         return players
     }
 
+    /** Sorts player list such that the role of active player is changed clockwise
+     * @param: string[] players
+     * @return: string[] clonePlayers*/
     async playersWithoutUser(players) {
         let clonePlayers = [];
         for (let i = (players.indexOf(localStorage.getItem('username'))+1); i<players.length; i++) {
@@ -1052,6 +1071,13 @@ class InGame extends React.Component {
     render() {
         return (
             <Game>
+                {console.log('players without user 1', this.playersWithoutUser(["1", "2", "3", "4", "5", "6", "7"]))}
+                {console.log('players without user 1', this.playersWithoutUser(["1", "2", "3", "4", "5", "6"]))}
+                {console.log('players without user 1', this.playersWithoutUser(["1", "2", "3", "4", "5"]))}
+                {console.log('players without user 1', this.playersWithoutUser(["1", "2", "3", "4"]))}
+                {console.log('players without user 1', this.playersWithoutUser(["1", "2", "3"]))}
+                {console.log('players', this.state.players)}
+                {console.log('clone players', this.state.clonePlayers)}
                 <PhaseMessageComponent activePlayer={this.state.activePlayer} passivePlayers={this.state.passivePlayers}
                                        phaseNumber={this.state.phaseNumber} remainingCards={this.state.remainingCards}/>
                 <EasterEggs/>

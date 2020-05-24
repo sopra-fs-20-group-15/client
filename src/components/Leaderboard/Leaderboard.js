@@ -101,6 +101,7 @@ class Leaderboard extends Component {
         this.getPlayers = this.getPlayers.bind(this);
     }
 
+    /** Fetches the players from the backend */
     getPlayers = async () => {
         const response = await api.get('/leaderBoards');
         if (response.status === 200) {
@@ -109,13 +110,6 @@ class Leaderboard extends Component {
             })
         }
     };
-
-    handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
-        // making sure that the new number of players does not violate the constraints imposed by the game rules
-        this.setState({[key]: value});
-    }
 
     async componentDidMount() {
         try {

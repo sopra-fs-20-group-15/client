@@ -131,6 +131,7 @@ class CreateGame extends Component{
 
     }
 
+    /** Creates a game */
     async createGame() {
         try {
             // requestBody should be in accordance with REST specification for GamePostDTO
@@ -160,6 +161,7 @@ class CreateGame extends Component{
         }
     }
 
+    /** Lets a player go back to the lobby overview */
     async cancel() {
         try {
             this.props.history.push('/lobbyOverview')
@@ -168,10 +170,16 @@ class CreateGame extends Component{
         }
     }
 
+    /** Handle input that is being typed in an input field
+     * @param: string key
+     * @param: string value */
     handleInputChange(key, value) {
         this.setState({[key]: value});
     }
 
+    /** Lets a player set the maximum number of players
+     * @param: string key
+     * @param: int value */
     handleMaxNrOfPlayersInput(key, value) {
         if (this.state.numberOfDevils + this.state.numberOfAngels < value) {
             this.setState({[key]: value})
@@ -182,8 +190,8 @@ class CreateGame extends Component{
         }
     }
 
+    /** Lets a player decrease the number of angels */
     handleDecreaseAngels = () => {
-        /** making sure the number of bots can't be below zero (because that would make no fucking sense...) */
         if (this.state.numberOfAngels !== 0) {
             this.setState({numberOfAngels: this.state.numberOfAngels - 1})
         } else {
@@ -191,10 +199,8 @@ class CreateGame extends Component{
         }
     };
 
+    /** Lets a player increase the number of angels */
     handleIncreaseAngels = () => {
-        /** making sure that the total number of participants in the game (including bots) does not exceed seven
-           (only necessary to check when incrementing, obviously)
-           (can this condition be refactored, so it only has to be stated once?) */
         if (this.state.numberOfDevils + this.state.numberOfAngels < this.state.maxNumberOfPlayers - 1 && this.state.numberOfAngels + 1 <= 5) {
             this.setState({numberOfAngels: this.state.numberOfAngels + 1})
         } else {
@@ -202,6 +208,7 @@ class CreateGame extends Component{
         }
     };
 
+    /** Lets a player decrease the number of devils */
     handleDecreaseDevils = () => {
         if (this.state.numberOfDevils !== 0) {
             this.setState({numberOfDevils: this.state.numberOfDevils - 1})
@@ -210,6 +217,7 @@ class CreateGame extends Component{
         }
     };
 
+    /** Lets a player increase the number of devils */
     handleIncreaseDevils = () => {
         if (this.state.numberOfDevils + this.state.numberOfAngels < this.state.maxNumberOfPlayers - 1 && this.state.numberOfDevils + 1 <= 5) {
             this.setState({numberOfDevils: this.state.numberOfDevils + 1})

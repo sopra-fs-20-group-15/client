@@ -72,6 +72,7 @@ export const PhaseMessage2 = styled.div`
     text-align: center;
 `;
 
+/** Makes sure that the correct message is being displayed (uses phase number, player role and remaining cards to determine that)*/
 function Message(props) {
     const phaseNumber = props.phaseNumber;
     const activePlayer = props.activePlayer;

@@ -151,6 +151,8 @@ const background = {
     backgroundImage: "url(" + TriangleBackground + ")"
 };
 
+/** Converts unix time to hh:mm
+ * @param: int duration*/
 export function msToTime(duration) {
     let offset = new Date().getTimezoneOffset(),
         offsetMinutes = offset % 60,
@@ -193,6 +195,7 @@ class Lobby extends React.Component {
         this.messagesEndRef = React.createRef();
     }
 
+    /** Fetches infos about the gameSetUp from backend */
     getInfos = async () => {
         try {
             const response = await api.get('/games/lobbies/' + this.props.match.params.id + "/" + localStorage.getItem("token"));
@@ -231,6 +234,7 @@ class Lobby extends React.Component {
         }
     };
 
+    /** Fetches chat messages from the backend */
     getChatMessages = async () => {
         try {
 
@@ -255,6 +259,7 @@ class Lobby extends React.Component {
         }
     };
 
+    /** Allows the host to start a game */
     async startGame() {
         try {
             const requestBody = JSON.stringify({
@@ -273,6 +278,7 @@ class Lobby extends React.Component {
         }
     }
 
+    /** Allows players to leave the lobby */
     async leaveLobby() {
         try {
             const requestBody = JSON.stringify({
@@ -288,6 +294,7 @@ class Lobby extends React.Component {
         }
     }
 
+    /** Allows host to terminate the lobby */
     async terminateGame() {
         try {
             const requestBody = JSON.stringify({
@@ -303,6 +310,7 @@ class Lobby extends React.Component {
         }
     }
 
+    /** Sends chat message to backend */
     async sendMessage() {
         try {
             const requestBody = JSON.stringify({
@@ -318,6 +326,8 @@ class Lobby extends React.Component {
         }
     }
 
+    /** Makes sure chat messages can be sent using enter
+     * @param: event e */
     keyPressed(e) {
         if (e.keyCode === 13) {
             this.sendMessage();
@@ -327,10 +337,12 @@ class Lobby extends React.Component {
         }
     }
 
+    /** Sets state according to input in an input field */
     handleInputChange(key, value) {
         this.setState({[key]: value});
     }
 
+    /** Makes sure that upon entering and also upon receiving a new chat message, it is being scrolled to the bottom */
     scrollToBottom = () => {
         this.messagesEndRef.current.scrollIntoView({ behavior: 'auto' })
     };

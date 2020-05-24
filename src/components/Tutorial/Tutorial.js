@@ -114,6 +114,8 @@ class Tutorial extends React.Component {
         };
     }
 
+    /** Updates phase HUD
+     * @param: int id */
     updatePhaseHUD(id) {
         for (let i=1 ; i<=4 ; i++) {
             if (i === id) {
@@ -134,6 +136,8 @@ class Tutorial extends React.Component {
         }
     }
 
+    /** Crosses out words that are not the mystery word
+     * @param: int input */
     updateMysteryWord(input) {
         for (let i = 0; i < 5; i++) {
             if (input - 1 !== i) {
@@ -143,16 +147,19 @@ class Tutorial extends React.Component {
         }
     }
 
+    /** Updates UI to signal right guess */
     updateRightGuess() {
         let field = document.getElementById("alice");
         field.style.backgroundColor = "#0900ff";
     }
 
+    /** Updates UI to signal wrong guess */
     updateWrongGuess() {
         let field = document.getElementById("alice");
         field.style.backgroundColor = "#ED0101";
     }
 
+    /** Handles input of stand-in active player Alice */
     handleInputAlice() {
         //actions of active player
         if (this.state.phaseNumber === 1) {
@@ -189,6 +196,7 @@ class Tutorial extends React.Component {
         }
     }
 
+    /** Handles input of stand-in passive player Bob */
     handleInputBob() {
         //actions of passive players
         if (this.state.phaseNumber === 2) {
@@ -208,9 +216,8 @@ class Tutorial extends React.Component {
         }
     }
 
+    /** Sets state according to input typed into input field */
     handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
         this.setState({ [key]: value });
     }
 
